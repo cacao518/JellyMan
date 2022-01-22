@@ -161,9 +161,9 @@ void ATestGame2Character::_RollStart()
 	if( !animInstance || !RollAnimation )
 		return;
 
-	GameObject->SetIsAttackMove( false );
 	animInstance->Montage_Play( RollAnimation, 1.f );
 	GetCharacterMovement()->MaxWalkSpeed *= Const::PLAYER_ROLL_MOVE_MULITPLIER;
+	GameObject->SetIsAttackMove( false );
 	GameObject->SetAttackCollSize();
 }
 
@@ -176,9 +176,9 @@ void ATestGame2Character::_Punch1Start()
 	if( !animInstance||!Punch1Animation )
 		return;
 
-	GameObject->SetIsAttackMove( false );
 	animInstance->Montage_Play( Punch1Animation, 1.f );
 	GetCharacterMovement()->MaxWalkSpeed *= Const::PLAYER_PUNCH1_MOVE_MULITPLIER;
+	GameObject->SetIsAttackMove( false );
 	GameObject->SetAttackCollSize( Const::PLAYER_PUNCH1_ATTACK_SIZE );
 }
 
@@ -194,9 +194,9 @@ void ATestGame2Character::_Punch2Start()
 	if( !animInstance||!Punch2Animation )
 		return;
 
-	GameObject->SetIsAttackMove( false );
 	animInstance->Montage_Play( Punch2Animation, 1.f );
 	GetCharacterMovement()->MaxWalkSpeed *= Const::PLAYER_PUNCH2_MOVE_MULITPLIER;
+	GameObject->SetIsAttackMove( false );
 	GameObject->SetAttackCollSize( Const::PLAYER_PUNCH2_ATTACK_SIZE );
 }
 

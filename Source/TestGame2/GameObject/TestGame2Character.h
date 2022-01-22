@@ -16,6 +16,7 @@ class ATestGame2Character : public ACharacter
 {
 	GENERATED_BODY()
 
+public:
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = GameObject, meta = ( AllowPrivateAccess = "true" ) )
 	class UGameObject* GameObject;
 
@@ -31,21 +32,13 @@ class ATestGame2Character : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
-public:
-	ATestGame2Character();
-
-	virtual void BeginPlay() override;
-
-	virtual void Tick(float InDeltaTime) override;
-
-public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Camera )
 	float BaseTurnRate;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Camera )
 	float BaseLookUpRate;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	UAnimMontage* RollAnimation;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
@@ -54,10 +47,19 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	UAnimMontage* Punch2Animation;
 
+public:
+	ATestGame2Character();
+
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float InDeltaTime) override;
+
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
 protected:
 	virtual void SetupPlayerInputComponent( class UInputComponent* PlayerInputComponent ) override;
 
-protected:
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
@@ -72,12 +74,9 @@ protected:
 
 	virtual void Jump() override;
 
+private:
 	void _RollStart();
 	void _Punch1Start();
 	void _Punch2Start();
-
-public:
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 };
 

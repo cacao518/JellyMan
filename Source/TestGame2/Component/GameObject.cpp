@@ -9,12 +9,17 @@
 UGameObject::UGameObject()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+	OwningCharacter = nullptr;
 	AttackCollSize = FVector( 0.f, 0.f, 0.f );
+	IsAttackMove = false;
+	IsEnabledAttackColl = false;
 }
 
 void UGameObject::BeginPlay()
 {
 	Super::BeginPlay();
+
+	OwningCharacter = Cast<ACharacter>( GetOwner() );
 }
 
 void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -26,11 +31,22 @@ void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	_ResetAttackColl();
 }
 
+void UGameObject::SetIsEnabledAttackColl( bool InIsEnabledAttackColl )
+{
+	IsEnabledAttackColl = InIsEnabledAttackColl;
+
+	auto attackColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
+	if( attackColl )
+	{ 
+		attackColl->SetCollisionEnabled( IsEnabledAttackColl ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
+		attackColl->SetVisibility( IsEnabledAttackColl );
+	}
+}
+
 void UGameObject::SetAttackCollSize( float InX, float InY, float InZ )
 {
 	AttackCollSize = FVector( InX, InY, InZ );
 
-	ACharacter* OwningCharacter = Cast<ACharacter>( GetOwner() );
 	auto attackColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ): nullptr;
 	if( attackColl )
 		attackColl->SetBoxExtent( AttackCollSize );
@@ -40,7 +56,6 @@ void UGameObject::SetAttackCollSize( const FVector& InVector )
 {
 	AttackCollSize = InVector;
 
-	ACharacter* OwningCharacter = Cast<ACharacter>( GetOwner() );
 	auto attackColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
 	if( attackColl )
 		attackColl->SetBoxExtent( AttackCollSize );
@@ -48,7 +63,6 @@ void UGameObject::SetAttackCollSize( const FVector& InVector )
 
 void UGameObject::_AnimStateChange()
 {
-	ACharacter* OwningCharacter = Cast<ACharacter>( GetOwner() );
 	if( !OwningCharacter )
 		return;
 
@@ -73,7 +87,6 @@ void UGameObject::_AnimStateChange()
 
 void UGameObject::_Move()
 {
-	ACharacter* OwningCharacter = Cast<ACharacter>( GetOwner() );
 	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
 
 	if( !characterMovement )
@@ -107,6 +120,6 @@ void UGameObject::_ResetAttackColl()
 	    AnimState==EAnimState::JUMP || 
 	    AnimState==EAnimState::DIE )
 	{
-		SetAttackCollSize( 0.f, 0.f, 0.f );
+		SetIsEnabledAttackColl( false );
 	}
 }
