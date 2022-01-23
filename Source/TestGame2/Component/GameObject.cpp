@@ -10,7 +10,6 @@ UGameObject::UGameObject()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	OwningCharacter = nullptr;
-	AttackCollSize = FVector( 0.f, 0.f, 0.f );
 	IsAttackMove = false;
 	IsEnabledAttackColl = false;
 }
@@ -20,6 +19,10 @@ void UGameObject::BeginPlay()
 	Super::BeginPlay();
 
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
+
+	auto hitColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
+	if( hitColl )
+		hitColl->OnComponentBeginOverlap.AddDynamic( this, &UGameObject::HitCollBeginOverlap );
 }
 
 void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -43,22 +46,44 @@ void UGameObject::SetIsEnabledAttackColl( bool InIsEnabledAttackColl )
 	}
 }
 
-void UGameObject::SetAttackCollSize( float InX, float InY, float InZ )
+void UGameObject::SetAttackCollSize( const FVector& InSize )
 {
-	AttackCollSize = FVector( InX, InY, InZ );
-
-	auto attackColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ): nullptr;
-	if( attackColl )
-		attackColl->SetBoxExtent( AttackCollSize );
-}
-
-void UGameObject::SetAttackCollSize( const FVector& InVector )
-{
-	AttackCollSize = InVector;
-
 	auto attackColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
 	if( attackColl )
-		attackColl->SetBoxExtent( AttackCollSize );
+		attackColl->SetBoxExtent( InSize );
+}
+
+void UGameObject::SetAttackCollPos( const FVector& InPos )
+{
+	auto attackColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
+	if( attackColl )
+		attackColl->SetRelativeLocation( InPos );
+}
+
+void UGameObject::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
+									   AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+									   bool bFromSweep, const FHitResult& SweepResult )
+{
+	if( !OwningCharacter ) 
+		return;
+
+	// 자기 자신 충돌은 무시한다.
+	if( Cast<ACharacter>( OtherActor ) == OwningCharacter ) 
+		return;
+
+	// AttackColl이 충돌된 것이 아니면 무시한다.
+	if( auto boxComponent = Cast<UBoxComponent>( OtherComp ) )
+	{
+		if( !boxComponent->GetName().Equals( TEXT( "AttackColl" ) ) )
+			return;
+	}
+
+	FString str = OwningCharacter->GetName() + TEXT( " : HitColl BeginOverlap!" );
+	if( GEngine )
+		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
+
+	//OwningCharacter->GetController()->ClientPlayCameraShake( UCameraShakeObstacle::StaticClass(),
+	//															 1.f, ECameraAnimPlaySpace::CameraLocal );
 }
 
 void UGameObject::_AnimStateChange()

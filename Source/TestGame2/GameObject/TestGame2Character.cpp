@@ -60,13 +60,11 @@ ATestGame2Character::ATestGame2Character()
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
 	HitColl->SetupAttachment( GetMesh() );
 	HitColl->SetCollisionProfileName( TEXT( "HitColl" ) );
-	HitColl->SetBoxExtent( FVector( 20.f, 20.f, 20.f ) );
 
 	// AttackBox Component
 	AttackColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "AttackColl" ) );
 	AttackColl->SetupAttachment( GetMesh() );
 	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
-	AttackColl->SetBoxExtent( FVector( 20.f, 20.f, 20.f ) );
 }
 
 void ATestGame2Character::BeginPlay()
@@ -164,7 +162,7 @@ void ATestGame2Character::_RollStart()
 	animInstance->Montage_Play( RollAnimation, 1.f );
 	GetCharacterMovement()->MaxWalkSpeed *= Const::PLAYER_ROLL_MOVE_MULITPLIER;
 	GameObject->SetIsAttackMove( false );
-	GameObject->SetAttackCollSize();
+	GameObject->SetIsEnabledAttackColl( false );
 }
 
 void ATestGame2Character::_Punch1Start()
@@ -179,7 +177,9 @@ void ATestGame2Character::_Punch1Start()
 	animInstance->Montage_Play( Punch1Animation, 1.f );
 	GetCharacterMovement()->MaxWalkSpeed *= Const::PLAYER_PUNCH1_MOVE_MULITPLIER;
 	GameObject->SetIsAttackMove( false );
+	GameObject->SetIsEnabledAttackColl( false );
 	GameObject->SetAttackCollSize( Const::PLAYER_PUNCH1_ATTACK_SIZE );
+	GameObject->SetAttackCollPos( Const::PLAYER_PUNCH1_ATTACK_POS );
 }
 
 
@@ -197,7 +197,9 @@ void ATestGame2Character::_Punch2Start()
 	animInstance->Montage_Play( Punch2Animation, 1.f );
 	GetCharacterMovement()->MaxWalkSpeed *= Const::PLAYER_PUNCH2_MOVE_MULITPLIER;
 	GameObject->SetIsAttackMove( false );
+	GameObject->SetIsEnabledAttackColl( false );
 	GameObject->SetAttackCollSize( Const::PLAYER_PUNCH2_ATTACK_SIZE );
+	GameObject->SetAttackCollPos( Const::PLAYER_PUNCH2_ATTACK_POS );
 }
 
 

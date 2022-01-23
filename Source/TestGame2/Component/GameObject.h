@@ -20,7 +20,6 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	EAnimState AnimState;       	    // 애니메이션 상태
 
-	FVector    AttackCollSize; 	        // 공격 콜리전 크기
 	float      MoveSpeed;               // 이동속도
 	bool       IsAttackMove;            // 공격중 이동 여부
 	bool       IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
@@ -45,10 +44,14 @@ public:
 	void SetIsEnabledAttackColl( bool InIsEnabledAttackColl );
 
 	// 공격 콜리전 사이즈를 셋팅한다.
-	void SetAttackCollSize( float InX = 0.f, float InY = 0.f, float InZ = 0.f );
+	void SetAttackCollSize( const FVector& InSize );
 
-	// 공격 콜리전 사이즈를 셋팅한다.
-	void SetAttackCollSize( const FVector& InVector );
+	// 공격 콜리전 위치를 셋팅한다.
+	void SetAttackCollPos( const FVector& InPos );
+
+	// 충돌이 시작할시에 호출되는 델리게이트에 등록하는 함수
+	UFUNCTION()
+	void HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult );
 
 private:
 	// 애니메이션 상태를 교체한다.

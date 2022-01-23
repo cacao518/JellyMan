@@ -19,10 +19,9 @@ ADummy::ADummy()
 	GetCharacterMovement()->MaxWalkSpeed = GameObject->MoveSpeed;
 
 	// Box Component
-	HitBox = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitBox" ) );
-	HitBox->SetupAttachment( GetMesh() );
-	HitBox->SetCollisionProfileName( TEXT( "Character" ) );
-	HitBox->SetBoxExtent( FVector( 20.f, 20.f, 20.f ) );
+	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
+	HitColl->SetupAttachment( GetMesh() );
+	HitColl->SetCollisionProfileName( TEXT( "HitColl" ) );
 }
 
 // Called when the game starts or when spawned

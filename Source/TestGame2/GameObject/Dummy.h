@@ -16,7 +16,7 @@ class TESTGAME2_API ADummy : public ACharacter
 	class UGameObject* GameObject;
 
 	UPROPERTY( Category = Collision, VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ) )
-	class UBoxComponent* HitBox;
+	class UBoxComponent* HitColl;
 
 public:
 	// Sets default values for this character's properties

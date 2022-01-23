@@ -27,6 +27,9 @@ namespace Const
 	constexpr float PLAYER_PUNCH2_MOVE_MULITPLIER = 4.0f;  // 플레이어 펀치2 이동 곱셈 값
 
 	// Player Skill
-	static const FVector PLAYER_PUNCH1_ATTACK_SIZE = FVector( 50, 50, 50 );  // 플레이어 펀치1 범위
-    static const FVector PLAYER_PUNCH2_ATTACK_SIZE = FVector( 50, 50, 50 );  // 플레이어 펀치2 범위
+	static const FVector PLAYER_PUNCH1_ATTACK_SIZE = FVector( 85, 133, 80 );  // 플레이어 펀치1 판정 크기
+	static const FVector PLAYER_PUNCH1_ATTACK_POS = FVector( 0, -191, 364 );  // 플레이어 펀치1 판정 위치
+
+    static const FVector PLAYER_PUNCH2_ATTACK_SIZE = FVector( 90, 201, 236 );  // 플레이어 펀치2 판정 크기
+	static const FVector PLAYER_PUNCH2_ATTACK_POS = FVector( 0, -192, 392 );  // 플레이어 펀치1 판정 위치
 };
