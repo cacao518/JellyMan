@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "../ETC/SDB.h"
+#include "../ETC/CameraShakeEffect.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
@@ -77,13 +78,16 @@ void UGameObject::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 		if( !boxComponent->GetName().Equals( TEXT( "AttackColl" ) ) )
 			return;
 	}
+	else
+	{ 
+		return;
+	}
 
 	FString str = OwningCharacter->GetName() + TEXT( " : HitColl BeginOverlap!" );
 	if( GEngine )
 		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
 
-	//OwningCharacter->GetController()->ClientPlayCameraShake( UCameraShakeObstacle::StaticClass(),
-	//															 1.f, ECameraAnimPlaySpace::CameraLocal );
+	GetWorld()->GetFirstPlayerController()->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), 1.f );
 }
 
 void UGameObject::_AnimStateChange()
