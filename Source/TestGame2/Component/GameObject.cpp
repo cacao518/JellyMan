@@ -13,6 +13,7 @@ UGameObject::UGameObject()
 	OwningCharacter = nullptr;
 	IsAttackMove = false;
 	IsEnabledAttackColl = false;
+	AnimState = EAnimState::IDLE_RUN;
 }
 
 void UGameObject::BeginPlay()
@@ -32,7 +33,40 @@ void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 	_AnimStateChange();
 	_Move();
-	_ResetAttackColl();
+	_ResetInfo();
+}
+
+void UGameObject::SetAttackCollInfo()
+{
+	AttackCollInfo = CollisionInfo();
+
+	SetIsAttackMove( false );
+	SetIsEnabledAttackColl( false );
+
+	SetAttackCollSize( AttackCollInfo.Size );
+	SetAttackCollPos( AttackCollInfo.Pos );
+	SetAttackCollPower( AttackCollInfo.Power );
+}
+
+void UGameObject::SetAttackCollInfo( const CollisionInfo& InAttackCollInfo ) 
+{
+	AttackCollInfo = InAttackCollInfo;
+
+	SetIsAttackMove( false );
+	SetIsEnabledAttackColl( false );
+
+	SetAttackCollSize( AttackCollInfo.Size );
+	SetAttackCollPos( AttackCollInfo.Pos );
+	SetAttackCollPower( AttackCollInfo.Power );
+}
+
+void UGameObject::SetMoveSpeed( float InMoveSpeed )
+{
+	MoveSpeed = InMoveSpeed;
+
+	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
+	if( characterMovement )
+		characterMovement->MaxWalkSpeed = MoveSpeed;
 }
 
 void UGameObject::SetIsEnabledAttackColl( bool InIsEnabledAttackColl )
@@ -83,7 +117,7 @@ void UGameObject::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 		return;
 	}
 
-	FString str = OwningCharacter->GetName() + TEXT( " : HitColl BeginOverlap!" );
+	FString str = OwningCharacter->GetName() + TEXT( " : HitColl BeginOverlap! (HP : " ) + FString::FromInt( (int)Hp );
 	if( GEngine )
 		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
 
@@ -143,12 +177,13 @@ void UGameObject::_Move()
 	}
 }
 
-void UGameObject::_ResetAttackColl()
+void UGameObject::_ResetInfo()
 {
 	if( AnimState==EAnimState::IDLE_RUN || 
 	    AnimState==EAnimState::JUMP || 
 	    AnimState==EAnimState::DIE )
 	{
+		SetIsAttackMove( false );
 		SetIsEnabledAttackColl( false );
 	}
 }

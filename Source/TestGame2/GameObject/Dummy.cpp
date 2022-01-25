@@ -14,9 +14,8 @@ ADummy::ADummy()
 
 	// GameObject
 	GameObject = CreateDefaultSubobject<UGameObject>( TEXT( "GameObject" ) );
-	GameObject->AnimState = EAnimState::IDLE_RUN;
-	GameObject->MoveSpeed = Const::PLAYER_DEFAULT_SPEED;
-	GetCharacterMovement()->MaxWalkSpeed = GameObject->MoveSpeed;
+	GameObject->SetHp       ( Const::DUMMY_HP    );
+	GameObject->SetMoveSpeed( Const::DUMMY_SPEED );
 
 	// Box Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );

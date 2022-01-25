@@ -15,14 +15,21 @@ class TESTGAME2_API UGameObject : public UActorComponent
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	ACharacter* OwningCharacter;        // 부모 캐릭터 클래스
+	ACharacter*     OwningCharacter;         // 부모 캐릭터 클래스
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	EAnimState AnimState;       	    // 애니메이션 상태
+	EAnimState      AnimState;       	     // 애니메이션 상태
 
-	float      MoveSpeed;               // 이동속도
-	bool       IsAttackMove;            // 공격중 이동 여부
-	bool       IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
+	CollisionInfo   AttackCollInfo;          // 공격 콜리전 정보
+
+	float           Hp;                      // 체력
+	float           Hpm;                     // 최대 체력
+	float           MoveSpeed;               // 이동속도
+	float           AttackCollPower;         // 공격 콜리전 공격력
+			        
+	bool            IsDie;                   // 사망 여부
+	bool            IsAttackMove;            // 공격중 이동 여부
+	bool            IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
 
 public:	
 	UGameObject();
@@ -30,6 +37,24 @@ public:
 	virtual void BeginPlay() override;
 	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	// 공격 콜리전 정보를 셋팅한다.
+	void SetAttackCollInfo();
+
+	// 공격 콜리전 정보를 셋팅한다.
+	void SetAttackCollInfo( const CollisionInfo& InAttackCollInfo );
+
+	// 현재 HP를 반환한다. 
+	float GetHp(){ return Hp; };
+
+	// HP, HPM을 설정한다.
+	void SetHp( float InHp ){ Hp = InHp; Hpm = InHp; };
+
+	// 이동속도를 설정한다.
+	void SetMoveSpeed( float InMoveSpeed );
+
+	// HP, HPM을 설정한다.
+	void SetAttackCollPower( float InPower ) { AttackCollPower = InPower; };
 
 	// 공격중 이동 여부를 반환한다.
 	bool GetIsAttackMove() { return IsAttackMove; };
@@ -60,6 +85,6 @@ private:
 	// 이동 관련 로직을 수행한다.
 	void _Move();
 
-	// 공격 콜리전을 초기화한다.
-	void _ResetAttackColl();
+	// 정보를 초기화한다.
+	void _ResetInfo();
 };
