@@ -45,11 +45,12 @@ namespace Const
     // Player
 	constexpr float PLAYER_HP                     = 200.f; // 플레이어 체력
 	constexpr float PLAYER_DEFAULT_SPEED          = 450.f; // 플레이어 이동속도
-	constexpr float PLAYER_ROLL_MOVE_MULITPLIER   = 20.0f; // 플레이어 구르기 이동 곱셈 값
+
+	// Player Skill
+	constexpr float PLAYER_ROLL_MOVE_MULITPLIER = 20.0f; // 플레이어 구르기 이동 곱셈 값
 	constexpr float PLAYER_PUNCH1_MOVE_MULITPLIER = 1.1f;  // 플레이어 펀지1 이동 곱셈 값
 	constexpr float PLAYER_PUNCH2_MOVE_MULITPLIER = 4.0f;  // 플레이어 펀치2 이동 곱셈 값
 
-	// Player Skill
 	static const CollisionInfo PLAYER_PUNCH1_COLLISION_INFO = CollisionInfo ( FVector( 85, 133, 80 ),
 	                                                                          FVector( 0, -191, 364 ),
 																		      5.f );   // 플레이어 펀치1

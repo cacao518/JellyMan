@@ -154,13 +154,9 @@ void ATestGame2Character::_RollStart()
 	if( GameObject && GameObject->AnimState != EAnimState::IDLE_RUN )
 		return;
 
-	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
-	if( !animInstance || !RollAnimation )
-		return;
-
-	animInstance->Montage_Play( RollAnimation, 1.f );
-	GetCharacterMovement()->MaxWalkSpeed *= Const::PLAYER_ROLL_MOVE_MULITPLIER;
-	GameObject->SetAttackCollInfo();
+	GameObject->ResetInfo( true );
+	GameObject->MontagePlay( RollAnimation );
+	GameObject->MultiplyMoveSpeed( Const::PLAYER_ROLL_MOVE_MULITPLIER );
 }
 
 void ATestGame2Character::_Punch1Start()
@@ -168,13 +164,10 @@ void ATestGame2Character::_Punch1Start()
 	if( GameObject && GameObject->AnimState != EAnimState::IDLE_RUN )
 		return;
 
-	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
-	if( !animInstance||!Punch1Animation )
-		return;
-
-	animInstance->Montage_Play( Punch1Animation, 1.f );
-	GetCharacterMovement()->MaxWalkSpeed *= Const::PLAYER_PUNCH1_MOVE_MULITPLIER;
-	GameObject->SetAttackCollInfo( PLAYER_PUNCH1_COLLISION_INFO );
+	GameObject->ResetInfo( true );
+	GameObject->MontagePlay( Punch1Animation );
+	GameObject->SetAttackCollInfo( Const::PLAYER_PUNCH1_COLLISION_INFO );
+	GameObject->MultiplyMoveSpeed( Const::PLAYER_PUNCH1_MOVE_MULITPLIER );
 }
 
 
@@ -185,13 +178,10 @@ void ATestGame2Character::_Punch2Start()
 	    GameObject->AnimState != EAnimState::PUNCH1 )
 		return;
 
-	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
-	if( !animInstance||!Punch2Animation )
-		return;
-
-	animInstance->Montage_Play( Punch2Animation, 1.f );
-	GetCharacterMovement()->MaxWalkSpeed *= Const::PLAYER_PUNCH2_MOVE_MULITPLIER;
-	GameObject->SetAttackCollInfo( PLAYER_PUNCH2_COLLISION_INFO );
+	GameObject->ResetInfo( true );
+	GameObject->MontagePlay( Punch2Animation );
+	GameObject->SetAttackCollInfo( Const::PLAYER_PUNCH2_COLLISION_INFO );
+	GameObject->MultiplyMoveSpeed( Const::PLAYER_PUNCH2_MOVE_MULITPLIER );
 }
 
 
