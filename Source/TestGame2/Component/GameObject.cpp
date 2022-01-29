@@ -126,6 +126,18 @@ void UGameObject::MultiplyMoveSpeed( float InMoveMultipler )
 		characterMovement->MaxWalkSpeed *= InMoveMultipler;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 현재 몽타주 이름을 반환한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+FString UGameObject::GetCurMontageName()
+{
+	auto curMontage = OwningCharacter ? OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage() : nullptr;
+	FString curMontageName = curMontage ? curMontage->GetName() : "";
+
+	return curMontageName;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 충돌이 시작할시에 호출되는 델리게이트에 등록하는 함수
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,10 +192,7 @@ void UGameObject::_AnimStateChange()
 	auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
 	if( curMontage )
 	{
-		FString curAnimName = curMontage->GetName();
-		if(      curAnimName.Equals( "MTG_Roll" ) )   AnimState = EAnimState::ROLL;
-		else if( curAnimName.Equals( "MTG_Punch1" ) ) AnimState = EAnimState::PUNCH1;
-		else if( curAnimName.Equals( "MTG_Punch2" ) ) AnimState = EAnimState::PUNCH2;
+		AnimState = EAnimState::COMMON_ACTION;
 	}
 	else
 	{

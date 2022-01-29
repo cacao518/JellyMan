@@ -8,9 +8,7 @@ enum class EAnimState : uint8
 	IDLE_RUN        UMETA( DisplayName = "Idle_Run" ),
 	JUMP            UMETA( DisplayName = "Jump" ),
 	DIE             UMETA( DisplayName = "Die" ),
-	ROLL            UMETA( DisplayName = "Roll" ),
-	PUNCH1          UMETA( DisplayName = "Punch1" ),
-	PUNCH2          UMETA( DisplayName = "Punch2" ),
+	COMMON_ACTION   UMETA( DisplayName = "Common_Action" ),
 
 	MAX,
 };

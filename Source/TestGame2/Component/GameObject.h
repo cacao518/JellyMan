@@ -75,6 +75,9 @@ public:
 	// Getter
 	///////////////////////////////////////////////////////////////////////
 	
+	// 현재 몽타주 이름을 반환한다.
+	FString GetCurMontageName();
+
 	// 공격 콜리전 정보를 반환한다.
 	const CollisionInfo& GetAttackCollInfo() { return AttackCollInfo; };
 	

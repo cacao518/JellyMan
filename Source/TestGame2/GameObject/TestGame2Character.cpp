@@ -93,6 +93,7 @@ void ATestGame2Character::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAction("Shift", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAction("Space", IE_Pressed, this, &ATestGame2Character::_RollStart);
+	PlayerInputComponent->BindAction( "F", IE_Pressed, this, &ATestGame2Character::_TakeDownStart );
 	PlayerInputComponent->BindAction("LeftClick", IE_Pressed, this, &ATestGame2Character::_Punch1Start );
 	PlayerInputComponent->BindAction("RightClick", IE_Pressed, this, &ATestGame2Character::_Punch2Start );
 }
@@ -170,12 +171,11 @@ void ATestGame2Character::_Punch1Start()
 	GameObject->MultiplyMoveSpeed( Const::PLAYER_PUNCH1_MOVE_MULITPLIER );
 }
 
-
 void ATestGame2Character::_Punch2Start()
 {
 	if( GameObject && 
 	    GameObject->AnimState != EAnimState::IDLE_RUN && 
-	    GameObject->AnimState != EAnimState::PUNCH1 )
+	    !GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) )
 		return;
 
 	GameObject->ResetInfo( true );
@@ -183,5 +183,16 @@ void ATestGame2Character::_Punch2Start()
 	GameObject->SetAttackCollInfo( Const::PLAYER_PUNCH2_COLLISION_INFO );
 	GameObject->MultiplyMoveSpeed( Const::PLAYER_PUNCH2_MOVE_MULITPLIER );
 }
+
+void ATestGame2Character::_TakeDownStart()
+{
+	if( GameObject&&
+		GameObject->AnimState!=EAnimState::IDLE_RUN )
+		return;
+
+	GameObject->ResetInfo( true );
+	GameObject->MontagePlay( TakeDownAnimation );
+}
+
 
 

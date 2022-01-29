@@ -42,6 +42,9 @@ public:
 	UAnimMontage* RollAnimation;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	UAnimMontage* TakeDownAnimation;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	UAnimMontage* Punch1Animation;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
@@ -78,5 +81,6 @@ private:
 	void _RollStart();
 	void _Punch1Start();
 	void _Punch2Start();
+	void _TakeDownStart();
 };
 
