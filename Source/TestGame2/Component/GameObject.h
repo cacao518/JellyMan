@@ -28,7 +28,6 @@ public:
 	float           Hp;                      // 체력
 	float           Hpm;                     // 최대 체력
 	float           MoveSpeed;               // 이동속도
-	float           AttackCollPower;         // 공격 콜리전 공격력
 			        
 	bool            IsDie;                   // 사망 여부
 	bool            IsAttackMove;            // 공격중 이동 여부

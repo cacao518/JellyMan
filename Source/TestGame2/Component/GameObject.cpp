@@ -80,7 +80,6 @@ void UGameObject::SetAttackCollInfo( const CollisionInfo& InAttackCollInfo )
 {
 	AttackCollInfo = InAttackCollInfo;
 
-	AttackCollPower = AttackCollInfo.Power;
 	auto attackColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
 	if( attackColl )
 	{ 
