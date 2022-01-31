@@ -189,6 +189,3 @@ void ATestGame2Character::_TakeDownStart()
 	GameObject->ResetInfo( true );
 	GameObject->MontagePlay( TakeDownAnimation );
 }
-
-
-
