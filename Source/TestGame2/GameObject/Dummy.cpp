@@ -14,8 +14,9 @@ ADummy::ADummy()
 
 	// GameObject
 	GameObject = CreateDefaultSubobject<UGameObject>( TEXT( "GameObject" ) );
-	GameObject->SetHp       ( Const::DUMMY_HP    );
-	GameObject->SetMoveSpeed( Const::DUMMY_SPEED );
+	GameObject->SetHp       ( Const::DUMMY_HP             );
+	GameObject->SetMoveSpeed( Const::DUMMY_MOVE_SPEED     );
+	GameObject->SetAttackSpeed( Const::DUMMY_ATTACK_SPEED );
 
 	// Box Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );

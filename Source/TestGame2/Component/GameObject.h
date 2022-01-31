@@ -23,11 +23,13 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	EAnimState      AnimState;       	     // 애니메이션 상태
 
-	CollisionInfo   AttackCollInfo;          // 공격 콜리전 정보
+	FCollisionInfo  AttackCollInfo;          // 공격 콜리전 정보
+	FVector         MovePos;                 // 이동할 위치
 
 	float           Hp;                      // 체력
 	float           Hpm;                     // 최대 체력
 	float           MoveSpeed;               // 이동속도
+	float           AttackSpeed;             // 공격속도
 			        
 	bool            IsDie;                   // 사망 여부
 	bool            IsAttackMove;            // 공격중 이동 여부
@@ -53,7 +55,7 @@ public:
 	///////////////////////////////////////////////////////////////////////
 
 	// 공격 콜리전 정보를 셋팅한다.
-	void SetAttackCollInfo( const CollisionInfo& InAttackCollInfo );
+	void SetAttackCollInfo( const FCollisionInfo& InAttackCollInfo );
 
 	// HP, HPM을 설정한다.
 	void SetHp( float InHp ){ Hp = InHp; Hpm = InHp; };
@@ -61,14 +63,17 @@ public:
 	// 이동속도를 설정한다.
 	void SetMoveSpeed( float InMoveSpeed );
 
+	// 공격속도를 설정한다.
+	void SetAttackSpeed( float InAttackSpeed ){ AttackSpeed = InAttackSpeed; };
+
 	// 공격중 이동 여부를 셋팅한다.
 	void SetIsAttackMove( bool InIsAttackMove ){ IsAttackMove = InIsAttackMove; };
 
 	// 공격 콜리전 활성화 여부를 셋팅한다.
 	void SetIsEnabledAttackColl( bool InIsEnabledAttackColl );
 
-	//// 이동 속도에 가중치를 곱한다.
-	void MultiplyMoveSpeed( float InMoveMultipler );
+	//// 이동할 위치를 셋팅한다.
+	void SetMovePos( float InMovePower );
 
 	///////////////////////////////////////////////////////////////////////
 	// Getter
@@ -78,7 +83,7 @@ public:
 	FString GetCurMontageName();
 
 	// 공격 콜리전 정보를 반환한다.
-	const CollisionInfo& GetAttackCollInfo() { return AttackCollInfo; };
+	const FCollisionInfo& GetAttackCollInfo() { return AttackCollInfo; };
 	
 	// 현재 HP를 반환한다. 
 	float GetHp() { return Hp; };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SDB.generated.h"
 
 UENUM( BlueprintType )
 enum class EAnimState : uint8
@@ -13,21 +14,29 @@ enum class EAnimState : uint8
 	MAX,
 };
 
-struct CollisionInfo
+USTRUCT( Atomic, BlueprintType )
+struct FCollisionInfo
 {
+	GENERATED_BODY()
+
 public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FVector Size;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FVector Pos;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float Power;
 
-	CollisionInfo()
+	FCollisionInfo()
 	{
 		Size = FVector(0,0,0);
 		Pos = FVector(0,0,0);
 		Power = 0;
 	};
 
-	CollisionInfo( FVector InSize, FVector InPos, float InPower )
+	FCollisionInfo( FVector InSize, FVector InPos, float InPower )
 	{
 		Size = InSize;
 		Pos = InPos;
@@ -38,27 +47,16 @@ public:
 namespace Const
 { 
     // Common
-	constexpr float ANIM_LERP_MULITPLIER = 10.0f;          // 애니메이션 중 이동 속도 보간 값
+	constexpr float ANIM_LERP_MULITPLIER = 5.f;   // 애니메이션 중 이동 속도 보간 값
 
     // Player
-	constexpr float PLAYER_HP                     = 200.f; // 플레이어 체력
-	constexpr float PLAYER_DEFAULT_SPEED          = 450.f; // 플레이어 이동속도
-
-	// Player Skill
-	constexpr float PLAYER_ROLL_MOVE_MULITPLIER = 20.0f; // 플레이어 구르기 이동 곱셈 값
-	constexpr float PLAYER_PUNCH1_MOVE_MULITPLIER = 1.1f;  // 플레이어 펀지1 이동 곱셈 값
-	constexpr float PLAYER_PUNCH2_MOVE_MULITPLIER = 4.0f;  // 플레이어 펀치2 이동 곱셈 값
-
-	static const CollisionInfo PLAYER_PUNCH1_COLLISION_INFO = CollisionInfo ( FVector( 85, 133, 80 ),
-	                                                                          FVector( 0, -191, 364 ),
-																		      5.f );   // 플레이어 펀치1
-
-	static const CollisionInfo PLAYER_PUNCH2_COLLISION_INFO = CollisionInfo( FVector( 90, 201, 236 ),
-																			 FVector( 0, -192, 392 ),
-																			 15.f );   // 플레이어 펀치2
+	constexpr float PLAYER_HP                            = 200.f; // 플레이어 체력
+	constexpr float PLAYER_DEFAULT_MOVE_SPEED            = 450.f; // 플레이어 이동속도
+	constexpr float PLAYER_DEFAULT_ATTACK_SPEED          = 1.0f;   // 플레이어 공격속도
 
 	// Dummy
-	constexpr float DUMMY_HP =    100.f;       // 더미 체력
-	constexpr float DUMMY_SPEED = 100.f;       // 더미 이동속도
+	constexpr float DUMMY_HP           = 100.f;        // 더미 체력
+	constexpr float DUMMY_MOVE_SPEED   = 100.f;        // 더미 이동속도
+	constexpr float DUMMY_ATTACK_SPEED = 1.f;          // 더미 공격속도
 
 };

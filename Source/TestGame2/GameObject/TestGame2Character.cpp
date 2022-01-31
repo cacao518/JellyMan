@@ -52,8 +52,9 @@ ATestGame2Character::ATestGame2Character()
 
 	// Create a GameObejct Component
 	GameObject = CreateDefaultSubobject<UGameObject>( TEXT( "GameObject" ) );
-	GameObject->SetHp       ( Const::PLAYER_HP            );
-	GameObject->SetMoveSpeed( Const::PLAYER_DEFAULT_SPEED );
+	GameObject->SetHp         ( Const::PLAYER_HP                   );
+	GameObject->SetMoveSpeed  ( Const::PLAYER_DEFAULT_MOVE_SPEED   );
+	GameObject->SetAttackSpeed( Const::PLAYER_DEFAULT_ATTACK_SPEED );
 
 	// HitBox Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
@@ -157,7 +158,6 @@ void ATestGame2Character::_RollStart()
 
 	GameObject->ResetInfo( true );
 	GameObject->MontagePlay( RollAnimation );
-	GameObject->MultiplyMoveSpeed( Const::PLAYER_ROLL_MOVE_MULITPLIER );
 }
 
 void ATestGame2Character::_Punch1Start()
@@ -166,9 +166,7 @@ void ATestGame2Character::_Punch1Start()
 		return;
 
 	GameObject->ResetInfo( true );
-	GameObject->MontagePlay( Punch1Animation );
-	GameObject->SetAttackCollInfo( Const::PLAYER_PUNCH1_COLLISION_INFO );
-	GameObject->MultiplyMoveSpeed( Const::PLAYER_PUNCH1_MOVE_MULITPLIER );
+	GameObject->MontagePlay( Punch1Animation, GameObject->AttackSpeed );
 }
 
 void ATestGame2Character::_Punch2Start()
@@ -179,9 +177,7 @@ void ATestGame2Character::_Punch2Start()
 		return;
 
 	GameObject->ResetInfo( true );
-	GameObject->MontagePlay( Punch2Animation );
-	GameObject->SetAttackCollInfo( Const::PLAYER_PUNCH2_COLLISION_INFO );
-	GameObject->MultiplyMoveSpeed( Const::PLAYER_PUNCH2_MOVE_MULITPLIER );
+	GameObject->MontagePlay( Punch2Animation, GameObject->AttackSpeed );
 }
 
 void ATestGame2Character::_TakeDownStart()

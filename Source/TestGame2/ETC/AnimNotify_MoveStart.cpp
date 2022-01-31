@@ -14,5 +14,6 @@ void UAnimNotify_MoveStart::Notify( USkeletalMeshComponent* MeshComp, UAnimSeque
 	UGameObject* obj = Cast<UGameObject>( MeshComp->GetOwner()->FindComponentByClass<UGameObject>() );
 	if( !obj ) return;
 
+	obj->SetMovePos( MovePower );
 	obj->SetIsAttackMove( true );
 }

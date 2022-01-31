@@ -15,6 +15,10 @@ class TESTGAME2_API UAnimNotify_MoveStart : public UAnimNotify
 	GENERATED_BODY()
 
 public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	float MovePower;
+
+public:
 	virtual FString GetNotifyName_Implementation() const override;
 
 private:

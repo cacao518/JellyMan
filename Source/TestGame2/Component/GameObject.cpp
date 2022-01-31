@@ -37,10 +37,11 @@ void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	ResetInfo();
+
 	_AnimStateChange();
 	_CheckDie();
 	_Move();
-	ResetInfo();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,6 +56,7 @@ void UGameObject::ResetInfo( bool InForceReset )
 	{
 		SetIsAttackMove( false );
 		SetIsEnabledAttackColl( false );
+		SetAttackCollInfo( FCollisionInfo() );
 	}
 }
 
@@ -76,7 +78,7 @@ void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 공격 콜리전 정보를 셋팅한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameObject::SetAttackCollInfo( const CollisionInfo& InAttackCollInfo ) 
+void UGameObject::SetAttackCollInfo( const FCollisionInfo& InAttackCollInfo )
 {
 	AttackCollInfo = InAttackCollInfo;
 
@@ -116,15 +118,18 @@ void UGameObject::SetIsEnabledAttackColl( bool InIsEnabledAttackColl )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 이동 속도에 가중치를 곱한다.
+//// @brief 이동할 위치를 셋팅한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameObject::MultiplyMoveSpeed( float InMoveMultipler )
+void UGameObject::SetMovePos( float InMovePower )
 {
 	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
-	if( characterMovement )
-		characterMovement->MaxWalkSpeed *= InMoveMultipler;
-}
 
+	const FRotator Rotation = characterMovement->GetLastUpdateRotation();
+	const FRotator YawRotation( 0, Rotation.Yaw, 0 );
+	const FVector  Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
+
+	MovePos = characterMovement->GetActorLocation() + ( Direction * InMovePower );
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 현재 몽타주 이름을 반환한다.
@@ -223,12 +228,12 @@ void UGameObject::_Move()
 	{
 		if( IsAttackMove )
 		{
-			const FRotator Rotation = characterMovement->GetLastUpdateRotation();
-			const FRotator YawRotation( 0, Rotation.Yaw, 0 );
-			const FVector  Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
+			float dest_X = FMath::Lerp( characterMovement->GetActorLocation().X, MovePos.X, GetWorld()->GetDeltaSeconds() * Const::ANIM_LERP_MULITPLIER );
+			float dest_Y = FMath::Lerp( characterMovement->GetActorLocation().Y, MovePos.Y, GetWorld()->GetDeltaSeconds() * Const::ANIM_LERP_MULITPLIER );
+			float dest_Z = FMath::Lerp( characterMovement->GetActorLocation().Z, MovePos.Z, GetWorld()->GetDeltaSeconds() * Const::ANIM_LERP_MULITPLIER );
+			FVector dest = FVector( dest_X, dest_Y, dest_Z );
 
-			characterMovement->MaxWalkSpeed = FMath::Lerp( characterMovement->MaxWalkSpeed, MoveSpeed, GetWorld()->GetDeltaSeconds()*Const::ANIM_LERP_MULITPLIER );
-			OwningCharacter->AddMovementInput( Direction, 1.0f );
+			OwningCharacter->SetActorLocation( dest, true );
 		}
 	}
 }
