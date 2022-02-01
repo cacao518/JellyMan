@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "SDB.generated.h"
 
+// 애니메이션 상태
 UENUM( BlueprintType )
 enum class EAnimState : uint8
 {
@@ -11,9 +12,21 @@ enum class EAnimState : uint8
 	DIE             UMETA( DisplayName = "Die" ),
 	COMMON_ACTION   UMETA( DisplayName = "Common_Action" ),
 
+	MAX,             
+};
+
+// 물질 상태
+UENUM( BlueprintType )
+enum class EMaterialState : uint8
+{
+	JELLY            UMETA( DisplayName = "Jelly" ),
+	GRASS            UMETA( DisplayName = "Grass" ),
+	ROCK             UMETA( DisplayName = "Rock" ),
+
 	MAX,
 };
 
+// 충돌체 정보
 USTRUCT( Atomic, BlueprintType )
 struct FCollisionInfo
 {

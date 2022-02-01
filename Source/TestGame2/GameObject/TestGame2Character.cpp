@@ -3,6 +3,7 @@
 #include "TestGame2Character.h"
 #include "../ETC/SDB.h"
 #include "../Component/GameObject.h"
+#include "../Component/MaterialProperty.h"
 #include "Animation/AnimInstance.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
@@ -23,10 +24,6 @@ ATestGame2Character::ATestGame2Character()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
-	// set our turn rates for input
-	BaseTurnRate = 45.f;
-	BaseLookUpRate = 45.f;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -56,6 +53,10 @@ ATestGame2Character::ATestGame2Character()
 	GameObject->SetMoveSpeed  ( Const::PLAYER_DEFAULT_MOVE_SPEED   );
 	GameObject->SetAttackSpeed( Const::PLAYER_DEFAULT_ATTACK_SPEED );
 
+	// Create a MaterialProperty Component
+	MatProperty = CreateDefaultSubobject<UMaterialProperty>( TEXT( "MatProperty" ) );
+	MatProperty->SetMatState( EMaterialState::JELLY );
+
 	// HitBox Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
 	HitColl->SetupAttachment( GetMesh() );
@@ -79,70 +80,6 @@ void ATestGame2Character::Tick( float InDeltaTime )
 	Super::Tick(InDeltaTime);
 }
 
-void ATestGame2Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
-	check(PlayerInputComponent);
-	PlayerInputComponent->BindAxis( "MoveForward", this, &ATestGame2Character::MoveForward );
-	PlayerInputComponent->BindAxis( "MoveRight", this, &ATestGame2Character::MoveRight );
-
-	PlayerInputComponent->BindAxis( "Turn", this, &APawn::AddControllerYawInput );
-	PlayerInputComponent->BindAxis( "TurnRate", this, &ATestGame2Character::TurnAtRate );
-	PlayerInputComponent->BindAxis( "LookUp", this, &APawn::AddControllerPitchInput );
-	PlayerInputComponent->BindAxis( "LookUpRate", this, &ATestGame2Character::LookUpAtRate );
-
-	PlayerInputComponent->BindAction("Shift", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Shift", IE_Released, this, &ACharacter::StopJumping);
-
-	PlayerInputComponent->BindAction("Space", IE_Pressed, this, &ATestGame2Character::_RollStart);
-	PlayerInputComponent->BindAction( "F", IE_Pressed, this, &ATestGame2Character::_TakeDownStart );
-	PlayerInputComponent->BindAction("LeftClick", IE_Pressed, this, &ATestGame2Character::_Punch1Start );
-	PlayerInputComponent->BindAction("RightClick", IE_Pressed, this, &ATestGame2Character::_Punch2Start );
-}
-
-void ATestGame2Character::MoveForward( float Value )
-{
-	if( ( Controller!=nullptr )&&( Value!=0.0f ) && GameObject && GameObject->AnimState == EAnimState::IDLE_RUN )
-	{
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation( 0, Rotation.Yaw, 0 );
-
-		const FVector Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
-		AddMovementInput( Direction, Value );
-	}
-}
-
-void ATestGame2Character::MoveRight( float Value )
-{
-	if( ( Controller!=nullptr )&&( Value!=0.0f ) && GameObject && GameObject->AnimState == EAnimState::IDLE_RUN )
-	{
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation( 0, Rotation.Yaw, 0 );
-
-		const FVector Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::Y );
-		AddMovementInput( Direction, Value );
-	}
-}
-
-void ATestGame2Character::TurnAtRate( float Rate )
-{
-	AddControllerYawInput( Rate*BaseTurnRate*GetWorld()->GetDeltaSeconds() );
-}
-
-void ATestGame2Character::LookUpAtRate( float Rate )
-{
-	AddControllerPitchInput( Rate*BaseLookUpRate*GetWorld()->GetDeltaSeconds() );
-}
-
-void ATestGame2Character::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		//Jump();
-}
-
-void ATestGame2Character::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		//StopJumping();
-}
-
 void ATestGame2Character::Jump()
 {
 	if( GameObject && GameObject->AnimState != EAnimState::IDLE_RUN )
@@ -151,7 +88,7 @@ void ATestGame2Character::Jump()
 	Super::Jump();
 }
 
-void ATestGame2Character::_RollStart()
+void ATestGame2Character::RollStart()
 {
 	if( GameObject && GameObject->AnimState != EAnimState::IDLE_RUN )
 		return;
@@ -160,7 +97,7 @@ void ATestGame2Character::_RollStart()
 	GameObject->MontagePlay( RollAnimation );
 }
 
-void ATestGame2Character::_Punch1Start()
+void ATestGame2Character::Punch1Start()
 {
 	if( GameObject && GameObject->AnimState != EAnimState::IDLE_RUN )
 		return;
@@ -169,7 +106,7 @@ void ATestGame2Character::_Punch1Start()
 	GameObject->MontagePlay( Punch1Animation, GameObject->AttackSpeed );
 }
 
-void ATestGame2Character::_Punch2Start()
+void ATestGame2Character::Punch2Start()
 {
 	if( GameObject && 
 	    GameObject->AnimState != EAnimState::IDLE_RUN && 
@@ -180,7 +117,7 @@ void ATestGame2Character::_Punch2Start()
 	GameObject->MontagePlay( Punch2Animation, GameObject->AttackSpeed );
 }
 
-void ATestGame2Character::_TakeDownStart()
+void ATestGame2Character::TakeDownStart()
 {
 	if( GameObject&&
 		GameObject->AnimState!=EAnimState::IDLE_RUN )
