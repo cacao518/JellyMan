@@ -2,7 +2,7 @@
 
 
 #include "AnimNotify_CopyMaterial.h"
-#include "../Component/GameObject.h"
+#include "../Component/MaterialProperty.h"
 
 FString UAnimNotify_CopyMaterial::GetNotifyName_Implementation() const
 {
@@ -11,6 +11,8 @@ FString UAnimNotify_CopyMaterial::GetNotifyName_Implementation() const
 
 void UAnimNotify_CopyMaterial::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
 {
-	UGameObject* obj = Cast<UGameObject>( MeshComp->GetOwner()->FindComponentByClass<UGameObject>() );
-	if( !obj ) return;
+	UMaterialProperty* matProperty = Cast<UMaterialProperty>( MeshComp->GetOwner()->FindComponentByClass<UMaterialProperty>() );
+	if( !matProperty ) return;
+
+	matProperty->CopyMaterial();
 }

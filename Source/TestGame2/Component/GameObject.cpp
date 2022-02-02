@@ -72,6 +72,7 @@ void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
 	if( !animInstance || !InMontage )
 		return;
 
+	ResetInfo( true );
 	animInstance->Montage_Play( InMontage, InScale );
 }
 

@@ -2,7 +2,7 @@
 
 #include "MyPlayerController.h"
 #include "../Component/GameObject.h"
-#include "../GameObject/TestGame2Character.h"
+#include "../Character/GamePlayer.h"
 #include "../ETC/SDB.h"
 
 AMyPlayerController::AMyPlayerController()
@@ -18,7 +18,7 @@ void AMyPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	MyPlayer = Cast<ATestGame2Character>( GetPawn() );
+	MyPlayer = Cast<AGamePlayer>( GetPawn() );
 	if( !MyPlayer )
 		return;
 
@@ -34,10 +34,10 @@ void AMyPlayerController::BeginPlay()
 	InputComponent->BindAction( "Shift", IE_Pressed, MyPlayer, &ACharacter::Jump );
 	InputComponent->BindAction( "Shift", IE_Released, MyPlayer, &ACharacter::StopJumping );
 
-	InputComponent->BindAction( "Space", IE_Pressed, MyPlayer, &ATestGame2Character::RollStart );
-	InputComponent->BindAction( "F", IE_Pressed, MyPlayer, &ATestGame2Character::TakeDownStart );
-	InputComponent->BindAction( "LeftClick", IE_Pressed, MyPlayer, &ATestGame2Character::Punch1Start );
-	InputComponent->BindAction( "RightClick", IE_Pressed, MyPlayer, &ATestGame2Character::Punch2Start );
+	InputComponent->BindAction( "Space", IE_Pressed, MyPlayer, &AGamePlayer::RollStart );
+	InputComponent->BindAction( "F", IE_Pressed, MyPlayer, &AGamePlayer::TakeDownStart );
+	InputComponent->BindAction( "LeftClick", IE_Pressed, MyPlayer, &AGamePlayer::Punch1Start );
+	InputComponent->BindAction( "RightClick", IE_Pressed, MyPlayer, &AGamePlayer::Punch2Start );
 }
 
 void AMyPlayerController::MoveForward( float Value )

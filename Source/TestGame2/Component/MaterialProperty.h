@@ -8,6 +8,9 @@
 #include "MaterialProperty.generated.h"
 
 
+class UMaterialInterface;
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TESTGAME2_API UMaterialProperty : public UActorComponent
 {
@@ -20,6 +23,11 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	EMaterialState      MatState;       	     // 물질 상태
 
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	EMaterialState      MatStateOnTile;       	 // 밟고 있는 타일 위 물질 상태
+
+	TArray<UMaterialInterface*> Materials;       // 모든 머터리얼 애셋
+
 public:	
 	UMaterialProperty();
 
@@ -31,10 +39,33 @@ public:
 
 	// 현재 올라가 있는 타일의 물질을 복사한다.
 	void CopyMaterial();
+
+	///////////////////////////////////////////////////////////////////////
+	// Setter
+	///////////////////////////////////////////////////////////////////////
 	
 	// 물질을 변경한다.
 	void SetMatState( EMaterialState InMatState, bool InChangeAnim = false );
 
+	///////////////////////////////////////////////////////////////////////
+	// Getter
+	///////////////////////////////////////////////////////////////////////
+
 	// 현재 물질 상태를 반환한다.
-	EMaterialState GetMatState(){ return MatState; };
+	EMaterialState GetMatState() { return MatState; };
+
+	///////////////////////////////////////////////////////////////////////
+	// Delegate Function
+	///////////////////////////////////////////////////////////////////////
+
+	// 충돌이 시작할시에 호출되는 델리게이트에 등록하는 함수
+	UFUNCTION()
+	void TileCollBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult );
+
+private:
+	// 머터리얼 애셋 주소를 저장한다.
+	void _InitMatAssets();
+
+	// 머터리얼 애셋 주소를 EMaterialState로 바꿔준다.
+	EMaterialState _ConvertMatAssetToMatState( UMaterialInterface* InMaterial );
 };

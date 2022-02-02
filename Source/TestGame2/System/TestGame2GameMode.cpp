@@ -2,7 +2,7 @@
 
 #include "TestGame2GameMode.h"
 #include "MyPlayerController.h"
-#include "../GameObject/TestGame2Character.h"
+#include "../Character/GamePlayer.h"
 #include "UObject/ConstructorHelpers.h"
 
 ATestGame2GameMode::ATestGame2GameMode()

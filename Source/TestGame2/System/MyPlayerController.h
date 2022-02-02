@@ -15,7 +15,7 @@ class TESTGAME2_API AMyPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 private:
-	class ATestGame2Character* MyPlayer;
+	class AGamePlayer* MyPlayer;
 
 	float BaseTurnRate;
 	float BaseLookUpRate;
