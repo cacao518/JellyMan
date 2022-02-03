@@ -108,7 +108,7 @@ void UGameObject::SetMoveSpeed( float InMoveSpeed )
 
 	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
 	if( characterMovement )
-		characterMovement->MaxWalkSpeed = MoveSpeed;
+		characterMovement->MaxWalkSpeed = MoveSpeed * Const::DEFAULT_MOVE_SPEED;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,7 +137,7 @@ void UGameObject::SetMovePos( float InMovePower )
 	const FRotator YawRotation( 0, Rotation.Yaw, 0 );
 	const FVector  Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
 
-	MovePos = characterMovement->GetActorLocation() + ( Direction * InMovePower );
+	MovePos = characterMovement->GetActorLocation() + ( Direction * ( InMovePower * MoveSpeed ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,7 +227,7 @@ void UGameObject::_Move()
 
 	if( AnimState == EAnimState::IDLE_RUN || AnimState == EAnimState::JUMP )
 	{
-		characterMovement->MaxWalkSpeed = MoveSpeed;
+		characterMovement->MaxWalkSpeed = MoveSpeed * Const::DEFAULT_MOVE_SPEED;
 	}
 	else if( AnimState == EAnimState::DIE )
 	{

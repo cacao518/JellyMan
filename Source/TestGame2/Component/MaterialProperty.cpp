@@ -83,11 +83,27 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 	if( Cast<ACharacter>( OtherActor ) == OwningCharacter )
 		return;
 
-	auto meshOnTile = Cast<ACharacter>( OtherActor )->GetMesh();
-	if( !meshOnTile )
-		return;
-	
-	MatStateOnTile = _ConvertMatAssetToMatState( meshOnTile->GetMaterial( 0 ) );
+	// 몬스터나 플레이어
+	if( Cast<ACharacter>( OtherActor ) )
+	{ 
+		/*auto meshOnTile = Cast<ACharacter>( OtherActor )->GetMesh();
+		if( !meshOnTile )
+			return;
+
+		MatStateOnTile = _ConvertMatAssetToMatState( meshOnTile->GetMaterial( 0 ) );*/
+	}
+	else // 스테틱 매쉬
+	{
+		auto staticMesh = Cast<UStaticMeshComponent>( OtherActor->GetComponentByClass( UStaticMeshComponent::StaticClass() ) );
+		if( staticMesh )
+		{
+			auto material = staticMesh->GetMaterial( 0 );
+			if( !material )
+				return;
+
+			MatStateOnTile = _ConvertMatAssetToMatState( material );
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,13 +117,16 @@ void UMaterialProperty::_InitMatAssets()
 		switch( (EMaterialState)matState )
 		{
 		case EMaterialState::JELLY:
-			path = TEXT( "/Game/StarterContent/Materials/M_Metal_Copper.M_Metal_Copper" );
+			path = TEXT( "/Game/StarterContent/Materials/M_Basic_Floor.M_Basic_Floor" );
 			break;
 		case EMaterialState::GRASS:
 			path = TEXT( "/Game/StarterContent/Materials/M_Ground_Moss.M_Ground_Moss" );
 			break;
 		case EMaterialState::ROCK:
 			path = TEXT( "/Game/StarterContent/Materials/M_Rock_Basalt.M_Rock_Basalt" );
+			break;
+		case EMaterialState::WATER:
+			path = TEXT( "/Game/StarterContent/Materials/M_Water_Lake.M_Water_Lake" );
 			break;
 		case EMaterialState::MAX:
 			break;
@@ -132,12 +151,14 @@ EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface
 
 	FString path = InMaterial->GetPathName();
 
-	if( path == "/Game/StarterContent/Materials/M_Metal_Copper.M_Metal_Copper" )
+	if( path == "/Game/StarterContent/Materials/M_Basic_Floor.M_Basic_Floor" )
 		matState = EMaterialState::JELLY;
 	else if( path =="/Game/StarterContent/Materials/M_Ground_Moss.M_Ground_Moss" )
 		matState = EMaterialState::GRASS;
 	else if( path =="/Game/StarterContent/Materials/M_Rock_Basalt.M_Rock_Basalt" )
 		matState = EMaterialState::ROCK;
+	else if( path=="/Game/StarterContent/Materials/M_Water_Lake.M_Water_Lake" )
+		matState = EMaterialState::WATER;
 
 	return matState;
 }
