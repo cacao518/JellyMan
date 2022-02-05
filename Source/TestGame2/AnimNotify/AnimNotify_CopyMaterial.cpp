@@ -14,5 +14,5 @@ void UAnimNotify_CopyMaterial::Notify( USkeletalMeshComponent* MeshComp, UAnimSe
 	UMaterialProperty* matProperty = Cast<UMaterialProperty>( MeshComp->GetOwner()->FindComponentByClass<UMaterialProperty>() );
 	if( !matProperty ) return;
 
-	matProperty->CopyMaterial();
+	matProperty->SetIsEnabledTileColl( true );
 }

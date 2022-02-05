@@ -5,6 +5,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Materials/MaterialInterface.h"
 #include "Components/BoxComponent.h"
+#include "LandscapeComponent.h"
 
 UMaterialProperty::UMaterialProperty()
 {
@@ -12,7 +13,6 @@ UMaterialProperty::UMaterialProperty()
 	OwningCharacter = nullptr;
 
 	MatState = EMaterialState::MAX;
-	MatStateOnTile = EMaterialState::MAX;
 
 	_InitMatAssets();
 }
@@ -29,6 +29,8 @@ void UMaterialProperty::BeginPlay()
 	auto tileColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "TileColl" ) ) ) : nullptr;
 	if( tileColl )
 		tileColl->OnComponentBeginOverlap.AddDynamic( this, &UMaterialProperty::TileCollBeginOverlap );
+
+	SetIsEnabledTileColl( false );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,22 +42,11 @@ void UMaterialProperty::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 현재 올라가 있는 타일의 물질을 복사한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::CopyMaterial()
-{
-	if( MatStateOnTile == EMaterialState::MAX || MatStateOnTile == MatState )
-		return;
-
-	SetMatState( MatStateOnTile, true );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 물질을 변경한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialProperty::SetMatState( EMaterialState InMatState, bool InChangeAnim )
 {
-	if( InMatState == EMaterialState::MAX )
+	if( InMatState == EMaterialState::MAX || InMatState == MatState )
 		return;
 
 	if( !OwningCharacter )
@@ -67,6 +58,23 @@ void UMaterialProperty::SetMatState( EMaterialState InMatState, bool InChangeAni
 
 	MatState = InMatState;
 	curMesh->SetMaterial( 0, Materials[ (uint8)MatState ] );
+
+	SetIsEnabledTileColl( false );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 타일 콜리전 활성화 여부를 셋팅한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UMaterialProperty::SetIsEnabledTileColl( bool InIsEnabled )
+{
+	IsEnabledTileColl = InIsEnabled;
+
+	auto tileColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "TileColl" ) ) ) : nullptr;
+	if( tileColl )
+	{
+		tileColl->SetCollisionEnabled( IsEnabledTileColl ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
+		tileColl->SetVisibility( IsEnabledTileColl );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,6 +91,8 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 	if( Cast<ACharacter>( OtherActor ) == OwningCharacter )
 		return;
 
+	EMaterialState matStateOnTile = EMaterialState::MAX;
+
 	// 몬스터나 플레이어
 	if( Cast<ACharacter>( OtherActor ) )
 	{ 
@@ -92,8 +102,9 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 
 		MatStateOnTile = _ConvertMatAssetToMatState( meshOnTile->GetMaterial( 0 ) );*/
 	}
-	else // 스테틱 매쉬
+	else
 	{
+		// 스테틱 매쉬
 		auto staticMesh = Cast<UStaticMeshComponent>( OtherActor->GetComponentByClass( UStaticMeshComponent::StaticClass() ) );
 		if( staticMesh )
 		{
@@ -101,13 +112,32 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 			if( !material )
 				return;
 
-			MatStateOnTile = _ConvertMatAssetToMatState( material );
+			matStateOnTile = _ConvertMatAssetToMatState( material );
+
+
+		}
+
+		// 랜드스케이프
+		auto landScape = Cast<ULandscapeComponent>( OtherActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
+		if( landScape )
+		{
+			auto material = landScape->GetMaterial( 0 );
+			if( !material )
+				return;
+
+			matStateOnTile = _ConvertMatAssetToMatState( material );
+
+			FString str = OwningCharacter->GetName()+TEXT( ": Material Change -> " )+material->GetName();
+			if( GEngine )
+				GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
 		}
 	}
+
+	SetMatState( matStateOnTile, true );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief EMaterialState를 머터리얼 애셋 주소로 바꿔준다.
+//// @brief  머터리얼 애셋 주소를 저장한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialProperty::_InitMatAssets()
 {
@@ -124,6 +154,9 @@ void UMaterialProperty::_InitMatAssets()
 			break;
 		case EMaterialState::ROCK:
 			path = TEXT( "/Game/StarterContent/Materials/M_Rock_Basalt.M_Rock_Basalt" );
+			break;
+		case EMaterialState::GRAVEL:
+			path = TEXT( "/Game/StarterContent/Materials/M_Ground_Gravel.M_Ground_Gravel" );
 			break;
 		case EMaterialState::WATER:
 			path = TEXT( "/Game/StarterContent/Materials/M_Water_Lake.M_Water_Lake" );
@@ -157,6 +190,8 @@ EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface
 		matState = EMaterialState::GRASS;
 	else if( path =="/Game/StarterContent/Materials/M_Rock_Basalt.M_Rock_Basalt" )
 		matState = EMaterialState::ROCK;
+	else if( path=="/Game/StarterContent/Materials/M_Ground_Gravel.M_Ground_Gravel" )
+		matState = EMaterialState::GRAVEL;
 	else if( path=="/Game/StarterContent/Materials/M_Water_Lake.M_Water_Lake" )
 		matState = EMaterialState::WATER;
 

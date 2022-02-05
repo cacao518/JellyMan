@@ -22,6 +22,7 @@ enum class EMaterialState : uint8
 	JELLY            UMETA( DisplayName = "Jelly" ),
 	GRASS            UMETA( DisplayName = "Grass" ),
 	ROCK             UMETA( DisplayName = "Rock" ),
+	GRAVEL           UMETA( DisplayName = "Gravel" ),
 	WATER            UMETA( DisplayName = "Water" ),
 
 	MAX,

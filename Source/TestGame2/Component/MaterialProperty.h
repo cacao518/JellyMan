@@ -23,10 +23,9 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	EMaterialState      MatState;       	     // 물질 상태
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	EMaterialState      MatStateOnTile;       	 // 밟고 있는 타일 위 물질 상태
-
 	TArray<UMaterialInterface*> Materials;       // 모든 머터리얼 애셋
+
+	bool            IsEnabledTileColl;     // 타일 콜리전 활성화 여부
 
 public:	
 	UMaterialProperty();
@@ -37,15 +36,15 @@ public:
 	// Tick 함수
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
-	// 현재 올라가 있는 타일의 물질을 복사한다.
-	void CopyMaterial();
-
 	///////////////////////////////////////////////////////////////////////
 	// Setter
 	///////////////////////////////////////////////////////////////////////
 	
 	// 물질을 변경한다.
 	void SetMatState( EMaterialState InMatState, bool InChangeAnim = false );
+
+	// 타일 콜리전 활성화 여부를 셋팅한다.
+	void SetIsEnabledTileColl( bool InIsEnabled );
 
 	///////////////////////////////////////////////////////////////////////
 	// Getter
