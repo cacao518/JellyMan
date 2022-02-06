@@ -113,8 +113,6 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 				return;
 
 			matStateOnTile = _ConvertMatAssetToMatState( material );
-
-
 		}
 
 		// 랜드스케이프
