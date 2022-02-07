@@ -113,6 +113,10 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 				return;
 
 			matStateOnTile = _ConvertMatAssetToMatState( material );
+
+			FString str = OwningCharacter->GetName()+TEXT( ": Material Change -> " )+material->GetName();
+			if( GEngine )
+				GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
 		}
 
 		// 랜드스케이프
