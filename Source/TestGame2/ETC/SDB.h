@@ -67,12 +67,12 @@ namespace Const
 
     // Player
 	constexpr float PLAYER_HP                    = 200.f;  // 플레이어 체력
-	constexpr float PLAYER_MOVE_SPEED            = 1.0f;   // 플레이어 이동속도
-	constexpr float PLAYER_ATTACK_SPEED          = 1.0f;   // 플레이어 공격속도
+	constexpr float PLAYER_MOVE_SPEED            = 1.f;   // 플레이어 이동속도
+	constexpr float PLAYER_ATTACK_SPEED          = 1.f;   // 플레이어 공격속도
 
 	// Dummy
 	constexpr float DUMMY_HP           = 100.f;       // 더미 체력
 	constexpr float DUMMY_MOVE_SPEED   = 0.6f;        // 더미 이동속도
-	constexpr float DUMMY_ATTACK_SPEED = 1.0f;        // 더미 공격속도
+	constexpr float DUMMY_ATTACK_SPEED = 1.f;        // 더미 공격속도
 
 };
