@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MaterialProperty.h"
+#include "GameObject.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Materials/MaterialInterface.h"
@@ -58,6 +59,8 @@ void UMaterialProperty::SetMatState( EMaterialState InMatState, bool InChangeAni
 
 	MatState = InMatState;
 	curMesh->SetMaterial( 0, Materials[ (uint8)MatState ] );
+	
+	_InitStatus();
 
 	SetIsEnabledTileColl( false );
 }
@@ -174,6 +177,42 @@ void UMaterialProperty::_InitMatAssets()
 		{
 			Materials.Push( materialAsset.Object );
 		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief  머티리얼에 맞는 능력치를 초기화한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UMaterialProperty::_InitStatus()
+{
+	auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+	if( !gameObject )
+		return;
+
+	switch( MatState )
+	{
+	case EMaterialState::JELLY:
+	{
+		gameObject->SetMoveSpeed( Const::PLAYER_MOVE_SPEED );
+		gameObject->SetAttackSpeed( Const::PLAYER_ATTACK_SPEED );
+	}
+		break;
+	case EMaterialState::GRASS:
+	{
+		gameObject->SetMoveSpeed( Const::GRASS_MOVE_SPEED );
+		gameObject->SetAttackSpeed( Const::GRASS_ATTACK_SPEED );
+	}
+		break;
+	case EMaterialState::ROCK:
+	{
+		gameObject->SetMoveSpeed( Const::ROCK_MOVE_SPEED );
+		gameObject->SetAttackSpeed( Const::ROCK_ATTACK_SPEED );
+	}
+		break;
+	case EMaterialState::MAX:
+		break;
+	default:
+		break;
 	}
 }
 

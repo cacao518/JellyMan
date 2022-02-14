@@ -75,4 +75,12 @@ namespace Const
 	constexpr float DUMMY_MOVE_SPEED   = 0.6f;        // 더미 이동속도
 	constexpr float DUMMY_ATTACK_SPEED = 1.f;        // 더미 공격속도
 
+
+
+	// Material 
+	constexpr float GRASS_MOVE_SPEED = 1.2f;   // 플레이어 이동속도
+	constexpr float GRASS_ATTACK_SPEED = 1.1f;   // 플레이어 공격속도
+
+	constexpr float ROCK_MOVE_SPEED = 0.4f;   // 플레이어 이동속도
+	constexpr float ROCK_ATTACK_SPEED = 0.5f;   // 플레이어 공격속도
 };

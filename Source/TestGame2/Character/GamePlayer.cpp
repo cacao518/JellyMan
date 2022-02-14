@@ -97,7 +97,7 @@ void AGamePlayer::RollStart()
 	if( GameObject && GameObject->AnimState != EAnimState::IDLE_RUN )
 		return;
 
-	GameObject->MontagePlay( RollAnimation );
+	GameObject->MontagePlay( RollAnimation, GameObject->MoveSpeed );
 }
 
 void AGamePlayer::Punch1Start()
@@ -124,5 +124,5 @@ void AGamePlayer::TakeDownStart()
 		GameObject->AnimState!=EAnimState::IDLE_RUN )
 		return;
 
-	GameObject->MontagePlay( TakeDownAnimation );
+	GameObject->MontagePlay( TakeDownAnimation, GameObject->AttackSpeed );
 }

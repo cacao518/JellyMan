@@ -65,6 +65,9 @@ private:
 	// 머터리얼 애셋 주소를 저장한다.
 	void _InitMatAssets();
 
+	// 머티리얼에 맞는 능력치를 초기화한다.
+	void _InitStatus();
+
 	// 머터리얼 애셋 주소를 EMaterialState로 바꿔준다.
 	EMaterialState _ConvertMatAssetToMatState( UMaterialInterface* InMaterial );
 };
