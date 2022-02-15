@@ -30,7 +30,8 @@ public:
 	float           Hpm;                     // 최대 체력
 	float           MoveSpeed;               // 이동속도
 	float           AttackSpeed;             // 공격속도
-			        
+	float			JumpPower;               // 점프력
+	
 	bool            IsDie;                   // 사망 여부
 	bool            IsAttackMove;            // 공격중 이동 여부
 	bool            IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
@@ -62,9 +63,12 @@ public:
 
 	// HP, HPM을 설정한다.
 	void SetHp( float InHp ){ Hp = InHp; Hpm = InHp; };
-
+	
 	// 이동속도를 설정한다.
 	void SetMoveSpeed( float InMoveSpeed );
+
+	// 점프력을 설정한다.
+	void SetJumpPower( float InJumpPower );
 
 	// 공격속도를 설정한다.
 	void SetAttackSpeed( float InAttackSpeed ){ AttackSpeed = InAttackSpeed; };

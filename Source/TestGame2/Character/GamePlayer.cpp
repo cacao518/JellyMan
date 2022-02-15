@@ -52,6 +52,8 @@ AGamePlayer::AGamePlayer()
 	GameObject->SetHp         ( Const::PLAYER_HP                   );
 	GameObject->SetMoveSpeed  ( Const::PLAYER_MOVE_SPEED           );
 	GameObject->SetAttackSpeed( Const::PLAYER_ATTACK_SPEED         );
+	GameObject->SetJumpPower  ( Const::PLAYER_JUMP_POWER           );
+
 
 	// Create a MaterialProperty Component
 	MatProperty = CreateDefaultSubobject<UMaterialProperty>( TEXT( "MatProperty" ) );

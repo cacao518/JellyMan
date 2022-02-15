@@ -64,23 +64,28 @@ namespace Const
     // Common
 	constexpr float ANIM_LERP_MULITPLIER = 5.f;   // 애니메이션 중 이동 속도 보간 값
 	constexpr float DEFAULT_MOVE_SPEED = 450.f;   // 기본 이동속도
+	constexpr float DEFAULT_JUMP_POWER = 600.f;   // 기본 점프력
 
     // Player
 	constexpr float PLAYER_HP                    = 200.f;  // 플레이어 체력
 	constexpr float PLAYER_MOVE_SPEED            = 1.f;   // 플레이어 이동속도
 	constexpr float PLAYER_ATTACK_SPEED          = 1.f;   // 플레이어 공격속도
+	constexpr float PLAYER_JUMP_POWER            = 1.f;   // 플레이어 점프력
 
 	// Dummy
 	constexpr float DUMMY_HP           = 100.f;       // 더미 체력
 	constexpr float DUMMY_MOVE_SPEED   = 0.6f;        // 더미 이동속도
 	constexpr float DUMMY_ATTACK_SPEED = 1.f;        // 더미 공격속도
+	constexpr float DUMMY_JUMP_POWER   = 1.f;        // 더미 점프력
 
 
 
 	// Material 
-	constexpr float GRASS_MOVE_SPEED = 1.2f;   // 플레이어 이동속도
+	constexpr float GRASS_MOVE_SPEED   = 1.2f;   // 플레이어 이동속도
 	constexpr float GRASS_ATTACK_SPEED = 1.1f;   // 플레이어 공격속도
+	constexpr float GRASS_JUMP_POWER   = 1.1f;   // 플레이어 점프력
 
-	constexpr float ROCK_MOVE_SPEED = 0.4f;   // 플레이어 이동속도
+	constexpr float ROCK_MOVE_SPEED   = 0.4f;   // 플레이어 이동속도
 	constexpr float ROCK_ATTACK_SPEED = 0.5f;   // 플레이어 공격속도
+	constexpr float ROCK_JUMP_POWER   = 0.5f;   // 플레이어 점프력
 };
