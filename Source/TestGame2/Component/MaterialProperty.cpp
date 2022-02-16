@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Materials/MaterialInterface.h"
 #include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "LandscapeComponent.h"
 
 UMaterialProperty::UMaterialProperty()
@@ -200,6 +201,7 @@ void UMaterialProperty::_InitStatus()
 		gameObject->SetMoveSpeed( Const::PLAYER_MOVE_SPEED );
 		gameObject->SetAttackSpeed( Const::PLAYER_ATTACK_SPEED );
 		gameObject->SetJumpPower( Const::PLAYER_JUMP_POWER );
+		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
 		break;
 	}
 	case EMaterialState::GRASS:
@@ -207,6 +209,7 @@ void UMaterialProperty::_InitStatus()
 		gameObject->SetMoveSpeed( Const::GRASS_MOVE_SPEED );
 		gameObject->SetAttackSpeed( Const::GRASS_ATTACK_SPEED );
 		gameObject->SetJumpPower( Const::GRASS_JUMP_POWER );
+		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
 		break;
 	}
 	case EMaterialState::ROCK:
@@ -214,13 +217,15 @@ void UMaterialProperty::_InitStatus()
 		gameObject->SetMoveSpeed( Const::ROCK_MOVE_SPEED );
 		gameObject->SetAttackSpeed( Const::ROCK_ATTACK_SPEED );
 		gameObject->SetJumpPower( Const::ROCK_JUMP_POWER );
+		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
 		break;
 	}
 	case EMaterialState::WATER:
 	{
-		gameObject->SetMoveSpeed( Const::PLAYER_MOVE_SPEED );
-		gameObject->SetAttackSpeed( Const::PLAYER_ATTACK_SPEED );
-		gameObject->SetJumpPower( Const::PLAYER_JUMP_POWER );
+		gameObject->SetMoveSpeed( Const::WATER_MOVE_SPEED );
+		gameObject->SetAttackSpeed( Const::WATER_ATTACK_SPEED );
+		gameObject->SetJumpPower( Const::WATER_JUMP_POWER );
+		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Water" );
 		break;
 	}
 	case EMaterialState::MAX:

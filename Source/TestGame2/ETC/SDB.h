@@ -88,4 +88,8 @@ namespace Const
 	constexpr float ROCK_MOVE_SPEED   = 0.4f;   // 플레이어 이동속도
 	constexpr float ROCK_ATTACK_SPEED = 0.5f;   // 플레이어 공격속도
 	constexpr float ROCK_JUMP_POWER   = 0.5f;   // 플레이어 점프력
+
+	constexpr float WATER_MOVE_SPEED = 1.1f;   // 플레이어 이동속도
+	constexpr float WATER_ATTACK_SPEED = 1.0f;   // 플레이어 공격속도
+	constexpr float WATER_JUMP_POWER = 0.5f;   // 플레이어 점프력
 };
