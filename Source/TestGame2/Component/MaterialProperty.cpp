@@ -200,22 +200,29 @@ void UMaterialProperty::_InitStatus()
 		gameObject->SetMoveSpeed( Const::PLAYER_MOVE_SPEED );
 		gameObject->SetAttackSpeed( Const::PLAYER_ATTACK_SPEED );
 		gameObject->SetJumpPower( Const::PLAYER_JUMP_POWER );
-	}
 		break;
+	}
 	case EMaterialState::GRASS:
 	{
 		gameObject->SetMoveSpeed( Const::GRASS_MOVE_SPEED );
 		gameObject->SetAttackSpeed( Const::GRASS_ATTACK_SPEED );
 		gameObject->SetJumpPower( Const::GRASS_JUMP_POWER );
-	}
 		break;
+	}
 	case EMaterialState::ROCK:
 	{
 		gameObject->SetMoveSpeed( Const::ROCK_MOVE_SPEED );
 		gameObject->SetAttackSpeed( Const::ROCK_ATTACK_SPEED );
 		gameObject->SetJumpPower( Const::ROCK_JUMP_POWER );
-	}
 		break;
+	}
+	case EMaterialState::WATER:
+	{
+		gameObject->SetMoveSpeed( Const::PLAYER_MOVE_SPEED );
+		gameObject->SetAttackSpeed( Const::PLAYER_ATTACK_SPEED );
+		gameObject->SetJumpPower( Const::PLAYER_JUMP_POWER );§ø§°¡÷
+		break;
+	}
 	case EMaterialState::MAX:
 		break;
 	default:
