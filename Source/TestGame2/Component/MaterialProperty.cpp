@@ -220,7 +220,7 @@ void UMaterialProperty::_InitStatus()
 	{
 		gameObject->SetMoveSpeed( Const::PLAYER_MOVE_SPEED );
 		gameObject->SetAttackSpeed( Const::PLAYER_ATTACK_SPEED );
-		gameObject->SetJumpPower( Const::PLAYER_JUMP_POWER );¤¿¤¡ÁÖ
+		gameObject->SetJumpPower( Const::PLAYER_JUMP_POWER );
 		break;
 	}
 	case EMaterialState::MAX:
