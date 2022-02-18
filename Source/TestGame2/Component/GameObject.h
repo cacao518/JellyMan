@@ -52,7 +52,7 @@ public:
 	void MontagePlay( UAnimMontage* InMontage, float InScale = 1.f );
 
 	// 카메라 쉐이크를 실행한다.
-	void CameraShake( float InScale = 1.f );
+	void CameraShake( float InScale = 1.f, bool InShakeByWeight = false );
 
 	///////////////////////////////////////////////////////////////////////
 	// Setter

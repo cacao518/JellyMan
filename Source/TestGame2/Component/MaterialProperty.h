@@ -25,7 +25,8 @@ public:
 
 	TArray<UMaterialInterface*> Materials;       // 모든 머터리얼 애셋
 
-	bool            IsEnabledTileColl;     // 타일 콜리전 활성화 여부
+	bool            IsEnabledTileColl;            // 타일 콜리전 활성화 여부
+	bool            FallingShakeToWeightOnce;     // 무게에 의한 흔들림을 한번만 시도하기위한 변수
 
 public:	
 	UMaterialProperty();
@@ -70,4 +71,7 @@ private:
 
 	// 머터리얼 애셋 주소를 EMaterialState로 바꿔준다.
 	EMaterialState _ConvertMatAssetToMatState( UMaterialInterface* InMaterial );
+
+	// 무거운 상태 로직을 실행한다.
+	void _ProcessHeavyMaterial();
 };

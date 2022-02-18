@@ -16,7 +16,10 @@ class TESTGAME2_API UAnimNotify_CameraShake : public UAnimNotify
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
-	float Scale;
+	float Scale = 1.f;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	bool ShakeByWeight = false;
 
 public:
 	virtual FString GetNotifyName_Implementation() const override;

@@ -79,9 +79,23 @@ void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 카메라 쉐이크를 실행한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameObject::CameraShake( float InScale )
+void UGameObject::CameraShake( float InScale, bool InShakeByWeight )
 {
-	GetWorld()->GetFirstPlayerController()->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
+	if( InShakeByWeight )
+	{
+		auto moveComponent = OwningCharacter->GetCharacterMovement();
+		if( moveComponent )
+		{
+			if( !moveComponent->IsFalling() && JumpPower<=0.5f )
+			{
+				GetWorld()->GetFirstPlayerController()->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
+			}
+		}
+	}
+	else
+	{
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

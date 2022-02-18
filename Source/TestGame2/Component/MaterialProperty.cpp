@@ -41,6 +41,8 @@ void UMaterialProperty::BeginPlay()
 void UMaterialProperty::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	_ProcessHeavyMaterial();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,4 +258,25 @@ EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface
 		matState = EMaterialState::WATER;
 
 	return matState;
+}
+
+void UMaterialProperty::_ProcessHeavyMaterial()
+{
+	auto moveComponent = OwningCharacter->GetMovementComponent();
+	if( moveComponent )
+	{
+		if( moveComponent->IsFalling() )
+		{
+			FallingShakeToWeightOnce = false;
+		}
+		else if( !FallingShakeToWeightOnce )
+		{
+			auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+			if( gameObject )
+			{
+				gameObject->CameraShake( 1.f, true );
+				FallingShakeToWeightOnce = true;
+			}
+		}
+	}
 }

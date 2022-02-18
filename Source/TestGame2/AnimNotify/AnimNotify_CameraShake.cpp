@@ -14,5 +14,5 @@ void UAnimNotify_CameraShake::Notify( USkeletalMeshComponent* MeshComp, UAnimSeq
 	UGameObject* obj = Cast<UGameObject>( MeshComp->GetOwner()->FindComponentByClass<UGameObject>() );
 	if( !obj ) return;
 
-	obj->CameraShake( Scale );
+	obj->CameraShake( Scale, ShakeByWeight );
 }
