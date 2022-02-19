@@ -91,5 +91,5 @@ namespace Const
 
 	constexpr float WATER_MOVE_SPEED = 1.1f;   // 플레이어 이동속도
 	constexpr float WATER_ATTACK_SPEED = 1.0f;   // 플레이어 공격속도
-	constexpr float WATER_JUMP_POWER = 0.6f;   // 플레이어 점프력
+	constexpr float WATER_JUMP_POWER = 0.7f;   // 플레이어 점프력
 };

@@ -86,7 +86,7 @@ void UGameObject::CameraShake( float InScale, bool InShakeByWeight )
 		auto moveComponent = OwningCharacter->GetCharacterMovement();
 		if( moveComponent )
 		{
-			if( !moveComponent->IsFalling() && JumpPower<=0.5f )
+			if( !moveComponent->IsFalling() && JumpPower <= 0.5f )
 			{
 				GetWorld()->GetFirstPlayerController()->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
 			}
