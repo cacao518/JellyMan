@@ -28,6 +28,15 @@ enum class EMaterialState : uint8
 	MAX,
 };
 
+// 무기 상태
+UENUM( BlueprintType )
+enum class EWeaponState : uint8
+{
+	SWORD            UMETA( DisplayName = "Sword" ),
+
+	MAX,
+};
+
 // 충돌체 정보
 USTRUCT( Atomic, BlueprintType )
 struct FCollisionInfo
@@ -81,15 +90,19 @@ namespace Const
 
 
 	// Material 
-	constexpr float GRASS_MOVE_SPEED   = 1.2f;   // 플레이어 이동속도
-	constexpr float GRASS_ATTACK_SPEED = 1.1f;   // 플레이어 공격속도
-	constexpr float GRASS_JUMP_POWER   = 1.1f;   // 플레이어 점프력
+	constexpr float GRASS_MOVE_SPEED   = 1.2f;   
+	constexpr float GRASS_ATTACK_SPEED = 1.1f;   
+	constexpr float GRASS_JUMP_POWER   = 1.1f;  
 
-	constexpr float ROCK_MOVE_SPEED   = 0.4f;   // 플레이어 이동속도
-	constexpr float ROCK_ATTACK_SPEED = 0.5f;   // 플레이어 공격속도
-	constexpr float ROCK_JUMP_POWER   = 0.5f;   // 플레이어 점프력
+	constexpr float ROCK_MOVE_SPEED   = 0.4f;   
+	constexpr float ROCK_ATTACK_SPEED = 0.5f;  
+	constexpr float ROCK_JUMP_POWER   = 0.5f;   
 
-	constexpr float WATER_MOVE_SPEED = 1.1f;   // 플레이어 이동속도
-	constexpr float WATER_ATTACK_SPEED = 1.0f;   // 플레이어 공격속도
-	constexpr float WATER_JUMP_POWER = 0.7f;   // 플레이어 점프력
+	constexpr float GRAVEL_MOVE_SPEED = 0.7f;   
+	constexpr float GRAVEL_ATTACK_SPEED = 0.8f;  
+	constexpr float GRAVEL_JUMP_POWER = 0.7f;  
+
+	constexpr float WATER_MOVE_SPEED = 1.1f;   
+	constexpr float WATER_ATTACK_SPEED = 1.0f; 
+	constexpr float WATER_JUMP_POWER = 0.8f;  
 };

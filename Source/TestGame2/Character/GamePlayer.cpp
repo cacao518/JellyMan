@@ -4,6 +4,7 @@
 #include "../ETC/SDB.h"
 #include "../Component/GameObject.h"
 #include "../Component/MaterialProperty.h"
+#include "../Component/WeaponChange.h"
 #include "Animation/AnimInstance.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
@@ -54,9 +55,11 @@ AGamePlayer::AGamePlayer()
 	GameObject->SetAttackSpeed( Const::PLAYER_ATTACK_SPEED         );
 	GameObject->SetJumpPower  ( Const::PLAYER_JUMP_POWER           );
 
-
 	// Create a MaterialProperty Component
 	MatProperty = CreateDefaultSubobject<UMaterialProperty>( TEXT( "MatProperty" ) );
+
+	// Create a WeaponChange Component
+	WeaponChange = CreateDefaultSubobject<UWeaponChange>( TEXT( "WeaponChange" ) );
 
 	// HitBox Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
@@ -100,6 +103,7 @@ void AGamePlayer::RollStart()
 		return;
 
 	GameObject->MontagePlay( RollAnimation, GameObject->MoveSpeed );
+	WeaponChange->SetWeaponState( EWeaponState::SWORD, true );
 }
 
 void AGamePlayer::Punch1Start()

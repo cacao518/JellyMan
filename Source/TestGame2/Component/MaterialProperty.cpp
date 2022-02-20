@@ -222,6 +222,14 @@ void UMaterialProperty::_InitStatus()
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
 		break;
 	}
+	case EMaterialState::GRAVEL:
+	{
+		gameObject->SetMoveSpeed( Const::GRAVEL_MOVE_SPEED );
+		gameObject->SetAttackSpeed( Const::GRAVEL_ATTACK_SPEED );
+		gameObject->SetJumpPower( Const::GRAVEL_JUMP_POWER );
+		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
+		break;
+	}
 	case EMaterialState::WATER:
 	{
 		gameObject->SetMoveSpeed( Const::WATER_MOVE_SPEED );
