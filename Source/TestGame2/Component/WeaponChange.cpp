@@ -34,7 +34,8 @@ void UWeaponChange::BeginPlay()
 		switch( (EWeaponState)i )
 		{
 		case EWeaponState::SWORD:
-			//WeaponMeshes[ i ] = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "Sword" ) ) );
+		    auto staticMesh = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "Sword" ) ) );
+			WeaponMeshes.Push ( staticMesh );
 			break;
 		}
 	}
