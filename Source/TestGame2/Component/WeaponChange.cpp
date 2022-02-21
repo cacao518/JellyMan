@@ -11,13 +11,13 @@ UWeaponChange::UWeaponChange()
 	PrimaryComponentTick.bCanEverTick = true;
 	OwningCharacter                   = nullptr;
 	CurWeaponMesh                     = nullptr;
-	CurWeaponMaterialInstance         = nullptr;
+	DissolveMaterial                  = nullptr;
+	DissovleMaterialInstance          = nullptr;
 
 	WeaponState = EWeaponState::MAX;
 
 	ConstructorHelpers::FObjectFinder<UMaterialInterface> materialAsset( TEXT( "/Game/Shader/Dissolve_Inst.Dissolve_Inst" ) );
-	if( materialAsset.Succeeded() )
-		DissolveMaterial = materialAsset.Object;
+	if( materialAsset.Succeeded() ) DissolveMaterial = materialAsset.Object;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,15 +48,15 @@ void UWeaponChange::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if( DissolveAmount > 0.f )
+	if( DissolveAmount <= 0.1f )
 	{ 
-		DissolveAmount = FMath::Lerp( DissolveAmount, 0.f, GetWorld()->GetDeltaSeconds() );
-		if( CurWeaponMaterialInstance )
-			CurWeaponMaterialInstance->SetScalarParameterValue( FName( TEXT( "Amount" ) ), DissolveAmount );
+		_DissovleAnimEnd();
 	}
 	else
 	{ 
-		_DissovleAnimEnd();
+		DissolveAmount = FMath::Lerp( DissolveAmount, 0.f, GetWorld()->GetDeltaSeconds() );
+		if( DissovleMaterialInstance )
+			DissovleMaterialInstance->SetScalarParameterValue( FName( TEXT( "Amount" ) ), DissolveAmount );
 	}
 }
 
@@ -70,7 +70,6 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 
 	WeaponState = InWeaponState;
 	CurWeaponMesh = WeaponMeshes[ (uint8)WeaponState ];
-	CurWeaponMaterialInstance = UMaterialInstanceDynamic::Create( CurWeaponMesh->GetMaterial( 0 ), this );
 
 	if( !CurWeaponMesh )
 		return;
@@ -78,7 +77,8 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 	if( InChangeAnim )
 	{ 
 		DissolveAmount = 1.f;
-		CurWeaponMesh->SetMaterial( 0, DissolveMaterial );
+		DissovleMaterialInstance = UMaterialInstanceDynamic::Create( DissolveMaterial, this );
+		CurWeaponMesh->SetMaterial( 0, DissovleMaterialInstance );
 	}
 	else
 	{
@@ -94,7 +94,7 @@ void UWeaponChange::_DissovleAnimEnd()
 	if ( !CurWeaponMesh )
 		return;
 
-	if( CurWeaponMesh->GetMaterial(0) != DissolveMaterial )
+	if( CurWeaponMesh->GetMaterial(0) != DissovleMaterialInstance )
 		return;
 
 	auto curMesh = OwningCharacter->GetMesh();
@@ -104,5 +104,5 @@ void UWeaponChange::_DissovleAnimEnd()
 	DissolveAmount = 0.f;
 
 	// 무기 머티리얼을 현재 캐릭터 머티리얼과 동일한 머티리얼로 바꿔준다.
-	curMesh->SetMaterial( 0, curMesh->GetMaterial( 0 ) );	
+	CurWeaponMesh->SetMaterial( 0, curMesh->GetMaterial( 0 ) );
 }

@@ -21,11 +21,11 @@ public:
 	EWeaponState           WeaponState;       	        // 무기 상태
 
 	class UStaticMeshComponent*     CurWeaponMesh;               // 현재 무기 스태틱매쉬
-	class UMaterialInstanceDynamic* CurWeaponMaterialInstance;   // 현재 무기 머티리얼 인스턴스
 	TArray< UStaticMeshComponent* > WeaponMeshes;                // 무기 스태틱 메시 애셋들
 
-	UMaterialInterface*    DissolveMaterial;            // 디졸브 머티리얼 주소
-	float                  DissolveAmount;              // 디졸브 변환 값
+	class UMaterialInstanceDynamic* DissovleMaterialInstance;    // 디졸브 머티리얼 인스턴스
+	UMaterialInterface*             DissolveMaterial;            // 디졸브 머티리얼 주소
+	float                           DissolveAmount;              // 디졸브 변환 값
 
 public:	
 	UWeaponChange();
