@@ -68,11 +68,19 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 	if( InWeaponState == EWeaponState::MAX || InWeaponState == WeaponState )
 		return;
 
+	if( WeaponMeshes.IsEmpty() )
+		return;
+
 	WeaponState = InWeaponState;
 	CurWeaponMesh = WeaponMeshes[ (uint8)WeaponState ];
 
 	if( !CurWeaponMesh )
 		return;
+
+	for( auto mesh : WeaponMeshes )
+		mesh->SetVisibility( false );
+
+	CurWeaponMesh->SetVisibility( true );
 
 	if( InChangeAnim )
 	{ 
