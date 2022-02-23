@@ -2,6 +2,7 @@
 
 #include "MaterialProperty.h"
 #include "GameObject.h"
+#include "WeaponChange.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Materials/MaterialInterface.h"
@@ -62,6 +63,10 @@ void UMaterialProperty::SetMatState( EMaterialState InMatState, bool InChangeAni
 
 	MatState = InMatState;
 	curMesh->SetMaterial( 0, Materials[ (uint8)MatState ] );
+
+	auto weaponChange = OwningCharacter ? Cast<UWeaponChange>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "WeaponChange" ) ) ) : nullptr;
+	if( weaponChange && weaponChange->GetCurWeaponMesh() )
+		weaponChange->GetCurWeaponMesh()->SetMaterial( 0, Materials[ (uint8)MatState ] );
 	
 	_InitStatus();
 

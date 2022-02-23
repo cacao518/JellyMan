@@ -41,7 +41,7 @@ public:
 	///////////////////////////////////////////////////////////////////////
 	
 	// 무기를 변경한다.
-	void SetWeaponState( EWeaponState InWeaponState, bool InChangeAnim = false );
+	void SetWeaponState( EWeaponState InWeaponState, bool InChangeAnim = true );
 
 	///////////////////////////////////////////////////////////////////////
 	// Getter
@@ -50,7 +50,13 @@ public:
 	// 현재 무기 상태를 반환한다.
 	EWeaponState GetWeaponState() { return WeaponState; };
 
+	// 현재 무기 스태틱매쉬를 반환한다.
+	UStaticMeshComponent* GetCurWeaponMesh() { return CurWeaponMesh; };
+
 private:
+	// 무기 메쉬 주소를 저장해놓는다.
+	void _InitWeaponMesh();
+
 	// 디졸브 애니메이션을 종료 처리한다.
 	void _DissovleAnimEnd();
 

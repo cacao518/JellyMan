@@ -29,16 +29,7 @@ void UWeaponChange::BeginPlay()
 
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 
-	for( uint8 i = 0; i<(uint8)EWeaponState::MAX; i++ )
-	{
-		switch( (EWeaponState)i )
-		{
-		case EWeaponState::SWORD:
-		    auto staticMesh = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "Sword" ) ) );
-			WeaponMeshes.Push ( staticMesh );
-			break;
-		}
-	}
+	_InitWeaponMesh();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +45,7 @@ void UWeaponChange::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	}
 	else
 	{ 
-		DissolveAmount = FMath::Lerp( DissolveAmount, 0.f, GetWorld()->GetDeltaSeconds() );
+		DissolveAmount = FMath::Lerp( DissolveAmount, 0.f, GetWorld()->GetDeltaSeconds() * 2.f );
 		if( DissovleMaterialInstance )
 			DissovleMaterialInstance->SetScalarParameterValue( FName( TEXT( "Amount" ) ), DissolveAmount );
 	}
@@ -65,7 +56,7 @@ void UWeaponChange::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAnim )
 {
-	if( InWeaponState == EWeaponState::MAX || InWeaponState == WeaponState )
+	if( InWeaponState == EWeaponState::MAX )
 		return;
 
 	if( WeaponMeshes.IsEmpty() )
@@ -91,6 +82,23 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 	else
 	{
 		_DissovleAnimEnd();
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 무기 메쉬 주소를 저장해놓는다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UWeaponChange::_InitWeaponMesh()
+{
+	for( uint8 i = 0; i<(uint8)EWeaponState::MAX; i++ )
+	{
+		switch( (EWeaponState)i )
+		{
+		case EWeaponState::SWORD:
+			auto staticMesh = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "Sword" ) ) );
+			WeaponMeshes.Push( staticMesh );
+			break;
+		}
 	}
 }
 

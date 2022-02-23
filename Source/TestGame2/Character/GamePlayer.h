@@ -66,5 +66,7 @@ public:
 	void Punch1Start();
 	void Punch2Start();
 	void TakeDownStart();
+
+	void EquipSword();
 };
 

@@ -103,7 +103,6 @@ void AGamePlayer::RollStart()
 		return;
 
 	GameObject->MontagePlay( RollAnimation, GameObject->MoveSpeed );
-	WeaponChange->SetWeaponState( EWeaponState::SWORD, true );
 }
 
 void AGamePlayer::Punch1Start()
@@ -131,4 +130,12 @@ void AGamePlayer::TakeDownStart()
 		return;
 
 	GameObject->MontagePlay( TakeDownAnimation, GameObject->AttackSpeed );
+}
+
+void AGamePlayer::EquipSword()
+{
+	if( !GameObject || !WeaponChange )
+		return;
+
+	WeaponChange->SetWeaponState( EWeaponState::SWORD );
 }
