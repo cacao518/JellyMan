@@ -88,7 +88,6 @@ namespace Const
 	constexpr float DUMMY_JUMP_POWER   = 1.f;        // 더미 점프력
 
 
-
 	// Material 
 	constexpr float GRASS_MOVE_SPEED   = 1.2f;   
 	constexpr float GRASS_ATTACK_SPEED = 1.1f;   
