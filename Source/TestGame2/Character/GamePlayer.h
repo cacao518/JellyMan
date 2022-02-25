@@ -42,16 +42,19 @@ public:
 	class UCameraComponent* FollowCamera;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* RollAnimation;
+	class UAnimMontage* RollAnim;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* TakeDownAnimation;
+	class UAnimMontage* TakeDownAnim;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* Punch1Animation;
+	class UAnimMontage* Punch1Anim;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* Punch2Animation;
+	class UAnimMontage* Punch2Anim;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	class UAnimMontage* SwordDrawAnim;
 
 public:
 	AGamePlayer();
