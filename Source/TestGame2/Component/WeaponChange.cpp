@@ -45,7 +45,7 @@ void UWeaponChange::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	}
 	else
 	{ 
-		DissolveAmount = FMath::Lerp( DissolveAmount, 0.f, GetWorld()->GetDeltaSeconds() * 2.f );
+		DissolveAmount = FMath::Lerp( DissolveAmount, 0.f, GetWorld()->GetDeltaSeconds() * 3.f );
 		if( DissovleMaterialInstance )
 			DissovleMaterialInstance->SetScalarParameterValue( FName( TEXT( "Amount" ) ), DissolveAmount );
 	}
@@ -73,10 +73,15 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 
 	CurWeaponMesh->SetVisibility( true );
 
+	auto curMesh = OwningCharacter->GetMesh();
+	if( !curMesh )
+		return;
+
 	if( InChangeAnim )
 	{ 
 		DissolveAmount = 1.f;
 		DissovleMaterialInstance = UMaterialInstanceDynamic::Create( DissolveMaterial, this );
+		//DissovleMaterialInstance->SetTextureParameterValue("Texture");
 		CurWeaponMesh->SetMaterial( 0, DissovleMaterialInstance );
 	}
 	else

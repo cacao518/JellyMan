@@ -139,5 +139,4 @@ void AGamePlayer::EquipSword()
 		return;
 
 	GameObject->MontagePlay( SwordDrawAnim, GameObject->AttackSpeed );
-	WeaponChange->SetWeaponState( EWeaponState::SWORD );
 }
