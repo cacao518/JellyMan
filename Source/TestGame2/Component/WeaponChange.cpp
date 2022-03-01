@@ -81,7 +81,6 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 	{ 
 		DissolveAmount = 1.f;
 		DissovleMaterialInstance = UMaterialInstanceDynamic::Create( DissolveMaterial, this );
-		//DissovleMaterialInstance->SetTextureParameterValue("Texture");
 		CurWeaponMesh->SetMaterial( 0, DissovleMaterialInstance );
 	}
 	else
