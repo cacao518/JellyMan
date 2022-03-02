@@ -89,7 +89,7 @@ namespace Const
 
 
 	// Material 
-	constexpr float GRASS_MOVE_SPEED   = 1.2f;   
+	constexpr float GRASS_MOVE_SPEED   = 1.1f;   
 	constexpr float GRASS_ATTACK_SPEED = 1.1f;   
 	constexpr float GRASS_JUMP_POWER   = 1.1f;  
 
