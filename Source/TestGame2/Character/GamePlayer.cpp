@@ -97,6 +97,44 @@ void AGamePlayer::Jump()
 	Super::Jump();
 }
 
+void AGamePlayer::LeftAttack()
+{
+	switch( WeaponChange->GetWeaponState() )
+	{
+		case EWeaponState::MAX:
+		{
+			Punch1Start();
+			break;
+		}
+		case EWeaponState::SWORD:
+		{
+			SwordAttack1Start();
+			break;
+		}
+		default:
+			break;
+	}
+}
+
+void AGamePlayer::RightAttack()
+{
+	switch( WeaponChange->GetWeaponState() )
+	{
+	case EWeaponState::MAX:
+	{
+		Punch2Start();
+		break;
+	}
+	case EWeaponState::SWORD:
+	{
+		SwordAttack2Start();
+		break;
+	}
+	default:
+		break;
+	}
+}
+
 void AGamePlayer::RollStart()
 {
 	if( GameObject && GameObject->AnimState != EAnimState::IDLE_RUN )
@@ -110,7 +148,7 @@ void AGamePlayer::Punch1Start()
 	if( GameObject && GameObject->AnimState != EAnimState::IDLE_RUN )
 		return;
 
-	GameObject->MontagePlay( SwordAttack1Anim, GameObject->AttackSpeed );
+	GameObject->MontagePlay( Punch1Anim, GameObject->AttackSpeed );
 }
 
 void AGamePlayer::Punch2Start()
@@ -120,7 +158,7 @@ void AGamePlayer::Punch2Start()
 	    !GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) )
 		return;
 
-	GameObject->MontagePlay( SwordAttack2Anim, GameObject->AttackSpeed );
+	GameObject->MontagePlay( Punch2Anim, GameObject->AttackSpeed );
 }
 
 void AGamePlayer::TakeDownStart()
@@ -139,4 +177,23 @@ void AGamePlayer::EquipSword()
 		return;
 
 	GameObject->MontagePlay( SwordDrawAnim, GameObject->AttackSpeed );
+}
+
+void AGamePlayer::SwordAttack1Start()
+{
+	if( GameObject&&
+		GameObject->AnimState!=EAnimState::IDLE_RUN )
+		return;
+
+	GameObject->MontagePlay( SwordAttack1Anim, GameObject->AttackSpeed );
+}
+
+void AGamePlayer::SwordAttack2Start()
+{
+	if( GameObject&&
+		GameObject->AnimState!=EAnimState::IDLE_RUN&&
+		!GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" ) )
+		return;
+
+	GameObject->MontagePlay( SwordAttack2Anim, GameObject->AttackSpeed );
 }

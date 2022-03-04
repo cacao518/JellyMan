@@ -71,11 +71,16 @@ public:
 
 	virtual void Jump() override;
 
+	void LeftAttack();
+	void RightAttack();
+
 	void RollStart();
 	void Punch1Start();
 	void Punch2Start();
 	void TakeDownStart();
 
 	void EquipSword();
+	void SwordAttack1Start();
+	void SwordAttack2Start();
 };
 

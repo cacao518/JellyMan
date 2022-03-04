@@ -36,8 +36,8 @@ void AMyPlayerController::BeginPlay()
 
 	InputComponent->BindAction( "Space", IE_Pressed, MyPlayer, &AGamePlayer::RollStart );
 	InputComponent->BindAction( "F", IE_Pressed, MyPlayer, &AGamePlayer::TakeDownStart );
-	InputComponent->BindAction( "LeftClick", IE_Pressed, MyPlayer, &AGamePlayer::Punch1Start );
-	InputComponent->BindAction( "RightClick", IE_Pressed, MyPlayer, &AGamePlayer::Punch2Start );
+	InputComponent->BindAction( "LeftClick", IE_Pressed, MyPlayer, &AGamePlayer::LeftAttack );
+	InputComponent->BindAction( "RightClick", IE_Pressed, MyPlayer, &AGamePlayer::RightAttack );
 	InputComponent->BindAction( "1", IE_Pressed, MyPlayer, &AGamePlayer::EquipSword );
 }
 
