@@ -56,6 +56,12 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	class UAnimMontage* SwordDrawAnim;
 
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	class UAnimMontage* SwordAttack1Anim;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	class UAnimMontage* SwordAttack2Anim;
+
 public:
 	AGamePlayer();
 

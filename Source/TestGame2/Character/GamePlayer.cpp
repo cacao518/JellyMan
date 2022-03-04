@@ -110,7 +110,7 @@ void AGamePlayer::Punch1Start()
 	if( GameObject && GameObject->AnimState != EAnimState::IDLE_RUN )
 		return;
 
-	GameObject->MontagePlay( Punch1Anim, GameObject->AttackSpeed );
+	GameObject->MontagePlay( SwordAttack1Anim, GameObject->AttackSpeed );
 }
 
 void AGamePlayer::Punch2Start()
@@ -120,7 +120,7 @@ void AGamePlayer::Punch2Start()
 	    !GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) )
 		return;
 
-	GameObject->MontagePlay( Punch2Anim, GameObject->AttackSpeed );
+	GameObject->MontagePlay( SwordAttack2Anim, GameObject->AttackSpeed );
 }
 
 void AGamePlayer::TakeDownStart()
