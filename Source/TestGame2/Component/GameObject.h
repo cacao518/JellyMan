@@ -35,6 +35,7 @@ public:
 	bool            IsDie;                   // 사망 여부
 	bool            IsAttackMove;            // 공격중 이동 여부
 	bool            IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
+	bool            IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
 
 public:	
 	UGameObject();
@@ -75,6 +76,9 @@ public:
 
 	// 공격중 이동 여부를 셋팅한다.
 	void SetIsAttackMove( bool InIsAttackMove ){ IsAttackMove = InIsAttackMove; };
+
+	// 추가 키 입력 가능한지 여부
+	void SetIsEnableDerivedKey( bool InIsEnableDerivedKey ) { IsEnableDerivedKey = InIsEnableDerivedKey; };
 
 	// 공격 콜리전 활성화 여부를 셋팅한다.
 	void SetIsEnabledAttackColl( bool InIsEnabledAttackColl );

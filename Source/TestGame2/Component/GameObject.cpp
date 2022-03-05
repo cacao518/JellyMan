@@ -54,6 +54,7 @@ void UGameObject::ResetInfo( bool InForceReset )
 		AnimState == EAnimState::JUMP ||
 		AnimState == EAnimState::DIE )
 	{
+		SetIsEnableDerivedKey( false );
 		SetIsAttackMove( false );
 		SetIsEnabledAttackColl( false );
 		SetAttackCollInfo( FCollisionInfo() );
