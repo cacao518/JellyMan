@@ -77,7 +77,7 @@ public:
 	// 공격중 이동 여부를 셋팅한다.
 	void SetIsAttackMove( bool InIsAttackMove ){ IsAttackMove = InIsAttackMove; };
 
-	// 추가 키 입력 가능한지 여부
+	// 추가 키 입력 가능한지 여부를 셋팅한다.
 	void SetIsEnableDerivedKey( bool InIsEnableDerivedKey ) { IsEnableDerivedKey = InIsEnableDerivedKey; };
 
 	// 공격 콜리전 활성화 여부를 셋팅한다.
@@ -104,6 +104,9 @@ public:
 
 	// 공격중 이동 여부를 반환한다.
 	bool GetIsAttackMove() { return IsAttackMove; };
+
+	// 추가 키 입력 가능한지 여부를 반환한다.
+	bool GetIsEnableDerivedKey() { return IsEnableDerivedKey; };
 
 	///////////////////////////////////////////////////////////////////////
 	// Delegate Function
