@@ -211,7 +211,7 @@ void AGamePlayer::SwordAttack3Start()
 	if( !GameObject )
 		return;
 
-	if(    GameObject->AnimState==EAnimState::IDLE_RUN
+	if(    GameObject->AnimState == EAnimState::IDLE_RUN
 	    || GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" )
 		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack2" ) )
 		GameObject->MontagePlay( SwordAttack3Anim, GameObject->AttackSpeed );
