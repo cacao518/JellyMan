@@ -103,5 +103,5 @@ namespace Const
 
 	constexpr float WATER_MOVE_SPEED = 1.1f;   
 	constexpr float WATER_ATTACK_SPEED = 1.0f; 
-	constexpr float WATER_JUMP_POWER = 0.8f;  
+	constexpr float WATER_JUMP_POWER = 0.7f;  
 };
