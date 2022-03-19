@@ -5,11 +5,22 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Component/GameObject.h"
 #include "../Component/MaterialProperty.h"
+#include "../System/MonsterAIController.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
 AMonster::AMonster()
 {
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	MonsterAIController = CreateDefaultSubobject<AMonsterAIController>( TEXT( "MonsterAIController" ) );
+	if( MonsterAIController )
+	{
+		AIControllerClass = Cast<UClass>( MonsterAIController );
+		MonsterAIController->SetBB( BBAsset );
+		MonsterAIController->SetBT( BTAsset );
+	}
+
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
