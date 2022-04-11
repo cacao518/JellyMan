@@ -19,15 +19,6 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	TArray<UAnimMontage*> AnimMontages;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UBehaviorTree* BTAsset;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UBlackboardData* BBAsset;
-
-	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
-	class AMonsterAIController* MonsterAIController;
-
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
 	class UGameObject* GameObject;
 

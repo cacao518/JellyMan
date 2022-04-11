@@ -15,20 +15,16 @@ class TESTGAME2_API AMonsterAIController : public AAIController
 	GENERATED_BODY()
 	
 public:
-	AMonsterAIController();
+	AMonsterAIController( FObjectInitializer const& object_initializer );
 
 	virtual void OnPossess( APawn* InPawn ) override;
 
 	void RunAI();
 	void StopAI();
 
-	void SetBT( UBehaviorTree* InBT ) { BTAsset = InBT; };
-	void SetBB( UBlackboardData* InBB ) { BBAsset = InBB; };
-
 private:
+	class UBlackboardComponent* blackboard;
+
 	UPROPERTY()
 	class UBehaviorTree* BTAsset;
-
-	UPROPERTY()
-	class UBlackboardData* BBAsset;
 };

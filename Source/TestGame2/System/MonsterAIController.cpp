@@ -6,28 +6,32 @@
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
-AMonsterAIController::AMonsterAIController()
+AMonsterAIController::AMonsterAIController( FObjectInitializer const& object_initializer )
 {
-	BTAsset = nullptr;
-	BBAsset = nullptr;
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject( TEXT( "BehaviorTree'/Game/Monster/BT_Monster.BT_Monster'" ) );
+	if( BTObject.Succeeded() )
+	{
+		BTAsset = BTObject.Object;
+	}
+
+	blackboard = object_initializer.CreateDefaultSubobject<UBlackboardComponent>( this, TEXT( "BlackboardComp" ) );
 }
 
 void AMonsterAIController::OnPossess( APawn* InPawn )
 {
 	Super::OnPossess( InPawn );
+	if( blackboard )
+	{
+		//비헤이비어트리에 있는 블랙보드로 초기화
+		blackboard->InitializeBlackboard( *BTAsset->BlackboardAsset );
+	}
+
 	RunAI();
 }
 
 void AMonsterAIController::RunAI()
 {
-	UBlackboardComponent* BlackBoardComponent = Cast<UBlackboardComponent>( Blackboard );
-	if( !BlackBoardComponent || !BBAsset || !BTAsset )
-		return;
-
-	if( UseBlackboard( BBAsset, BlackBoardComponent ) )
-	{
-		RunBehaviorTree( BTAsset );
-	}
+	RunBehaviorTree( BTAsset );
 }
 
 void AMonsterAIController::StopAI()

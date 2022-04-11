@@ -11,15 +11,8 @@
 // Sets default values
 AMonster::AMonster()
 {
+	AIControllerClass = AMonsterAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
-	MonsterAIController = CreateDefaultSubobject<AMonsterAIController>( TEXT( "MonsterAIController" ) );
-	if( MonsterAIController )
-	{
-		AIControllerClass = Cast<UClass>( MonsterAIController );
-		MonsterAIController->SetBB( BBAsset );
-		MonsterAIController->SetBT( BTAsset );
-	}
 
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
