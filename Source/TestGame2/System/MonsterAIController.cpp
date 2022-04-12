@@ -6,6 +6,11 @@
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
+
+const FName AMonsterAIController::HomePosKey( TEXT( "HomePos" ) );
+const FName AMonsterAIController::PatrolPosKey( TEXT( "PatrolPos" ) );
+
+
 AMonsterAIController::AMonsterAIController( FObjectInitializer const& object_initializer )
 {
 	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject( TEXT( "BehaviorTree'/Game/Monster/BT_Monster.BT_Monster'" ) );
