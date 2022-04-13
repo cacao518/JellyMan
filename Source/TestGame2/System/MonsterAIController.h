@@ -17,6 +17,7 @@ class TESTGAME2_API AMonsterAIController : public AAIController
 public:
 	static const FName HomePosKey;
 	static const FName PatrolPosKey;
+	static const FName TargetKey;
 
 private:
 	class UBlackboardComponent* blackboard;

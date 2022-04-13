@@ -35,7 +35,7 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		overlapResults,
 		center,
 		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel2,
+		ECollisionChannel::ECC_GameTraceChannel4,
 		FCollisionShape::MakeSphere( detectRadius ),
 		collisionQueryParam
 	);
@@ -49,7 +49,7 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 			if( character&&character->GetController()->IsPlayerController() )
 			{
 				// Character면, 블랙보드에 저장한다.
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::Key_Target, character );
+				OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, character );
 
 				// 디버깅 용.
 				DrawDebugSphere( world, center, detectRadius, 16, FColor::Green, false, 0.2f );
@@ -61,7 +61,7 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 	}
 	else
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::Key_Target, nullptr );
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, nullptr );
 	}
 
 	DrawDebugSphere( world, center, detectRadius, 16, FColor::Red, false, 0.2f );
