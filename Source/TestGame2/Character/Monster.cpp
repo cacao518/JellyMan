@@ -17,6 +17,11 @@ AMonster::AMonster()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// 회전을 부드럽게 하기 위한 코드
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
 	// GameObject
 	GameObject = CreateDefaultSubobject<UGameObject>( TEXT( "GameObject" ) );
 	GameObject->SetHp       ( Const::DUMMY_HP             );
