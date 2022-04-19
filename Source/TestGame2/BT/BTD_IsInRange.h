@@ -15,6 +15,10 @@ class TESTGAME2_API UBTD_IsInRange : public UBTDecorator
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, meta = ( ExposeOnSpawn = true ) )
+	float Range;
+
+public:
 	UBTD_IsInRange();
 
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;

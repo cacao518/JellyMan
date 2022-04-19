@@ -36,6 +36,11 @@ AMonster::AMonster()
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
 	HitColl->SetupAttachment( GetMesh() );
 	HitColl->SetCollisionProfileName( TEXT( "HitColl" ) );
+
+	// AttackBox Component
+	AttackColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "AttackColl" ) );
+	AttackColl->SetupAttachment( GetMesh() );
+	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
 }
 
 // Called when the game starts or when spawned

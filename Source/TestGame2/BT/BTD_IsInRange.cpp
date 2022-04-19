@@ -21,6 +21,6 @@ bool UBTD_IsInRange::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerCom
 	if( !Target )
 		return false;
 
-	bool bResult = ( Target->GetDistanceTo(ControllingPawn ) <= 200.0f);
+	bool bResult = ( Target->GetDistanceTo(ControllingPawn ) <= Range );
 	return bResult;
 }

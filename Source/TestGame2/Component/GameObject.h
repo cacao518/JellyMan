@@ -108,6 +108,9 @@ public:
 	// 추가 키 입력 가능한지 여부를 반환한다.
 	bool GetIsEnableDerivedKey() { return IsEnableDerivedKey; };
 
+	// 애니메이션 상태를 반환한다.
+	EAnimState GetAnimState() { return AnimState; };
+
 	///////////////////////////////////////////////////////////////////////
 	// Delegate Function
 	///////////////////////////////////////////////////////////////////////
