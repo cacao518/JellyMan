@@ -15,10 +15,6 @@ class TESTGAME2_API UBTT_Attack : public UBTTaskNode
 	GENERATED_BODY()
 
 public:
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, meta = ( ExposeOnSpawn = true ) )
-	class UAnimMontage* AttackAnim;
-
-public:
 	UBTT_Attack();
 
 	virtual EBTNodeResult::Type ExecuteTask( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory ) override;

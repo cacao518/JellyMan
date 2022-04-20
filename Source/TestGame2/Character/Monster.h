@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../ETC/SDB.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Monster.generated.h"
@@ -16,9 +17,6 @@ class TESTGAME2_API AMonster : public ACharacter
 	GENERATED_BODY()
 
 public:
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	TArray<UAnimMontage*> AnimMontages;
-
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
 	class UGameObject* GameObject;
 

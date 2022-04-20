@@ -2,8 +2,10 @@
 
 
 #include "BTT_Attack.h"
+#include "../ETC/SDB.h"
 #include "../System/MonsterAIController.h"
 #include "../Component/GameObject.h"
+#include "GameFramework/Character.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTT_Attack::UBTT_Attack()
@@ -17,17 +19,24 @@ EBTNodeResult::Type UBTT_Attack::ExecuteTask( UBehaviorTreeComponent& OwnerComp,
 	if( !controllingPawn )
 		return EBTNodeResult::Failed;
 
+	ACharacter* target = Cast<ACharacter>( OwnerComp.GetBlackboardComponent()->GetValueAsObject( AMonsterAIController::TargetKey ) );
+	if( !target )
+		return EBTNodeResult::Failed;
+
 	auto gameObject = controllingPawn ? Cast<UGameObject>( controllingPawn->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
 	if( !gameObject )
 		return EBTNodeResult::Failed;
 
-	if( !AttackAnim )
-		return EBTNodeResult::Failed;
-
-	if( gameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	for( auto skill : gameObject->GetSkillInfos() )
 	{
-		gameObject->MontagePlay( AttackAnim );
-		return EBTNodeResult::Succeeded;
+		if( target->GetDistanceTo( controllingPawn ) >= skill.ActivateRange )
+			continue;
+
+		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN )
+		{
+			gameObject->MontagePlay( skill.Anim );
+			return EBTNodeResult::Succeeded;
+		}
 	}
 
 	return EBTNodeResult::Failed;

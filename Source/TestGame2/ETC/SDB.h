@@ -68,6 +68,23 @@ public:
 	};
 };
 
+// 스킬 정보
+USTRUCT( Atomic, BlueprintType )
+struct FSkillInfo
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UAnimMontage* Anim;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float CollTime;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float ActivateRange;
+};
+
 namespace Const
 { 
     // Common

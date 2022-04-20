@@ -18,24 +18,28 @@ class TESTGAME2_API UGameObject : public UActorComponent
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	ACharacter*     OwningCharacter;         // 부모 캐릭터 클래스
+	ACharacter*        OwningCharacter;         // 부모 캐릭터 클래스
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	EAnimState      AnimState;       	     // 애니메이션 상태
+	EAnimState         AnimState;       	     // 애니메이션 상태
 
-	FCollisionInfo  AttackCollInfo;          // 공격 콜리전 정보
-	FVector         MovePos;                 // 이동할 위치
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	TArray<FSkillInfo> SkillInfos;              // 보유 스킬 정보
 
-	float           Hp;                      // 체력
-	float           Hpm;                     // 최대 체력
-	float           MoveSpeed;               // 이동속도
-	float           AttackSpeed;             // 공격속도
-	float			JumpPower;               // 점프력
-	
-	bool            IsDie;                   // 사망 여부
-	bool            IsAttackMove;            // 공격중 이동 여부
-	bool            IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
-	bool            IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
+	FCollisionInfo     AttackCollInfo;          // 공격 콜리전 정보
+	FVector            MovePos;                 // 이동할 위치
+	TArray<FSkillInfo> CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보
+
+	float              Hp;                      // 체력
+	float              Hpm;                     // 최대 체력
+	float              MoveSpeed;               // 이동속도
+	float              AttackSpeed;             // 공격속도
+	float			   JumpPower;               // 점프력
+				       
+	bool               IsDie;                   // 사망 여부
+	bool               IsAttackMove;            // 공격중 이동 여부
+	bool               IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
+	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
 
 public:	
 	UGameObject();
@@ -111,6 +115,9 @@ public:
 	// 애니메이션 상태를 반환한다.
 	EAnimState GetAnimState() { return AnimState; };
 
+	// 스킬 정보를 반환한다.
+	const TArray<FSkillInfo>& GetSkillInfos() { return SkillInfos; };
+
 	///////////////////////////////////////////////////////////////////////
 	// Delegate Function
 	///////////////////////////////////////////////////////////////////////
@@ -128,4 +135,7 @@ private:
 
 	// 해당 캐릭터가 사망했는지 체크한다.
 	void _CheckDie();
+
+	// 쿨타임 처리 로직
+	void _ProcessCoolTime();
 };

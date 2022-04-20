@@ -4,6 +4,7 @@
 #include "BTD_IsInRange.h"
 #include "GameFramework/Character.h"
 #include "../System/MonsterAIController.h"
+#include "../Component/GameObject.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTD_IsInRange::UBTD_IsInRange()
