@@ -14,6 +14,11 @@ class TESTGAME2_API UBTS_Detect : public UBTService
 {
 	GENERATED_BODY()
 	
+		
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, meta = ( ExposeOnSpawn = true ) )
+	float DetectRadius = 600.f;
+
 public:
 	UBTS_Detect();
 

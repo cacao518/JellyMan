@@ -26,7 +26,6 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		return;
 
 	FVector center = controllingPawn->GetActorLocation();
-	float detectRadius = 600.0f;
 
 	// 600의 반지름을 가진 구체를 만들어서 오브젝트를 감지한다.
 	TArray<FOverlapResult> overlapResults;
@@ -36,7 +35,7 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		center,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel4,
-		FCollisionShape::MakeSphere( detectRadius ),
+		FCollisionShape::MakeSphere( DetectRadius ),
 		collisionQueryParam
 	);
 
@@ -52,7 +51,7 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, character );
 
 				// 디버깅 용.
-				DrawDebugSphere( world, center, detectRadius, 16, FColor::Green, false, 0.2f );
+				DrawDebugSphere( world, center, DetectRadius, 16, FColor::Green, false, 0.2f );
 				DrawDebugPoint( world, character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f );
 				DrawDebugLine( world, controllingPawn->GetActorLocation(), character->GetActorLocation(), FColor::Blue, false, 0.2f );
 				return;
@@ -66,5 +65,5 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, nullptr );
 	}
 
-	DrawDebugSphere( world, center, detectRadius, 16, FColor::Red, false, 0.2f );
+	DrawDebugSphere( world, center, DetectRadius, 16, FColor::Red, false, 0.2f );
 }

@@ -82,7 +82,10 @@ public:
 	float CollTime;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float ActivateRange;
+	float ActivateRangeMin;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float ActivateRangeMax;
 };
 
 namespace Const

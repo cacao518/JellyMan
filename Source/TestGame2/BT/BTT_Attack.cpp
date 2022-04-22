@@ -29,7 +29,8 @@ EBTNodeResult::Type UBTT_Attack::ExecuteTask( UBehaviorTreeComponent& OwnerComp,
 
 	for( auto skill : gameObject->GetSkillInfos() )
 	{
-		if( target->GetDistanceTo( controllingPawn ) >= skill.ActivateRange )
+		if( target->GetDistanceTo( controllingPawn ) >= skill.ActivateRangeMax || 
+			target->GetDistanceTo( controllingPawn ) <= skill.ActivateRangeMin )
 			continue;
 
 		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN )
