@@ -10,6 +10,7 @@
 const FName AMonsterAIController::HomePosKey( TEXT( "HomePos" ) );
 const FName AMonsterAIController::PatrolPosKey( TEXT( "PatrolPos" ) );
 const FName AMonsterAIController::TargetKey( TEXT( "Target" ) );
+const FName AMonsterAIController::CurSkillNumKey( TEXT( "CurSkillNum" ) );
 
 
 AMonsterAIController::AMonsterAIController( FObjectInitializer const& object_initializer )

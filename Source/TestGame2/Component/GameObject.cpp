@@ -39,6 +39,7 @@ void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 	ResetInfo();
 
+	_ProcessCoolTime();
 	_AnimStateChange();
 	_CheckDie();
 	_Move();

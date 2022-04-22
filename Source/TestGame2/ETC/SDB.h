@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "SDB.generated.h"
 
+
 // 애니메이션 상태
 UENUM( BlueprintType )
 enum class EAnimState : uint8
@@ -77,6 +78,9 @@ struct FSkillInfo
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	UAnimMontage* Anim;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int Num;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float CollTime;

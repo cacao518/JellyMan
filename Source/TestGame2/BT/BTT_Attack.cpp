@@ -29,8 +29,7 @@ EBTNodeResult::Type UBTT_Attack::ExecuteTask( UBehaviorTreeComponent& OwnerComp,
 
 	for( auto skill : gameObject->GetSkillInfos() )
 	{
-		if( target->GetDistanceTo( controllingPawn ) >= skill.ActivateRangeMax || 
-			target->GetDistanceTo( controllingPawn ) <= skill.ActivateRangeMin )
+		if( OwnerComp.GetBlackboardComponent()->GetValueAsInt( AMonsterAIController::CurSkillNumKey ) != skill.Num )
 			continue;
 
 		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN )
