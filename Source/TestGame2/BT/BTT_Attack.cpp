@@ -6,6 +6,7 @@
 #include "../System/MonsterAIController.h"
 #include "../Component/GameObject.h"
 #include "GameFramework/Character.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTT_Attack::UBTT_Attack()
@@ -34,6 +35,9 @@ EBTNodeResult::Type UBTT_Attack::ExecuteTask( UBehaviorTreeComponent& OwnerComp,
 
 		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN )
 		{
+			FRotator rotator = UKismetMathLibrary::FindLookAtRotation( controllingPawn->GetActorLocation(), target->GetActorLocation() );
+			controllingPawn->SetActorRotation( rotator );
+
 			gameObject->MontagePlay( skill.Anim );
 			return EBTNodeResult::Succeeded;
 		}
