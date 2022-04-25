@@ -11,7 +11,7 @@
 UBTS_CheckRange::UBTS_CheckRange()
 {
 	NodeName = TEXT( "CheckRange" );
-	Interval = 1.0f;
+	Interval = 0.1f;
 }
 
 void UBTS_CheckRange::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds )

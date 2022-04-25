@@ -36,6 +36,7 @@ EBTNodeResult::Type UBTT_Attack::ExecuteTask( UBehaviorTreeComponent& OwnerComp,
 		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN )
 		{
 			FRotator rotator = UKismetMathLibrary::FindLookAtRotation( controllingPawn->GetActorLocation(), target->GetActorLocation() );
+			rotator.Pitch = controllingPawn->GetActorRotation().Pitch;
 			controllingPawn->SetActorRotation( rotator );
 
 			gameObject->MontagePlay( skill.Anim );
