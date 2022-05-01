@@ -83,7 +83,7 @@ public:
 	int Num;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float CollTime;
+	float CoolTime;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float ActivateRangeMin;

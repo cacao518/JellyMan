@@ -32,12 +32,12 @@ void UBTS_CheckRange::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 
 	for( auto skill : gameObject->GetSkillInfos() )
 	{
-		if( target->GetDistanceTo( controllingPawn ) >= skill.ActivateRangeMax ||
-			target->GetDistanceTo( controllingPawn ) <= skill.ActivateRangeMin )
-			continue;
-
-		OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, skill.Num );
-		return;
+		if( target->GetDistanceTo( controllingPawn ) <= skill.ActivateRangeMax &&
+			target->GetDistanceTo( controllingPawn ) >= skill.ActivateRangeMin )
+		{
+			OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, skill.Num );
+			return;
+		}
 	}
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, -1 );
