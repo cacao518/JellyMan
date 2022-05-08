@@ -41,30 +41,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* RollAnim;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* TakeDownAnim;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* Punch1Anim;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* Punch2Anim;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* SwordDrawAnim;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* SwordAttack1Anim;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* SwordAttack2Anim;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	class UAnimMontage* SwordAttack3Anim;
-
 public:
 	AGamePlayer();
 

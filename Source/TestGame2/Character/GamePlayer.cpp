@@ -38,13 +38,13 @@ AGamePlayer::AGamePlayer()
 	GetCharacterMovement()->AirControl = 0.2f;
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>( TEXT( "CameraBoom" ) );
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 300.0f; 
 	CameraBoom->bUsePawnControlRotation = true;
 
 	// Create a follow camera
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
+	FollowCamera = CreateDefaultSubobject<UCameraComponent>( TEXT( "FollowCamera" ) );
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
@@ -151,7 +151,7 @@ void AGamePlayer::RollStart()
 		return;
 	
 	if( GameObject->AnimState == EAnimState::IDLE_RUN )
-		GameObject->MontagePlay( RollAnim, GameObject->MoveSpeed );
+		GameObject->SkillPlay( 1, GameObject->MoveSpeed );
 }
 
 void AGamePlayer::Punch1Start()
@@ -160,7 +160,7 @@ void AGamePlayer::Punch1Start()
 		return;
 
 	if( GameObject->AnimState == EAnimState::IDLE_RUN )
-		GameObject->MontagePlay( Punch1Anim, GameObject->AttackSpeed );
+		GameObject->SkillPlay( 2, GameObject->AttackSpeed );
 }
 
 void AGamePlayer::Punch2Start()
@@ -169,7 +169,7 @@ void AGamePlayer::Punch2Start()
 		return;
 
 	if( GameObject->AnimState == EAnimState::IDLE_RUN || GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) )
-		GameObject->MontagePlay( Punch2Anim, GameObject->AttackSpeed );
+		GameObject->SkillPlay( 3, GameObject->AttackSpeed );
 }
 
 void AGamePlayer::TakeDownStart()
@@ -178,7 +178,7 @@ void AGamePlayer::TakeDownStart()
 		return;
 
 	if( GameObject->AnimState == EAnimState::IDLE_RUN )
-		GameObject->MontagePlay( TakeDownAnim, GameObject->AttackSpeed );
+		GameObject->SkillPlay( 4, GameObject->AttackSpeed );
 }
 
 void AGamePlayer::EquipSword()
@@ -187,7 +187,7 @@ void AGamePlayer::EquipSword()
 		return;
 
 	if( GameObject->AnimState == EAnimState::IDLE_RUN )
-		GameObject->MontagePlay( SwordDrawAnim, GameObject->AttackSpeed );
+		GameObject->SkillPlay( 5, GameObject->AttackSpeed );
 }
 
 void AGamePlayer::SwordAttack1Start()
@@ -196,13 +196,13 @@ void AGamePlayer::SwordAttack1Start()
 		return;
 
 	if( GameObject->AnimState == EAnimState::IDLE_RUN )
-		GameObject->MontagePlay( SwordAttack1Anim, GameObject->AttackSpeed );
+		GameObject->SkillPlay( 6, GameObject->AttackSpeed );
 }
 
 void AGamePlayer::SwordAttack2Start()
 {
 	if( GameObject )
-		GameObject->MontagePlay( SwordAttack2Anim, GameObject->AttackSpeed );
+		GameObject->SkillPlay( 7, GameObject->AttackSpeed );
 }
 
 
@@ -214,5 +214,5 @@ void AGamePlayer::SwordAttack3Start()
 	if(    GameObject->AnimState == EAnimState::IDLE_RUN
 	    || GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" )
 		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack2" ) )
-		GameObject->MontagePlay( SwordAttack3Anim, GameObject->AttackSpeed );
+		GameObject->SkillPlay( 8, GameObject->AttackSpeed );
 }

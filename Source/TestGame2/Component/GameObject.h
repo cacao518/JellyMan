@@ -56,6 +56,12 @@ public:
 	// 몽타주를 플레이한다.
 	void MontagePlay( UAnimMontage* InMontage, float InScale = 1.f );
 
+	// 스킬을 플레이한다.
+	bool SkillPlay( int InSkillNum, float InScale = 1.f );
+
+	// 대상을 바라본다.
+	void LookAt( ACharacter* InTarget );
+
 	// 카메라 쉐이크를 실행한다.
 	void CameraShake( float InScale = 1.f, bool InShakeByWeight = false );
 

@@ -28,21 +28,8 @@ EBTNodeResult::Type UBTT_Attack::ExecuteTask( UBehaviorTreeComponent& OwnerComp,
 	if( !gameObject )
 		return EBTNodeResult::Failed;
 
-	for( auto skill : gameObject->GetSkillInfos() )
-	{
-		if( OwnerComp.GetBlackboardComponent()->GetValueAsInt( AMonsterAIController::CurSkillNumKey ) != skill.Num )
-			continue;
-
-		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN )
-		{
-			FRotator rotator = UKismetMathLibrary::FindLookAtRotation( controllingPawn->GetActorLocation(), target->GetActorLocation() );
-			rotator.Pitch = controllingPawn->GetActorRotation().Pitch;
-			controllingPawn->SetActorRotation( rotator );
-
-			gameObject->MontagePlay( skill.Anim );
-			return EBTNodeResult::Succeeded;
-		}
-	}
-
-	return EBTNodeResult::Failed;
+	gameObject->LookAt( target );
+	bool result = gameObject->SkillPlay( OwnerComp.GetBlackboardComponent()->GetValueAsInt( AMonsterAIController::CurSkillNumKey ) );
+	OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, 0 );
+	return result ? EBTNodeResult::Succeeded : EBTNodeResult::Failed;
 }

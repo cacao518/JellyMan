@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 UGameObject::UGameObject()
 {
@@ -63,6 +64,19 @@ void UGameObject::ResetInfo( bool InForceReset )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 대상을 바라본다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameObject::LookAt( ACharacter* InTarget )
+{
+	if( !OwningCharacter || !InTarget )
+		return;
+
+	FRotator rotator = UKismetMathLibrary::FindLookAtRotation( OwningCharacter->GetActorLocation(), InTarget->GetActorLocation() );
+	rotator.Pitch = OwningCharacter->GetActorRotation().Pitch;
+	OwningCharacter->SetActorRotation( rotator );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 몽타주를 플레이한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
@@ -76,6 +90,24 @@ void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
 
 	ResetInfo( true );
 	animInstance->Montage_Play( InMontage, InScale );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 스킬을 플레이한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+bool UGameObject::SkillPlay( int InSkillNum, float InScale )
+{
+	for( auto skillInfo : SkillInfos )
+	{
+		if( InSkillNum != skillInfo.Num )
+			continue;
+
+		MontagePlay( skillInfo.Anim, InScale );
+		return true;
+	}
+
+	return false;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
