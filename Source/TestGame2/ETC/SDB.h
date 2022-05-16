@@ -92,25 +92,50 @@ public:
 	float ActivateRangeMax;
 };
 
+// 스텟 정보
+USTRUCT( Atomic, BlueprintType )
+struct FStatusInfo
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int Level; 	// 레벨
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float Hp; 	// 체력
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float Hpm; 	// 체력
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float MoveSpeed;	// 이동속도
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float AttackSpeed;	// 공격속도
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float AttackPower;	// 공격력
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float DefensePower;	// 방어력
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float JumpPower;	// 점프력
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float Strength;   	// 강인함 ( 경직시간, 넉백거리 관련 )
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float Weight;   	// 무게 ( 점프, 에어본 관련 )
+};
+
 namespace Const
 { 
     // Common
 	constexpr float ANIM_LERP_MULITPLIER = 5.f;   // 애니메이션 중 이동 속도 보간 값
 	constexpr float DEFAULT_MOVE_SPEED = 450.f;   // 기본 이동속도
 	constexpr float DEFAULT_JUMP_POWER = 600.f;   // 기본 점프력
-
-    // Player
-	constexpr float PLAYER_HP                    = 200.f;  // 플레이어 체력
-	constexpr float PLAYER_MOVE_SPEED            = 1.f;   // 플레이어 이동속도
-	constexpr float PLAYER_ATTACK_SPEED          = 1.f;   // 플레이어 공격속도
-	constexpr float PLAYER_JUMP_POWER            = 1.f;   // 플레이어 점프력
-
-	// Dummy
-	constexpr float DUMMY_HP           = 100.f;       // 더미 체력
-	constexpr float DUMMY_MOVE_SPEED   = 0.6f;        // 더미 이동속도
-	constexpr float DUMMY_ATTACK_SPEED = 1.f;        // 더미 공격속도
-	constexpr float DUMMY_JUMP_POWER   = 1.f;        // 더미 점프력
-
 
 	// Material 
 	constexpr float GRASS_MOVE_SPEED   = 1.1f;   

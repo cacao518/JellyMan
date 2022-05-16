@@ -50,10 +50,6 @@ AGamePlayer::AGamePlayer()
 
 	// Create a GameObejct Component
 	GameObject = CreateDefaultSubobject<UGameObject>( TEXT( "GameObject" ) );
-	GameObject->SetHp         ( Const::PLAYER_HP                   );
-	GameObject->SetMoveSpeed  ( Const::PLAYER_MOVE_SPEED           );
-	GameObject->SetAttackSpeed( Const::PLAYER_ATTACK_SPEED         );
-	GameObject->SetJumpPower  ( Const::PLAYER_JUMP_POWER           );
 
 	// Create a MaterialProperty Component
 	MatProperty = CreateDefaultSubobject<UMaterialProperty>( TEXT( "MatProperty" ) );
@@ -94,7 +90,7 @@ void AGamePlayer::Jump()
 	if( !GameObject )
 		return;
 
-	if( GameObject->AnimState == EAnimState::IDLE_RUN )
+	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
 		Super::Jump();
 }
 
@@ -150,8 +146,8 @@ void AGamePlayer::RollStart()
 	if( !GameObject )
 		return;
 	
-	if( GameObject->AnimState == EAnimState::IDLE_RUN )
-		GameObject->SkillPlay( 1, GameObject->MoveSpeed );
+	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+		GameObject->SkillPlay( 1, GameObject->GetStat().MoveSpeed );
 }
 
 void AGamePlayer::Punch1Start()
@@ -159,8 +155,8 @@ void AGamePlayer::Punch1Start()
 	if( !GameObject )
 		return;
 
-	if( GameObject->AnimState == EAnimState::IDLE_RUN )
-		GameObject->SkillPlay( 2, GameObject->AttackSpeed );
+	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+		GameObject->SkillPlay( 2, GameObject->GetStat().AttackSpeed );
 }
 
 void AGamePlayer::Punch2Start()
@@ -168,8 +164,8 @@ void AGamePlayer::Punch2Start()
 	if( !GameObject )
 		return;
 
-	if( GameObject->AnimState == EAnimState::IDLE_RUN || GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) )
-		GameObject->SkillPlay( 3, GameObject->AttackSpeed );
+	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN || GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) )
+		GameObject->SkillPlay( 3, GameObject->GetStat().AttackSpeed );
 }
 
 void AGamePlayer::TakeDownStart()
@@ -177,8 +173,8 @@ void AGamePlayer::TakeDownStart()
 	if( !GameObject )
 		return;
 
-	if( GameObject->AnimState == EAnimState::IDLE_RUN )
-		GameObject->SkillPlay( 4, GameObject->AttackSpeed );
+	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+		GameObject->SkillPlay( 4, GameObject->GetStat().AttackSpeed );
 }
 
 void AGamePlayer::EquipSword()
@@ -186,8 +182,8 @@ void AGamePlayer::EquipSword()
 	if( !GameObject )
 		return;
 
-	if( GameObject->AnimState == EAnimState::IDLE_RUN )
-		GameObject->SkillPlay( 5, GameObject->AttackSpeed );
+	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+		GameObject->SkillPlay( 5, GameObject->GetStat().AttackSpeed );
 }
 
 void AGamePlayer::SwordAttack1Start()
@@ -195,14 +191,14 @@ void AGamePlayer::SwordAttack1Start()
 	if( !GameObject )
 		return;
 
-	if( GameObject->AnimState == EAnimState::IDLE_RUN )
-		GameObject->SkillPlay( 6, GameObject->AttackSpeed );
+	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+		GameObject->SkillPlay( 6, GameObject->GetStat().AttackSpeed );
 }
 
 void AGamePlayer::SwordAttack2Start()
 {
 	if( GameObject )
-		GameObject->SkillPlay( 7, GameObject->AttackSpeed );
+		GameObject->SkillPlay( 7, GameObject->GetStat().AttackSpeed );
 }
 
 
@@ -211,8 +207,8 @@ void AGamePlayer::SwordAttack3Start()
 	if( !GameObject )
 		return;
 
-	if(    GameObject->AnimState == EAnimState::IDLE_RUN
+	if(    GameObject->GetAnimState() == EAnimState::IDLE_RUN
 	    || GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" )
 		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack2" ) )
-		GameObject->SkillPlay( 8, GameObject->AttackSpeed );
+		GameObject->SkillPlay( 8, GameObject->GetStat().AttackSpeed );
 }

@@ -15,11 +15,10 @@ class TESTGAME2_API UWeaponChange : public UActorComponent
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	ACharacter*            OwningCharacter;             // 부모 캐릭터 클래스
+	EWeaponState                    WeaponState;       	         // 무기 상태
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	EWeaponState           WeaponState;       	        // 무기 상태
-
+private:
+	ACharacter*                     OwningCharacter;             // 부모 캐릭터 클래스
 	class UStaticMeshComponent*     CurWeaponMesh;               // 현재 무기 스태틱매쉬
 	TArray< UStaticMeshComponent* > WeaponMeshes;                // 무기 스태틱 메시 애셋들
 

@@ -29,6 +29,9 @@ void UGameObject::BeginPlay()
 	auto hitColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
 	if( hitColl )
 		hitColl->OnComponentBeginOverlap.AddDynamic( this, &UGameObject::HitCollBeginOverlap );
+
+	SetMoveSpeed( Stat.MoveSpeed );
+	SetJumpPower( Stat.JumpPower );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +43,6 @@ void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 	ResetInfo();
 
-	_ProcessCoolTime();
 	_AnimStateChange();
 	_CheckDie();
 	_Move();
@@ -120,7 +122,7 @@ void UGameObject::CameraShake( float InScale, bool InShakeByWeight )
 		auto moveComponent = OwningCharacter->GetCharacterMovement();
 		if( moveComponent )
 		{
-			if( !moveComponent->IsFalling() && JumpPower <= 0.5f )
+			if( !moveComponent->IsFalling() && Stat.JumpPower <= 0.5f )
 			{
 				GetWorld()->GetFirstPlayerController()->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
 			}
@@ -152,11 +154,11 @@ void UGameObject::SetAttackCollInfo( const FCollisionInfo& InAttackCollInfo )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameObject::SetMoveSpeed( float InMoveSpeed )
 {
-	MoveSpeed = InMoveSpeed;
+	Stat.MoveSpeed = InMoveSpeed;
 
 	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
 	if( characterMovement )
-		characterMovement->MaxWalkSpeed = MoveSpeed * Const::DEFAULT_MOVE_SPEED;
+		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * Const::DEFAULT_MOVE_SPEED;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,11 +166,11 @@ void UGameObject::SetMoveSpeed( float InMoveSpeed )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameObject::SetJumpPower( float InJumpPower )
 {
-	JumpPower = InJumpPower;
+	Stat.JumpPower = InJumpPower;
 
 	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
 	if( characterMovement )
-		characterMovement->JumpZVelocity = JumpPower * Const::DEFAULT_JUMP_POWER;
+		characterMovement->JumpZVelocity = Stat.JumpPower * Const::DEFAULT_JUMP_POWER;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,7 +199,7 @@ void UGameObject::SetMovePos( float InMovePower )
 	const FRotator YawRotation( 0, Rotation.Yaw, 0 );
 	const FVector  Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
 
-	MovePos = characterMovement->GetActorLocation() + ( Direction * ( InMovePower * MoveSpeed ) );
+	MovePos = characterMovement->GetActorLocation() + ( Direction * ( InMovePower * Stat.MoveSpeed ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,11 +236,11 @@ void UGameObject::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 	auto othetGameObject = OtherActor ? Cast<UGameObject>( OtherActor->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
 	if( othetGameObject )
 	{ 
-		float decrease = Hp - othetGameObject->GetAttackCollInfo().Power;
+		float decrease = Stat.Hp - othetGameObject->GetAttackCollInfo().Power;
 		SetHp( decrease > 0 ? decrease : 0 );
 	}
 
-	FString str = OwningCharacter->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Hp );
+	FString str = OwningCharacter->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
 	if( GEngine )
 		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
 
@@ -250,7 +252,7 @@ void UGameObject::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameObject::_AnimStateChange()
 {
-	if( Hp <= 0 )
+	if( Stat.Hp <= 0 )
 	{
 		AnimState = EAnimState::DIE;
 		return;
@@ -287,7 +289,7 @@ void UGameObject::_Move()
 
 	if( AnimState == EAnimState::IDLE_RUN || AnimState == EAnimState::JUMP )
 	{
-		characterMovement->MaxWalkSpeed = MoveSpeed * Const::DEFAULT_MOVE_SPEED;
+		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * Const::DEFAULT_MOVE_SPEED;
 	}
 	else if( AnimState == EAnimState::DIE )
 	{
@@ -319,12 +321,4 @@ void UGameObject::_CheckDie()
 	{
 		OwningCharacter->Destroy();
 	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 쿨타임 처리 로직
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameObject::_ProcessCoolTime()
-{
-
 }

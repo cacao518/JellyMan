@@ -205,9 +205,9 @@ void UMaterialProperty::_InitStatus()
 	{
 	case EMaterialState::JELLY:
 	{
-		gameObject->SetMoveSpeed( Const::PLAYER_MOVE_SPEED );
-		gameObject->SetAttackSpeed( Const::PLAYER_ATTACK_SPEED );
-		gameObject->SetJumpPower( Const::PLAYER_JUMP_POWER );
+		gameObject->SetMoveSpeed( 1.f );
+		gameObject->SetAttackSpeed( 1.f );
+		gameObject->SetJumpPower( 1.f );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
 		break;
 	}

@@ -18,11 +18,10 @@ class TESTGAME2_API UMaterialProperty : public UActorComponent
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	ACharacter* OwningCharacter;         // 부모 캐릭터 클래스
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	EMaterialState      MatState;       	     // 물질 상태
 
+private:
+	ACharacter*         OwningCharacter;         // 부모 캐릭터 클래스
 	TArray<UMaterialInterface*> Materials;       // 모든 머터리얼 애셋
 
 	bool            IsEnabledTileColl;            // 타일 콜리전 활성화 여부

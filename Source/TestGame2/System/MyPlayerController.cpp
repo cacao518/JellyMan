@@ -48,7 +48,7 @@ void AMyPlayerController::MoveForward( float Value )
 
 	auto gameObject = MyPlayer ? Cast<UGameObject>( MyPlayer->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
 	
-	if( ( Value != 0.0f ) && gameObject && gameObject->AnimState == EAnimState::IDLE_RUN )
+	if( ( Value != 0.0f ) && gameObject && gameObject->GetAnimState() == EAnimState::IDLE_RUN )
 	{
 		const FRotator Rotation = GetControlRotation();
 		const FRotator YawRotation( 0, Rotation.Yaw, 0 );
@@ -65,7 +65,7 @@ void AMyPlayerController::MoveRight( float Value )
 
 	auto gameObject = MyPlayer ? Cast<UGameObject>( MyPlayer->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
 
-	if( ( Value!=0.0f )&& gameObject && gameObject->AnimState == EAnimState::IDLE_RUN )
+	if( ( Value!=0.0f )&& gameObject && gameObject->GetAnimState() == EAnimState::IDLE_RUN )
 	{
 		const FRotator Rotation = GetControlRotation();
 		const FRotator YawRotation( 0, Rotation.Yaw, 0 );

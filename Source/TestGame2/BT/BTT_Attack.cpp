@@ -29,7 +29,12 @@ EBTNodeResult::Type UBTT_Attack::ExecuteTask( UBehaviorTreeComponent& OwnerComp,
 		return EBTNodeResult::Failed;
 
 	gameObject->LookAt( target );
-	bool result = gameObject->SkillPlay( OwnerComp.GetBlackboardComponent()->GetValueAsInt( AMonsterAIController::CurSkillNumKey ) );
+
+	bool result = gameObject->SkillPlay( 
+		OwnerComp.GetBlackboardComponent()->GetValueAsInt( AMonsterAIController::CurSkillNumKey ), 
+		gameObject->GetStat().AttackSpeed );
+
 	OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, 0 );
+
 	return result ? EBTNodeResult::Succeeded : EBTNodeResult::Failed;
 }

@@ -24,10 +24,6 @@ AMonster::AMonster()
 
 	// GameObject
 	GameObject = CreateDefaultSubobject<UGameObject>( TEXT( "GameObject" ) );
-	GameObject->SetHp       ( Const::DUMMY_HP             );
-	GameObject->SetMoveSpeed( Const::DUMMY_MOVE_SPEED     );
-	GameObject->SetAttackSpeed( Const::DUMMY_ATTACK_SPEED );
-	GameObject->SetJumpPower( Const::DUMMY_JUMP_POWER     );
 
 	// Create a MaterialProperty Component
 	MatProperty = CreateDefaultSubobject<UMaterialProperty>( TEXT( "MatProperty" ) );
