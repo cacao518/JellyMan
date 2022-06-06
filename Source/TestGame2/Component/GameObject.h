@@ -17,10 +17,10 @@ class TESTGAME2_API UGameObject : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	FStatusInfo        Stat;                    // 능력치
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	TArray<FSkillInfo> SkillInfos;              // 보유 스킬 정보
 
 private:

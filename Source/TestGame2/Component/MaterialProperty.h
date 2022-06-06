@@ -17,7 +17,7 @@ class TESTGAME2_API UMaterialProperty : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	EMaterialState      MatState;       	     // 물질 상태
 
 private:

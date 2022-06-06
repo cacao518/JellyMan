@@ -3,6 +3,16 @@
 #include "CoreMinimal.h"
 #include "SDB.generated.h"
 
+// 오브젝트 종류
+UENUM( BlueprintType )
+enum class EObjectType : uint8
+{
+	PC         UMETA( DisplayName = "PC" ),
+	NPC        UMETA( DisplayName = "NPC" ),
+	PROJECTILE UMETA( DisplayName = "PROJECTILE" ),
+	OBJECT     UMETA( DisplayName = "OBJECT" ),
+	MAX,
+};
 
 // 애니메이션 상태
 UENUM( BlueprintType )

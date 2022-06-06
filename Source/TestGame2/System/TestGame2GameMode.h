@@ -13,6 +13,9 @@ class ATestGame2GameMode : public AGameModeBase
 
 public:
 	ATestGame2GameMode();
+	virtual void BeginPlay() override final;
+	virtual void BeginDestroy() override final;
+	virtual void Tick( float InDeltaTime ) override final;
 };
 
 

@@ -15,4 +15,6 @@ class TESTGAME2_API UMyGameInstance : public UGameInstance
 public:
 	UMyGameInstance();
 	~UMyGameInstance();
+
+	void Tick( float DeltaTime );
 };
