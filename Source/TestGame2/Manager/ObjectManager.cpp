@@ -39,9 +39,6 @@ void ObjectManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator )
 {
-	if( !GameInstance )
-		return nullptr;
-
 	if( Objects.find( ObjectId ) != Objects.end() )
 	{
 		AActor* actor = Objects.find( ObjectId )->second;
@@ -56,7 +53,7 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		//if( !pClass )
 		//	return nullptr;
 
-		UWorld* World = GameInstance->GetWorld();
+		UWorld* World = GetMyGameInstance().GetWorld();
 		if( !World )
 			return nullptr;
 

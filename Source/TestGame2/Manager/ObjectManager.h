@@ -62,7 +62,6 @@ public:
 	static ObjectManager& GetInstance(){ return *Instance; }
 	static ObjectManager* CreateInstance() { return !Instance ? Instance = new ObjectManager() : Instance; }
 	static void DestroyInstance() { if( !Instance ) delete Instance; Instance = nullptr; }
-	void SetGameInstance( UMyGameInstance* InGameInstance ){ GameInstance = InGameInstance;  }
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// @brief  LoadClass

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "Engine/GameEngine.h"
 #include "MyGameInstance.generated.h"
 
 
@@ -16,5 +17,14 @@ public:
 	UMyGameInstance();
 	~UMyGameInstance();
 
+	virtual void Init() override;
+	virtual void Shutdown() override;
 	void Tick( float DeltaTime );
+
+	static UMyGameInstance* GetInstance();
+};
+
+inline UMyGameInstance& GetMyGameInstance() 
+{ 
+	return *( UMyGameInstance::GetInstance() );
 };
