@@ -9,6 +9,7 @@
 
 
 class UAnimMontage;
+class AActorSpawner;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -24,6 +25,7 @@ public:
 	TArray<FSkillInfo> SkillInfos;              // 보유 스킬 정보
 
 private:
+	int                Id;                      // 오브젝트 아이디 값
 	ACharacter*        OwningCharacter;         // 부모 캐릭터 클래스
 	EAnimState         AnimState;       	    // 애니메이션 상태
 	FCollisionInfo     AttackCollInfo;          // 공격 콜리전 정보
@@ -63,6 +65,9 @@ public:
 	// Setter
 	///////////////////////////////////////////////////////////////////////
 
+	// 오브젝트 아이디를 셋팅한다.
+	void SetId( int InId ){ Id = InId; };
+
 	// 공격 콜리전 정보를 셋팅한다.
 	void SetAttackCollInfo( const FCollisionInfo& InAttackCollInfo );
 
@@ -99,6 +104,9 @@ public:
 
 	// 공격 콜리전 정보를 반환한다.
 	const FCollisionInfo& GetAttackCollInfo() { return AttackCollInfo; };
+
+	// 오브젝트 아이디를 반환한다.
+	int GetId(){ return Id; };
 
 	// 현재 능력치를 반환한다.
 	const FStatusInfo& GetStat() { return Stat; };

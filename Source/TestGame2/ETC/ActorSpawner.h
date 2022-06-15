@@ -23,7 +23,7 @@ public:
 	int    SpawnCountMaxTotal;      ///< 스폰 최대 수 ( 전체 )
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	int    SpawnCountMaxInWorld;    ///< 스폰 최대 수 ( 한 맵에서 ) 
+	int    SpawnCountMaxInWorld;    ///< 스폰 최대 수 ( 한 맵에서 )
 
 private:
 	float  SpawnIntervalCount;     ///< 스폰 간격 카운트
@@ -53,4 +53,5 @@ public:
 	void ResetSpawnIntervalCount(){ SpawnIntervalCount = 0; };
 	void AddSpawnCountTotal(){ SpawnCountTotal++; };
 	void AddSpawnCountInWorld(){ SpawnCountInWorld++; };
+	void SubSpawnCountInWorld(){ SpawnCountInWorld--; };
 };

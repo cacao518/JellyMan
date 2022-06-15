@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "../ETC/SDB.h"
 #include "../ETC/CameraShakeEffect.h"
+#include "../Manager/ObjectManager.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
@@ -319,6 +320,6 @@ void UGameObject::_CheckDie()
 
 	if( AnimState == EAnimState::DIE )
 	{
-		OwningCharacter->Destroy();
+		GetObjectManager().DestroyActor( OwningCharacter );
 	}
 }

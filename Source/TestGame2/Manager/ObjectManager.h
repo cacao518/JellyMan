@@ -14,6 +14,7 @@ class AActorSpawner;
 class UMyGameInstance;
 
 typedef unordered_map<int, AActor*> ActorMap;
+typedef unordered_map<int, AActorSpawner*> SpawnerMap;
 typedef list< AActorSpawner* > ActorSpawnerList;
 
 class ObjectManager
@@ -23,7 +24,8 @@ private:
 	ActorMap         Objects;
 
 	UPROPERTY()
-	ActorSpawnerList SpawnerList;
+	ActorSpawnerList SpawnerList;  // 모든 스포너 리스트
+	SpawnerMap       SpawnerMap;   // key:소환된액터 아이디, value:스포너
 
 	UPROPERTY()
 	UMyGameInstance* GameInstance;
@@ -42,7 +44,10 @@ public:
 	///////////////////////////////////////////////////////////////
 	
 	// 액터 생성
-	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator );
+	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, AActorSpawner* InSpawner = nullptr );
+
+	// 액터 제거
+	void DestroyActor( AActor* InActor );
 
 
 	///////////////////////////////////////////////////////////////
@@ -51,6 +56,9 @@ public:
 	
 	// 스포너 등록 함수
 	void RegisterSpawner( AActorSpawner* InSpawner);
+
+	// 스포너에서 스폰한다.
+	void SpawnActorInSpawner( float InDeltaTime );
 
 	// 스포너 리스트를 정리한다.
 	void ClearSpawnerList();
