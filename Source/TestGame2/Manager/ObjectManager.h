@@ -13,9 +13,11 @@ using namespace std;
 class AActorSpawner;
 class UMyGameInstance;
 
+
 typedef unordered_map<int, AActor*> ActorMap;
 typedef unordered_map<int, AActorSpawner*> SpawnerMap;
 typedef list< AActorSpawner* > ActorSpawnerList;
+
 
 class ObjectManager
 {
@@ -26,9 +28,6 @@ private:
 	UPROPERTY()
 	ActorSpawnerList SpawnerList;  // 모든 스포너 리스트
 	SpawnerMap       SpawnerMap;   // key:소환된액터 아이디, value:스포너
-
-	UPROPERTY()
-	UMyGameInstance* GameInstance;
 	
 	int ObjectId;
 

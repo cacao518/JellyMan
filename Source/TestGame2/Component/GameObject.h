@@ -12,6 +12,9 @@ class UAnimMontage;
 class AActorSpawner;
 
 
+typedef TMap<int, float> CoolTimeMap; /// 쿨타임정보 (key:스킬넘버, value:남은쿨타임)
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TESTGAME2_API UGameObject : public UActorComponent
 {
@@ -30,15 +33,21 @@ private:
 	EAnimState         AnimState;       	    // 애니메이션 상태
 	FCollisionInfo     AttackCollInfo;          // 공격 콜리전 정보
 	FVector            MovePos;                 // 이동할 위치
-	TArray<FSkillInfo> CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보
 				       
 	bool               IsDie;                   // 사망 여부
 	bool               IsAttackMove;            // 공격중 이동 여부
 	bool               IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
 	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
 
+	CoolTimeMap        CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보
+
 public:	
+
+	// 생성자 함수
 	UGameObject();
+
+	// 소멸자 함수
+	~UGameObject();
 
 	// Begin 함수
 	virtual void BeginPlay() override;
@@ -129,6 +138,9 @@ public:
 	// 스킬 정보를 반환한다.
 	const TArray<FSkillInfo>& GetSkillInfos() { return SkillInfos; };
 
+	// 해당 스킬이 쿨타임이 돌고 있는지 여부를 반환한다.
+	bool IsCoolingSkill( int InSkillNum );
+
 	///////////////////////////////////////////////////////////////////////
 	// Delegate Function
 	///////////////////////////////////////////////////////////////////////
@@ -146,4 +158,10 @@ private:
 
 	// 해당 캐릭터가 사망했는지 체크한다.
 	void _CheckDie();
+
+	// 스킬 쿨타임을 등록한다.
+	void _RegisterCoolTime( const FSkillInfo& InSkillInfo );
+
+	// 스킬 쿨타임을 돌린다.
+	void _CoolingSkills( float InDeltaTime );
 };

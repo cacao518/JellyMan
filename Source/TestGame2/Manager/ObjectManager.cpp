@@ -75,8 +75,8 @@ void ObjectManager::DestroyActor( AActor* InActor )
 
 	if( Objects.find( gameObject->GetId() ) != Objects.end() )
 	{
-		Objects.erase( gameObject->GetId() );
 		InActor->Destroy();
+		Objects.erase( gameObject->GetId() );
 
 		if( AActorSpawner* spawner = SpawnerMap[ gameObject->GetId() ] )
 		{

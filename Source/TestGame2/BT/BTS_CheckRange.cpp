@@ -30,8 +30,11 @@ void UBTS_CheckRange::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 	if( !gameObject )
 		return;
 
-	for( auto skill : gameObject->GetSkillInfos() )
+	for( auto& skill : gameObject->GetSkillInfos() )
 	{
+		if( gameObject->IsCoolingSkill( skill.Num ) )
+			continue;
+
 		if( target->GetDistanceTo( controllingPawn ) <= skill.ActivateRangeMax &&
 			target->GetDistanceTo( controllingPawn ) >= skill.ActivateRangeMin )
 		{

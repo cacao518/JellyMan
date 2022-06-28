@@ -18,6 +18,12 @@ UGameObject::UGameObject()
 	AnimState = EAnimState::IDLE_RUN;
 }
 
+UGameObject::~UGameObject()
+{
+	CoolingSkills.Reset();
+	SkillInfos.Reset();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief Begin
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,6 +39,9 @@ void UGameObject::BeginPlay()
 
 	SetMoveSpeed( Stat.MoveSpeed );
 	SetJumpPower( Stat.JumpPower );
+
+	for( const auto& skill : SkillInfos )
+		CoolingSkills.Add( skill.Num, 0 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,6 +56,7 @@ void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	_AnimStateChange();
 	_CheckDie();
 	_Move();
+	_CoolingSkills( DeltaTime );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,12 +111,17 @@ void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UGameObject::SkillPlay( int InSkillNum, float InScale )
 {
-	for( auto skillInfo : SkillInfos )
+	for( auto& skillInfo : SkillInfos )
 	{
 		if( InSkillNum != skillInfo.Num )
 			continue;
 
+		if( IsCoolingSkill( skillInfo.Num ) )
+			continue;
+			
 		MontagePlay( skillInfo.Anim, InScale );
+		_RegisterCoolTime( skillInfo );
+
 		return true;
 	}
 
@@ -212,6 +227,17 @@ FString UGameObject::GetCurMontageName()
 	FString curMontageName = curMontage ? curMontage->GetName() : "";
 
 	return curMontageName;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 해당 스킬이 쿨타임이 돌고 있는지 여부를 반환한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+bool UGameObject::IsCoolingSkill( int InSkillNum )
+{
+	if( CoolingSkills.FindRef( InSkillNum ) > 0 )
+		return true;
+	else
+		return false;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -321,5 +347,36 @@ void UGameObject::_CheckDie()
 	if( AnimState == EAnimState::DIE )
 	{
 		GetObjectManager().DestroyActor( OwningCharacter );
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 스킬 쿨타임을 등록한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameObject::_RegisterCoolTime( const FSkillInfo& InSkillInfo )
+{
+	if( InSkillInfo.CoolTime <= 0 )
+		return;
+
+	if( float* coolTime = CoolingSkills.Find( InSkillInfo.Num ) )
+		*coolTime = InSkillInfo.CoolTime;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 스킬 쿨타임을 돌린다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameObject::_CoolingSkills( float InDeltaTime )
+{
+	for( auto& pair : CoolingSkills )
+	{
+		float& remainCoolTime = pair.Value;
+
+		if( remainCoolTime > 0 )
+			remainCoolTime -= InDeltaTime;
+		else
+			continue;
+
+		if( remainCoolTime < 0 )
+			remainCoolTime = 0;
 	}
 }
