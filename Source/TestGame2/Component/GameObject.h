@@ -12,9 +12,6 @@ class UAnimMontage;
 class AActorSpawner;
 
 
-typedef TMap<int, float> CoolTimeMap; /// 쿨타임정보 (key:스킬넘버, value:남은쿨타임)
-
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TESTGAME2_API UGameObject : public UActorComponent
 {
@@ -25,7 +22,10 @@ public:
 	FStatusInfo        Stat;                    // 능력치
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	TArray<FSkillInfo> SkillInfos;              // 보유 스킬 정보
+	TArray<FSkillInfo> SkillInfos;              // 해당 BP 모든 스킬 정보
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
+	UAnimMontage*      HitAnim;                 // 피격 애니메이션
 
 private:
 	int                Id;                      // 오브젝트 아이디 값
@@ -35,11 +35,11 @@ private:
 	FVector            MovePos;                 // 이동할 위치
 				       
 	bool               IsDie;                   // 사망 여부
-	bool               IsAttackMove;            // 공격중 이동 여부
+	bool               IsForceMove;             // 강제 이동 여부(스킬 이동, 넉백)
 	bool               IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
 	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
 
-	CoolTimeMap        CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보
+	TMap<int, float>   CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보 (key:스킬ID, value:남은쿨타임)
 
 public:	
 
@@ -92,8 +92,8 @@ public:
 	// 공격속도를 설정한다.
 	void SetAttackSpeed( float InAttackSpeed ){ Stat.AttackSpeed = InAttackSpeed; };
 
-	// 공격중 이동 여부를 셋팅한다.
-	void SetIsAttackMove( bool InIsAttackMove ){ IsAttackMove = InIsAttackMove; };
+	// 강제 이동 여부를 셋팅한다.
+	void SetIsForceMove( bool InIsForceMove ){ IsForceMove = InIsForceMove; };
 
 	// 추가 키 입력 가능한지 여부를 셋팅한다.
 	void SetIsEnableDerivedKey( bool InIsEnableDerivedKey ) { IsEnableDerivedKey = InIsEnableDerivedKey; };
@@ -102,7 +102,7 @@ public:
 	void SetIsEnabledAttackColl( bool InIsEnabledAttackColl );
 
 	//// 이동할 위치를 셋팅한다.
-	void SetMovePos( float InMovePower );
+	void SetMovePos( float InMovePower, bool InIsKnockBack = false);
 
 	///////////////////////////////////////////////////////////////////////
 	// Getter
@@ -126,8 +126,8 @@ public:
 	// 공격 콜리전 활성화 여부를 반환한다.
 	bool GetIsEnabledAttackColl() { return IsEnabledAttackColl; };
 
-	// 공격중 이동 여부를 반환한다.
-	bool GetIsAttackMove() { return IsAttackMove; };
+	// 강제 이동 여부를 반환한다.
+	bool GetIsForceMove() { return IsForceMove; };
 
 	// 추가 키 입력 가능한지 여부를 반환한다.
 	bool GetIsEnableDerivedKey() { return IsEnableDerivedKey; };

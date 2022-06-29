@@ -14,6 +14,6 @@ void UAnimNotify_AttackStart::Notify( USkeletalMeshComponent* MeshComp, UAnimSeq
 	UGameObject* obj = Cast<UGameObject>( MeshComp->GetOwner()->FindComponentByClass<UGameObject>() );
 	if( !obj ) return;
 
-	obj->SetAttackCollInfo( FCollisionInfo( Size, Pos, Power ) );
+	obj->SetAttackCollInfo( FCollisionInfo( Size, Pos, Power, KnockBackPower ) );
 	obj->SetIsEnabledAttackColl( true );
 }

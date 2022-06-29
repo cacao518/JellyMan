@@ -15,5 +15,5 @@ void UAnimNotify_MoveStart::Notify( USkeletalMeshComponent* MeshComp, UAnimSeque
 	if( !obj ) return;
 
 	obj->SetMovePos( MovePower );
-	obj->SetIsAttackMove( true );
+	obj->SetIsForceMove( true );
 }

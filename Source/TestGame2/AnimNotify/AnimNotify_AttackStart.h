@@ -25,6 +25,9 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
 	float Power;
 
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	float KnockBackPower;
+
 public:
 	virtual FString GetNotifyName_Implementation() const override;
 

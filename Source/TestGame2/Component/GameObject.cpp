@@ -13,7 +13,7 @@ UGameObject::UGameObject()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	OwningCharacter = nullptr;
-	IsAttackMove = false;
+	IsForceMove = false;
 	IsEnabledAttackColl = false;
 	AnimState = EAnimState::IDLE_RUN;
 }
@@ -51,12 +51,12 @@ void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	ResetInfo();
-
 	_AnimStateChange();
 	_CheckDie();
 	_Move();
 	_CoolingSkills( DeltaTime );
+
+	ResetInfo();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ void UGameObject::ResetInfo( bool InForceReset )
 		AnimState == EAnimState::DIE )
 	{
 		SetIsEnableDerivedKey( false );
-		SetIsAttackMove( false );
+		SetIsForceMove( false );
 		SetIsEnabledAttackColl( false );
 		SetAttackCollInfo( FCollisionInfo() );
 	}
@@ -207,15 +207,18 @@ void UGameObject::SetIsEnabledAttackColl( bool InIsEnabledAttackColl )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 이동할 위치를 셋팅한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameObject::SetMovePos( float InMovePower )
+void UGameObject::SetMovePos( float InMovePower, bool InIsKnockBack )
 {
 	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
 
 	const FRotator Rotation = characterMovement->GetLastUpdateRotation();
 	const FRotator YawRotation( 0, Rotation.Yaw, 0 );
 	const FVector  Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
-
-	MovePos = characterMovement->GetActorLocation() + ( Direction * ( InMovePower * Stat.MoveSpeed ) );
+	
+	if( InIsKnockBack )
+		MovePos = characterMovement->GetActorLocation() - ( Direction * InMovePower );
+	else
+		MovePos = characterMovement->GetActorLocation() + ( Direction * ( InMovePower * Stat.MoveSpeed ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,12 +262,30 @@ void UGameObject::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 	if( !boxComponent || !boxComponent->GetName().Equals( TEXT( "AttackColl" ) ) )
 		return;
 	
-	// 체력 감소
 	auto othetGameObject = OtherActor ? Cast<UGameObject>( OtherActor->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
 	if( othetGameObject )
 	{ 
-		float decrease = Stat.Hp - othetGameObject->GetAttackCollInfo().Power;
-		SetHp( decrease > 0 ? decrease : 0 );
+		// 체력 감소
+		float totalDamage = othetGameObject->GetAttackCollInfo().Power * othetGameObject->GetStat().AttackPower;
+		totalDamage -= Stat.DefensePower;
+		totalDamage = totalDamage > 0 ? totalDamage : 1;
+
+		float decrease = Stat.Hp - totalDamage;
+		Stat.Hp = decrease > 0 ? decrease : 0;
+
+		// 경직
+		if( Stat.Hpm * ( 0.1f + ( Stat.Strength * 0.005f ) ) < totalDamage )
+		{
+			MontagePlay( HitAnim, 1.0f + ( Stat.Strength * 0.01f ) );
+			
+			// 넉백
+			float knockbackPower = othetGameObject->GetAttackCollInfo().KnockBackPower - ( Stat.Strength * 1.5f );
+			if( knockbackPower > 0 )
+			{
+				SetMovePos( knockbackPower, true );
+				SetIsForceMove( true );
+			}
+		}
 	}
 
 	FString str = OwningCharacter->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
@@ -324,7 +345,7 @@ void UGameObject::_Move()
 	}
 	else
 	{
-		if( IsAttackMove )
+		if( IsForceMove )
 		{
 			float dest_X = FMath::Lerp( characterMovement->GetActorLocation().X, MovePos.X, GetWorld()->GetDeltaSeconds() * Const::ANIM_LERP_MULITPLIER );
 			float dest_Y = FMath::Lerp( characterMovement->GetActorLocation().Y, MovePos.Y, GetWorld()->GetDeltaSeconds() * Const::ANIM_LERP_MULITPLIER );
@@ -360,6 +381,8 @@ void UGameObject::_RegisterCoolTime( const FSkillInfo& InSkillInfo )
 
 	if( float* coolTime = CoolingSkills.Find( InSkillInfo.Num ) )
 		*coolTime = InSkillInfo.CoolTime;
+	else
+		CoolingSkills.Add( InSkillInfo.Num, InSkillInfo.CoolTime );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

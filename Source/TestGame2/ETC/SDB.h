@@ -64,6 +64,9 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float Power;
 
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float KnockBackPower;
+
 	FCollisionInfo()
 	{
 		Size = FVector(0,0,0);
@@ -71,11 +74,12 @@ public:
 		Power = 0;
 	};
 
-	FCollisionInfo( FVector InSize, FVector InPos, float InPower )
+	FCollisionInfo( FVector InSize, FVector InPos, float InPower, float InKnockBackPower )
 	{
 		Size = InSize;
 		Pos = InPos;
 		Power = InPower;
+		KnockBackPower = InKnockBackPower;
 	};
 };
 
@@ -134,10 +138,10 @@ public:
 	float JumpPower;	// 점프력
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Strength;   	// 강인함 ( 경직시간, 넉백거리 관련 )
+	float Strength;   	// 강인함 MAX:100( 경직시간, 넉백거리 관련 ) 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Weight;   	// 무게 ( 점프, 에어본 관련 )
+	float Weight;   	// 무게 MAX:100 ( 점프, 에어본 관련 )
 };
 
 namespace Const
