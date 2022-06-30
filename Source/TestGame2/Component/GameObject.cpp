@@ -209,16 +209,17 @@ void UGameObject::SetIsEnabledAttackColl( bool InIsEnabledAttackColl )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameObject::SetMovePos( float InMovePower, bool InIsKnockBack )
 {
-	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
+	if( !OwningCharacter )
+		return;
 
-	const FRotator Rotation = characterMovement->GetLastUpdateRotation();
+	const FRotator Rotation = OwningCharacter->GetActorRotation();
 	const FRotator YawRotation( 0, Rotation.Yaw, 0 );
 	const FVector  Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
 	
 	if( InIsKnockBack )
-		MovePos = characterMovement->GetActorLocation() - ( Direction * InMovePower );
+		MovePos = OwningCharacter->GetActorLocation() - ( Direction * InMovePower );
 	else
-		MovePos = characterMovement->GetActorLocation() + ( Direction * ( InMovePower * Stat.MoveSpeed ) );
+		MovePos = OwningCharacter->GetActorLocation() + ( Direction * ( InMovePower * Stat.MoveSpeed ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -277,6 +278,7 @@ void UGameObject::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 		if( Stat.Hpm * ( 0.1f + ( Stat.Strength * 0.005f ) ) < totalDamage )
 		{
 			MontagePlay( HitAnim, 1.0f + ( Stat.Strength * 0.01f ) );
+			LookAt( Cast<ACharacter>( OtherActor ) );
 			
 			// ³Ë¹é
 			float knockbackPower = othetGameObject->GetAttackCollInfo().KnockBackPower - ( Stat.Strength * 1.5f );
