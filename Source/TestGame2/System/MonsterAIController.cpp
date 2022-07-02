@@ -11,6 +11,7 @@ const FName AMonsterAIController::HomePosKey( TEXT( "HomePos" ) );
 const FName AMonsterAIController::PatrolPosKey( TEXT( "PatrolPos" ) );
 const FName AMonsterAIController::TargetKey( TEXT( "Target" ) );
 const FName AMonsterAIController::CurSkillNumKey( TEXT( "CurSkillNum" ) );
+const FName AMonsterAIController::IsCommonActionKey( TEXT( "IsCommonAction" ) );
 
 
 AMonsterAIController::AMonsterAIController( FObjectInitializer const& object_initializer )

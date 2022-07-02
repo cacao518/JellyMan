@@ -19,6 +19,7 @@ public:
 	static const FName PatrolPosKey;
 	static const FName TargetKey;
 	static const FName CurSkillNumKey;
+	static const FName IsCommonActionKey;
 
 private:
 	class UBlackboardComponent* blackboard;
