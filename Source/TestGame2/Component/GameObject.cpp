@@ -15,6 +15,7 @@ UGameObject::UGameObject()
 	OwningCharacter = nullptr;
 	IsForceMove = false;
 	IsEnabledAttackColl = false;
+	AttackCanceling = false;
 	AnimState = EAnimState::IDLE_RUN;
 }
 
@@ -69,10 +70,12 @@ void UGameObject::ResetInfo( bool InForceReset )
 		AnimState == EAnimState::JUMP ||
 		AnimState == EAnimState::DIE )
 	{
-		SetIsEnableDerivedKey( false );
-		SetIsForceMove( false );
 		SetIsEnabledAttackColl( false );
 		SetAttackCollInfo( FCollisionInfo() );
+		IsEnableDerivedKey = false;
+		IsForceMove = false;
+		AttackCanceling = false;
+		MoveDirectionInAction = FVector::ZeroVector;
 	}
 }
 
@@ -101,7 +104,14 @@ void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
 	if( !animInstance || !InMontage )
 		return;
 
+	if( AttackCanceling )
+		return;
+
 	ResetInfo( true );
+
+	if( AnimState == EAnimState::COMMON_ACTION )
+		AttackCanceling = true;
+
 	animInstance->Montage_Play( InMontage, InScale );
 }
 
@@ -218,8 +228,18 @@ void UGameObject::SetMovePos( float InMovePower, bool InIsKnockBack )
 	
 	if( InIsKnockBack )
 		MovePos = OwningCharacter->GetActorLocation() - ( Direction * InMovePower );
+	else if( AttackCanceling )
+		MovePos = OwningCharacter->GetActorLocation() + ( MoveDirectionInAction * ( InMovePower * Stat.MoveSpeed ) );
 	else
 		MovePos = OwningCharacter->GetActorLocation() + ( Direction * ( InMovePower * Stat.MoveSpeed ) );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 기본 공격 캔슬 중 다음으로 이동할 방향 값을 더한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameObject::AddMoveDirectionInAction( FVector InDirection, float InValue )
+{
+	MoveDirectionInAction += InDirection * InValue;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

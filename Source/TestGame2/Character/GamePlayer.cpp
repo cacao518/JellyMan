@@ -146,7 +146,10 @@ void AGamePlayer::RollStart()
 	if( !GameObject )
 		return;
 	
-	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	if( GameObject->GetCurMontageName().Equals( "MTG_Roll" ) )
+		return;
+
+	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN || GameObject->GetAnimState() == EAnimState::COMMON_ACTION )
 		GameObject->SkillPlay( 1, GameObject->GetStat().MoveSpeed );
 }
 

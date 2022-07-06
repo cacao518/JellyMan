@@ -47,13 +47,16 @@ void AMyPlayerController::MoveForward( float Value )
 		return;
 
 	auto gameObject = MyPlayer ? Cast<UGameObject>( MyPlayer->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
-	
+	if( !gameObject )
+		return;
+
+	const FRotator Rotation = GetControlRotation();
+	const FRotator YawRotation( 0, Rotation.Yaw, 0 );
+	const FVector Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
+	gameObject->AddMoveDirectionInAction( Direction, Value );
+
 	if( ( Value != 0.0f ) && gameObject && gameObject->GetAnimState() == EAnimState::IDLE_RUN )
 	{
-		const FRotator Rotation = GetControlRotation();
-		const FRotator YawRotation( 0, Rotation.Yaw, 0 );
-
-		const FVector Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
 		MyPlayer->AddMovementInput( Direction, Value );
 	}
 }
@@ -64,13 +67,16 @@ void AMyPlayerController::MoveRight( float Value )
 		return;
 
 	auto gameObject = MyPlayer ? Cast<UGameObject>( MyPlayer->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+	if( !gameObject )
+		return;
 
-	if( ( Value!=0.0f )&& gameObject && gameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	const FRotator Rotation = GetControlRotation();
+	const FRotator YawRotation( 0, Rotation.Yaw, 0 );
+	const FVector Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::Y );
+	gameObject->AddMoveDirectionInAction( Direction, Value );
+
+	if( ( Value!=0.0f )&& gameObject->GetAnimState() == EAnimState::IDLE_RUN )
 	{
-		const FRotator Rotation = GetControlRotation();
-		const FRotator YawRotation( 0, Rotation.Yaw, 0 );
-
-		const FVector Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::Y );
 		MyPlayer->AddMovementInput( Direction, Value );
 	}
 }

@@ -41,6 +41,10 @@ private:
 
 	TMap<int, float>   CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보 (key:스킬ID, value:남은쿨타임)
 
+	// Player 전용
+	FVector            MoveDirectionInAction;   // 기본 공격 캔슬 중 다음으로 이동할 방향
+	bool               AttackCanceling;         // 기본 공격을 캔슬중인가
+
 public:	
 
 	// 생성자 함수
@@ -101,8 +105,11 @@ public:
 	// 공격 콜리전 활성화 여부를 셋팅한다.
 	void SetIsEnabledAttackColl( bool InIsEnabledAttackColl );
 
-	//// 이동할 위치를 셋팅한다.
+	// 이동할 위치를 셋팅한다.
 	void SetMovePos( float InMovePower, bool InIsKnockBack = false);
+
+	// 기본 공격 캔슬 중 다음으로 이동할 방향 값을 더한다.
+	void AddMoveDirectionInAction( FVector InDirection, float InValue );
 
 	///////////////////////////////////////////////////////////////////////
 	// Getter
