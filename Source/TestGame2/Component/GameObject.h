@@ -102,6 +102,9 @@ public:
 	// 추가 키 입력 가능한지 여부를 셋팅한다.
 	void SetIsEnableDerivedKey( bool InIsEnableDerivedKey ) { IsEnableDerivedKey = InIsEnableDerivedKey; };
 
+	// 기본 공격을 캔슬중인지 여부를 셋팅한다.
+	void SetAttackCanceling( bool InAttackCanceling ) { AttackCanceling = InAttackCanceling; };
+
 	// 공격 콜리전 활성화 여부를 셋팅한다.
 	void SetIsEnabledAttackColl( bool InIsEnabledAttackColl );
 
