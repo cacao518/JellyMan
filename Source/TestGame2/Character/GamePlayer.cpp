@@ -2,6 +2,7 @@
 
 #include "GamePlayer.h"
 #include "../ETC/SDB.h"
+#include "../System/MyPlayerController.h"
 #include "../Component/GameObject.h"
 #include "../Component/MaterialProperty.h"
 #include "../Component/WeaponChange.h"
@@ -71,6 +72,8 @@ AGamePlayer::AGamePlayer()
 	TileColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "TileColl" ) );
 	TileColl->SetupAttachment( GetMesh() );
 	TileColl->SetCollisionProfileName( TEXT( "TileColl" ) );
+
+	_ResetReadySkill();
 }
 
 void AGamePlayer::BeginPlay()
@@ -83,6 +86,8 @@ void AGamePlayer::BeginPlay()
 void AGamePlayer::Tick( float InDeltaTime )
 {
 	Super::Tick(InDeltaTime);
+
+	_ProcessReadySkill( InDeltaTime );
 }
 
 void AGamePlayer::Jump()
@@ -96,6 +101,8 @@ void AGamePlayer::Jump()
 
 void AGamePlayer::LeftAttack()
 {
+	bool result = false;
+
 	if( !GameObject )
 		return;
 
@@ -103,24 +110,31 @@ void AGamePlayer::LeftAttack()
 	{
 		case EWeaponState::MAX:
 		{
-			Punch1Start();
+			result = Punch1Start();
 			break;
 		}
 		case EWeaponState::SWORD:
 		{
 		   if( GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" ) && GameObject->GetIsEnableDerivedKey() )
-				SwordAttack2Start();
+			   result = SwordAttack2Start();
 			else
-				SwordAttack1Start();
+			   result = SwordAttack1Start();
 			break;
 		}
 		default:
 			break;
 	}
+
+	if( !result )
+		_SetReadySkill( bind( &AGamePlayer::LeftAttack, this ) );
+	else
+		_ResetReadySkill();
 }
 
 void AGamePlayer::RightAttack()
 {
+	bool result = false;
+
 	if( !GameObject )
 		return;
 
@@ -128,90 +142,160 @@ void AGamePlayer::RightAttack()
 	{
 	case EWeaponState::MAX:
 	{
-		Punch2Start();
+		result = Punch2Start();
 		break;
 	}
 	case EWeaponState::SWORD:
 	{
-		SwordAttack3Start();
+		result = SwordAttack3Start();
 		break;
 	}
 	default:
 		break;
 	}
+
+	if( !result )
+		_SetReadySkill( bind( &AGamePlayer::RightAttack, this ) );
+	else
+		_ResetReadySkill();
 }
 
 void AGamePlayer::RollStart()
 {
-	if( !GameObject )
-		return;
-	
-	if( GameObject->GetCurMontageName().Equals( "MTG_Roll" ) )
-		return;
+	bool result = false;
 
-	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN || GameObject->GetAnimState() == EAnimState::COMMON_ACTION )
+	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	{
 		GameObject->SkillPlay( 1, GameObject->GetStat().MoveSpeed );
-}
-
-void AGamePlayer::Punch1Start()
-{
-	if( !GameObject )
-		return;
-
-	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
-		GameObject->SkillPlay( 2, GameObject->GetStat().AttackSpeed );
-}
-
-void AGamePlayer::Punch2Start()
-{
-	if( !GameObject )
-		return;
-
-	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN || GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) )
-		GameObject->SkillPlay( 3, GameObject->GetStat().AttackSpeed );
+		result = true;
+	}
+	
+	if( !result )
+		_SetReadySkill( bind( &AGamePlayer::RollStart, this ) );
+	else
+		_ResetReadySkill();
 }
 
 void AGamePlayer::TakeDownStart()
 {
-	if( !GameObject )
-		return;
-
-	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	{
 		GameObject->SkillPlay( 4, GameObject->GetStat().AttackSpeed );
+	}
 }
 
 void AGamePlayer::EquipSword()
 {
-	if( !GameObject )
-		return;
-
-	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	{
 		GameObject->SkillPlay( 5, GameObject->GetStat().AttackSpeed );
+	}
 }
 
-void AGamePlayer::SwordAttack1Start()
+bool AGamePlayer::Punch1Start()
 {
-	if( !GameObject )
-		return;
+	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	{
+		GameObject->SkillPlay( 2, GameObject->GetStat().AttackSpeed );
+		return true;
+	}
 
-	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
-		GameObject->SkillPlay( 6, GameObject->GetStat().AttackSpeed );
+	return false;
 }
 
-void AGamePlayer::SwordAttack2Start()
+bool AGamePlayer::Punch2Start()
+{
+	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN ||
+		GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) )
+	{
+		GameObject->SkillPlay( 3, GameObject->GetStat().AttackSpeed );
+		return true;
+	}
+
+	return false;
+}
+
+bool AGamePlayer::SwordAttack1Start()
+{
+	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	{
+		GameObject->SkillPlay( 6, GameObject->GetStat().AttackSpeed );
+		return true;
+	}
+
+	return false;
+}
+
+bool AGamePlayer::SwordAttack2Start()
 {
 	if( GameObject )
+	{
 		GameObject->SkillPlay( 7, GameObject->GetStat().AttackSpeed );
+		return true;
+	}
+
+	return false;
 }
 
 
-void AGamePlayer::SwordAttack3Start()
+bool AGamePlayer::SwordAttack3Start()
 {
-	if( !GameObject )
+	if( GameObject &&
+		( GameObject->GetAnimState() == EAnimState::IDLE_RUN
+		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" )
+		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack2" ) ) )
+	{
+		GameObject->SkillPlay( 8, GameObject->GetStat().AttackSpeed );
+		return true;
+	}
+
+	return false;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 발동 대기중 스킬 초기화
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AGamePlayer::_ResetReadySkill()
+{
+	ReadySkillDirection = FVector::ZeroVector;
+	ReadySkillFunc = nullptr;
+	ReadySkillResetTime = 0.f;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 발동 대기중 스킬 설정
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AGamePlayer::_SetReadySkill( std::function<void()> InReadySkillFunc )
+{
+	auto controller = Cast< AMyPlayerController >( GetController() );
+	if( !controller )
 		return;
 
-	if(    GameObject->GetAnimState() == EAnimState::IDLE_RUN
-	    || GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" )
-		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack2" ) )
-		GameObject->SkillPlay( 8, GameObject->GetStat().AttackSpeed );
+	if( &ReadySkillFunc == &InReadySkillFunc )
+		return;
+
+	ReadySkillDirection = FVector( controller->InputComponent->GetAxisValue( "MoveRight" ), controller->InputComponent->GetAxisValue( "MoveForward" ), 0 );
+	ReadySkillFunc = InReadySkillFunc;
+	ReadySkillResetTime = 0.5f;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 발동 대기중인 스킬 수행
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AGamePlayer::_ProcessReadySkill( float InDeltaTime )
+{
+	// 타임아웃 초기화
+	if( ReadySkillResetTime <= 0 )
+	{
+		_ResetReadySkill();
+		return;
+	}
+	else
+	{
+		ReadySkillResetTime -= InDeltaTime;
+
+		// 대기중인 스킬 발동
+		if( ReadySkillFunc )
+			ReadySkillFunc();
+	}
 }

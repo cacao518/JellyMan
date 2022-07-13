@@ -15,7 +15,6 @@ UGameObject::UGameObject()
 	OwningCharacter = nullptr;
 	IsForceMove = false;
 	IsEnabledAttackColl = false;
-	AttackCanceling = false;
 	AnimState = EAnimState::IDLE_RUN;
 }
 
@@ -74,8 +73,6 @@ void UGameObject::ResetInfo( bool InForceReset )
 		SetAttackCollInfo( FCollisionInfo() );
 		IsEnableDerivedKey = false;
 		IsForceMove = false;
-		AttackCanceling = false;
-		MoveDirectionInAction = FVector::ZeroVector;
 	}
 }
 
@@ -104,13 +101,7 @@ void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
 	if( !animInstance || !InMontage )
 		return;
 
-	if( AttackCanceling )
-		return;
-
 	ResetInfo( true );
-
-	if( AnimState == EAnimState::COMMON_ACTION )
-		AttackCanceling = true;
 
 	animInstance->Montage_Play( InMontage, InScale );
 }
@@ -228,18 +219,8 @@ void UGameObject::SetMovePos( float InMovePower, bool InIsKnockBack )
 	
 	if( InIsKnockBack )
 		MovePos = OwningCharacter->GetActorLocation() - ( Direction * InMovePower );
-	else if( AttackCanceling )
-		MovePos = OwningCharacter->GetActorLocation() + ( MoveDirectionInAction * ( InMovePower * Stat.MoveSpeed ) );
 	else
 		MovePos = OwningCharacter->GetActorLocation() + ( Direction * ( InMovePower * Stat.MoveSpeed ) );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 기본 공격 캔슬 중 다음으로 이동할 방향 값을 더한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameObject::AddMoveDirectionInAction( FVector InDirection, float InValue )
-{
-	MoveDirectionInAction += InDirection * InValue;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -283,38 +264,7 @@ void UGameObject::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 	if( !boxComponent || !boxComponent->GetName().Equals( TEXT( "AttackColl" ) ) )
 		return;
 	
-	auto othetGameObject = OtherActor ? Cast<UGameObject>( OtherActor->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
-	if( othetGameObject )
-	{ 
-		// 체력 감소
-		float totalDamage = othetGameObject->GetAttackCollInfo().Power * othetGameObject->GetStat().AttackPower;
-		totalDamage -= Stat.DefensePower;
-		totalDamage = totalDamage > 0 ? totalDamage : 1;
-
-		float decrease = Stat.Hp - totalDamage;
-		Stat.Hp = decrease > 0 ? decrease : 0;
-
-		// 경직
-		if( Stat.Hpm * ( 0.1f + ( Stat.Strength * 0.005f ) ) < totalDamage )
-		{
-			MontagePlay( HitAnim, 1.0f + ( Stat.Strength * 0.01f ) );
-			LookAt( Cast<ACharacter>( OtherActor ) );
-			
-			// 넉백
-			float knockbackPower = othetGameObject->GetAttackCollInfo().KnockBackPower - ( Stat.Strength * 1.5f );
-			if( knockbackPower > 0 )
-			{
-				SetMovePos( knockbackPower, true );
-				SetIsForceMove( true );
-			}
-		}
-	}
-
-	FString str = OwningCharacter->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
-	if( GEngine )
-		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
-
-	CameraShake();
+	_ProcessHit( OtherActor );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -424,4 +374,43 @@ void UGameObject::_CoolingSkills( float InDeltaTime )
 		if( remainCoolTime < 0 )
 			remainCoolTime = 0;
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 피격 처리를 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameObject::_ProcessHit( AActor* InOtherActor )
+{
+	auto othetGameObject = InOtherActor ? Cast<UGameObject>( InOtherActor->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+	if( !othetGameObject )
+		return;
+
+	// 체력 감소
+	float totalDamage = othetGameObject->GetAttackCollInfo().Power * othetGameObject->GetStat().AttackPower;
+	totalDamage -= Stat.DefensePower;
+	totalDamage = totalDamage > 0 ? totalDamage : 1;
+
+	float decrease = Stat.Hp - totalDamage;
+	Stat.Hp = decrease > 0 ? decrease : 0;
+
+	// 경직
+	if( Stat.Hpm * ( 0.1f + ( Stat.Strength * 0.005f ) ) < totalDamage )
+	{
+		MontagePlay( HitAnim, 1.0f + ( Stat.Strength * 0.01f ) );
+		LookAt( Cast<ACharacter>( InOtherActor ) );
+
+		// 넉백
+		float knockbackPower = othetGameObject->GetAttackCollInfo().KnockBackPower - ( Stat.Strength * 1.5f );
+		if( knockbackPower > 0 )
+		{
+			SetMovePos( knockbackPower, true );
+			SetIsForceMove( true );
+		}
+	}
+
+	FString str = OwningCharacter->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
+	if( GEngine )
+		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
+
+	CameraShake();
 }

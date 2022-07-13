@@ -2,10 +2,12 @@
 
 #pragma once
 
+#include <functional>
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GamePlayer.generated.h"
 
+using namespace std;
 
 class UAnimMontage;
 class USkeletalMeshComponent;
@@ -41,6 +43,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+private:
+	float                 ReadySkillResetTime;  // 발동 대기중인 스킬 초기화 시간
+	FVector               ReadySkillDirection;  // 발동 대기중인 마지막으로 입력한 스킬의 방향
+	function<void()>      ReadySkillFunc;       // 발동 대기중인 마지막으로 입력한 스킬 함수
+
 public:
 	AGamePlayer();
 
@@ -54,13 +61,22 @@ public:
 	void RightAttack();
 
 	void RollStart();
-	void Punch1Start();
-	void Punch2Start();
 	void TakeDownStart();
-
 	void EquipSword();
-	void SwordAttack1Start();
-	void SwordAttack2Start();
-	void SwordAttack3Start();
-};
 
+	bool Punch1Start();
+	bool Punch2Start();
+	bool SwordAttack1Start();
+	bool SwordAttack2Start();
+	bool SwordAttack3Start();
+
+private:
+	// 발동 대기중 스킬 초기화
+	void _ResetReadySkill();
+
+	// 발동 대기중 스킬 설정
+	void _SetReadySkill( function<void()> InReadySkillFunc );
+
+	// 발동 대기중인 스킬 수행
+	void _ProcessReadySkill( float InDeltaTime );
+};
