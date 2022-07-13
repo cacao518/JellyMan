@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "../ETC/SDB.h"
 #include "../ETC/CameraShakeEffect.h"
+#include "../Character/GamePlayer.h"
 #include "../Manager/ObjectManager.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -213,14 +214,14 @@ void UGameObject::SetMovePos( float InMovePower, bool InIsKnockBack )
 	if( !OwningCharacter )
 		return;
 
-	const FRotator Rotation = OwningCharacter->GetActorRotation();
-	const FRotator YawRotation( 0, Rotation.Yaw, 0 );
-	const FVector  Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
+	const FRotator rotation = OwningCharacter->GetActorRotation();
+	const FRotator yawRotation( 0, rotation.Yaw, 0 );
+	const FVector  direction = FRotationMatrix( yawRotation ).GetUnitAxis( EAxis::X );
 	
 	if( InIsKnockBack )
-		MovePos = OwningCharacter->GetActorLocation() - ( Direction * InMovePower );
+		MovePos = OwningCharacter->GetActorLocation() - ( direction * InMovePower );
 	else
-		MovePos = OwningCharacter->GetActorLocation() + ( Direction * ( InMovePower * Stat.MoveSpeed ) );
+		MovePos = OwningCharacter->GetActorLocation() + ( direction * ( InMovePower * Stat.MoveSpeed ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -125,10 +125,7 @@ void AGamePlayer::LeftAttack()
 			break;
 	}
 
-	if( !result )
-		_SetReadySkill( bind( &AGamePlayer::LeftAttack, this ) );
-	else
-		_ResetReadySkill();
+	result ? _ResetReadySkill() : _SetReadySkill( bind( &AGamePlayer::LeftAttack, this ) );
 }
 
 void AGamePlayer::RightAttack()
@@ -154,10 +151,7 @@ void AGamePlayer::RightAttack()
 		break;
 	}
 
-	if( !result )
-		_SetReadySkill( bind( &AGamePlayer::RightAttack, this ) );
-	else
-		_ResetReadySkill();
+	result ? _ResetReadySkill() : _SetReadySkill( bind( &AGamePlayer::RightAttack, this ) );
 }
 
 void AGamePlayer::RollStart()
@@ -170,10 +164,7 @@ void AGamePlayer::RollStart()
 		result = true;
 	}
 	
-	if( !result )
-		_SetReadySkill( bind( &AGamePlayer::RollStart, this ) );
-	else
-		_ResetReadySkill();
+	result ? _ResetReadySkill() : _SetReadySkill( bind( &AGamePlayer::RollStart, this ) );
 }
 
 void AGamePlayer::TakeDownStart()
@@ -274,7 +265,7 @@ void AGamePlayer::_SetReadySkill( std::function<void()> InReadySkillFunc )
 	if( &ReadySkillFunc == &InReadySkillFunc )
 		return;
 
-	ReadySkillDirection = FVector( controller->InputComponent->GetAxisValue( "MoveRight" ), controller->InputComponent->GetAxisValue( "MoveForward" ), 0 );
+	ReadySkillDirection = FVector( controller->InputComponent->GetAxisValue( "MoveRight" ), -controller->InputComponent->GetAxisValue( "MoveForward" ), 0 );
 	ReadySkillFunc = InReadySkillFunc;
 	ReadySkillResetTime = 0.5f;
 }

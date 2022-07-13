@@ -23,13 +23,13 @@ class ObjectManager
 {
 private:
 	UPROPERTY()
-	ActorMap         Objects;
+	ActorMap         Objects;      // 모든 오브젝트 리스트
 
 	UPROPERTY()
 	ActorSpawnerList SpawnerList;  // 모든 스포너 리스트
 	SpawnerMap       SpawnerMap;   // key:소환된액터 아이디, value:스포너
 	
-	int ObjectId;
+	int ObjectId;                  // 오브젝트 고유 아이디
 
 public:
 	ObjectManager();

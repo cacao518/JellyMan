@@ -70,6 +70,9 @@ public:
 	bool SwordAttack2Start();
 	bool SwordAttack3Start();
 
+	// 발동 대기중인 마지막으로 입력한 스킬의 방향을 반환한다.
+	const FVector& GetReadySkillDirection(){ return ReadySkillDirection; };
+
 private:
 	// 발동 대기중 스킬 초기화
 	void _ResetReadySkill();
