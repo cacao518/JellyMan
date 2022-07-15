@@ -218,15 +218,8 @@ void UGameObject::SetMovePos( float InMovePower, bool InIsKnockBack )
 	const FRotator yawRotation( 0, rotation.Yaw, 0 );
 	const FVector  direction = FRotationMatrix( yawRotation ).GetUnitAxis( EAxis::X );
 
-	FVector readySkillDir = FVector::ZeroVector;
-	auto player = Cast< AGamePlayer >( OwningCharacter );
-	if( player )
-		readySkillDir = player->GetReadySkillDirection();
-
 	if( InIsKnockBack )
 		MovePos = OwningCharacter->GetActorLocation() - ( direction * InMovePower );
- 	else if( readySkillDir != FVector::ZeroVector )
-		MovePos = OwningCharacter->GetActorLocation() + ( readySkillDir * ( InMovePower * Stat.MoveSpeed ) );
 	else
 		MovePos = OwningCharacter->GetActorLocation() + ( direction * ( InMovePower * Stat.MoveSpeed ) );
 }

@@ -251,7 +251,6 @@ bool AGamePlayer::SwordAttack3Start()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGamePlayer::_ResetReadySkill()
 {
-	ReadySkillDirection = FVector::ZeroVector;
 	ReadySkillFunc = nullptr;
 	ReadySkillResetTime = 0.f;
 	ReadySkillInputKey = EInputKeyType::MAX;
@@ -269,7 +268,6 @@ void AGamePlayer::_SetReadySkill( EInputKeyType InReadyInputKey )
 	if( ReadySkillInputKey == InReadyInputKey )
 		return;
 
-	ReadySkillDirection = FVector( controller->InputComponent->GetAxisValue( "MoveFoward" ), controller->InputComponent->GetAxisValue( "MoveRight" ), 0 );
 	ReadySkillFunc = InputTypeAndFuncMap[ InReadyInputKey ];
 	ReadySkillResetTime = 1.f;
 	ReadySkillInputKey = InReadyInputKey;
@@ -283,11 +281,13 @@ void AGamePlayer::_ProcessReadySkill( float InDeltaTime )
 	// 타임아웃 초기화
 	if( ReadySkillResetTime <= 0 )
 	{
+		GetCharacterMovement()->RotationRate = FRotator( 0.0f, 1000.0f, 0.0f );
 		_ResetReadySkill();
 		return;
 	}
 	else
 	{
+		GetCharacterMovement()->RotationRate = FRotator( 0.0f, 100000.0f, 0.0f );
 		ReadySkillResetTime -= InDeltaTime;
 
 		// 대기중인 스킬 발동

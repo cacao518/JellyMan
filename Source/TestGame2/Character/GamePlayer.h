@@ -51,7 +51,6 @@ public:
 private:
 	InputMap              InputTypeAndFuncMap;  // Key:입력키종류, Value:입력키 함수
 	float                 ReadySkillResetTime;  // 발동 대기중인 스킬 초기화 시간
-	FVector               ReadySkillDirection;  // 발동 대기중인 마지막으로 입력한 스킬의 방향
 	function<void()>      ReadySkillFunc;       // 발동 대기중인 마지막으로 입력한 스킬 함수
 	EInputKeyType         ReadySkillInputKey;   // 발동 대기중인 마지막으로 입력한 키 종류
 
@@ -75,9 +74,6 @@ public:
 	bool SwordAttack1Start();
 	bool SwordAttack2Start();
 	bool SwordAttack3Start();
-
-	// 발동 대기중인 마지막으로 입력한 스킬의 방향을 반환한다.
-	const FVector& GetReadySkillDirection(){ return ReadySkillDirection; };
 
 private:
 	// 발동 대기중 스킬 초기화
