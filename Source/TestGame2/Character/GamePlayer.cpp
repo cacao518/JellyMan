@@ -33,7 +33,7 @@ AGamePlayer::AGamePlayer()
 
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; 	
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 1000.0f, 0.0f); 
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f);
 	GetCharacterMovement()->JumpZVelocity = 600.f;
 	GetCharacterMovement()->AirControl = 0.2f;
 
@@ -281,13 +281,13 @@ void AGamePlayer::_ProcessReadySkill( float InDeltaTime )
 	// 타임아웃 초기화
 	if( ReadySkillResetTime <= 0 )
 	{
-		GetCharacterMovement()->RotationRate = FRotator( 0.0f, 1000.0f, 0.0f );
+		GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f );
 		_ResetReadySkill();
 		return;
 	}
 	else
 	{
-		GetCharacterMovement()->RotationRate = FRotator( 0.0f, 100000.0f, 0.0f );
+		GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::READY_SKILL_ROTATION_RATE, 0.0f );
 		ReadySkillResetTime -= InDeltaTime;
 
 		// 대기중인 스킬 발동
