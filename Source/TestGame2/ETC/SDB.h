@@ -48,6 +48,17 @@ enum class EWeaponState : uint8
 	MAX,
 };
 
+// 입력 키 종류
+UENUM( BlueprintType )
+enum class EInputKeyType : uint8
+{
+	LEFT_MOUSE            UMETA( DisplayName = "LeftMouse" ),
+	RIGHT_MOUSE           UMETA( DisplayName = "RightMouse" ),
+	SPACE                 UMETA( DisplayName = "Space" ),
+
+	MAX,
+};
+
 // 충돌체 정보
 USTRUCT( Atomic, BlueprintType )
 struct FCollisionInfo

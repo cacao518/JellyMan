@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "GamePlayer.h"
-#include "../ETC/SDB.h"
 #include "../System/MyPlayerController.h"
 #include "../Component/GameObject.h"
 #include "../Component/MaterialProperty.h"
@@ -73,6 +72,10 @@ AGamePlayer::AGamePlayer()
 	TileColl->SetupAttachment( GetMesh() );
 	TileColl->SetCollisionProfileName( TEXT( "TileColl" ) );
 
+	InputTypeAndFuncMap[ EInputKeyType::LEFT_MOUSE  ] = bind( &AGamePlayer::ProcessLeftMouse,  this );
+	InputTypeAndFuncMap[ EInputKeyType::RIGHT_MOUSE ] = bind( &AGamePlayer::ProcessRightMouse, this );
+	InputTypeAndFuncMap[ EInputKeyType::SPACE       ] = bind( &AGamePlayer::ProcessSpace,      this );
+
 	_ResetReadySkill();
 }
 
@@ -99,7 +102,7 @@ void AGamePlayer::Jump()
 		Super::Jump();
 }
 
-void AGamePlayer::LeftAttack()
+void AGamePlayer::ProcessLeftMouse()
 {
 	bool result = false;
 
@@ -125,10 +128,10 @@ void AGamePlayer::LeftAttack()
 			break;
 	}
 
-	result ? _ResetReadySkill() : _SetReadySkill( bind( &AGamePlayer::LeftAttack, this ) );
+	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
 }
 
-void AGamePlayer::RightAttack()
+void AGamePlayer::ProcessRightMouse()
 {
 	bool result = false;
 
@@ -151,10 +154,10 @@ void AGamePlayer::RightAttack()
 		break;
 	}
 
-	result ? _ResetReadySkill() : _SetReadySkill( bind( &AGamePlayer::RightAttack, this ) );
+	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
 }
 
-void AGamePlayer::RollStart()
+void AGamePlayer::ProcessSpace()
 {
 	bool result = false;
 
@@ -164,10 +167,10 @@ void AGamePlayer::RollStart()
 		result = true;
 	}
 	
-	result ? _ResetReadySkill() : _SetReadySkill( bind( &AGamePlayer::RollStart, this ) );
+	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::SPACE );
 }
 
-void AGamePlayer::TakeDownStart()
+void AGamePlayer::ProcessF()
 {
 	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
 	{
@@ -175,7 +178,7 @@ void AGamePlayer::TakeDownStart()
 	}
 }
 
-void AGamePlayer::EquipSword()
+void AGamePlayer::Process1()
 {
 	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
 	{
@@ -251,23 +254,25 @@ void AGamePlayer::_ResetReadySkill()
 	ReadySkillDirection = FVector::ZeroVector;
 	ReadySkillFunc = nullptr;
 	ReadySkillResetTime = 0.f;
+	ReadySkillInputKey = EInputKeyType::MAX;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 발동 대기중 스킬 설정
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void AGamePlayer::_SetReadySkill( std::function<void()> InReadySkillFunc )
+void AGamePlayer::_SetReadySkill( EInputKeyType InReadyInputKey )
 {
 	auto controller = Cast< AMyPlayerController >( GetController() );
 	if( !controller )
 		return;
 
-	if( &ReadySkillFunc == &InReadySkillFunc )
+	if( ReadySkillInputKey == InReadyInputKey )
 		return;
 
-	ReadySkillDirection = FVector( controller->InputComponent->GetAxisValue( "MoveRight" ), -controller->InputComponent->GetAxisValue( "MoveForward" ), 0 );
-	ReadySkillFunc = InReadySkillFunc;
-	ReadySkillResetTime = 0.5f;
+	ReadySkillDirection = FVector( controller->InputComponent->GetAxisValue( "MoveFoward" ), controller->InputComponent->GetAxisValue( "MoveRight" ), 0 );
+	ReadySkillFunc = InputTypeAndFuncMap[ InReadyInputKey ];
+	ReadySkillResetTime = 1.f;
+	ReadySkillInputKey = InReadyInputKey;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

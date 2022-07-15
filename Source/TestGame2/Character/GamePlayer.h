@@ -2,7 +2,9 @@
 
 #pragma once
 
+#include "../ETC/SDB.h"
 #include <functional>
+#include <map>
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GamePlayer.generated.h"
@@ -11,6 +13,9 @@ using namespace std;
 
 class UAnimMontage;
 class USkeletalMeshComponent;
+
+
+typedef map<EInputKeyType, function<void()> > InputMap;
 
 
 UCLASS(config=Game)
@@ -44,9 +49,11 @@ public:
 	class UCameraComponent* FollowCamera;
 
 private:
+	InputMap              InputTypeAndFuncMap;  // Key:입력키종류, Value:입력키 함수
 	float                 ReadySkillResetTime;  // 발동 대기중인 스킬 초기화 시간
 	FVector               ReadySkillDirection;  // 발동 대기중인 마지막으로 입력한 스킬의 방향
 	function<void()>      ReadySkillFunc;       // 발동 대기중인 마지막으로 입력한 스킬 함수
+	EInputKeyType         ReadySkillInputKey;   // 발동 대기중인 마지막으로 입력한 키 종류
 
 public:
 	AGamePlayer();
@@ -57,12 +64,11 @@ public:
 
 	virtual void Jump() override;
 
-	void LeftAttack();
-	void RightAttack();
-
-	void RollStart();
-	void TakeDownStart();
-	void EquipSword();
+	void ProcessLeftMouse();
+	void ProcessRightMouse();
+	void ProcessSpace();
+	void ProcessF();
+	void Process1();
 
 	bool Punch1Start();
 	bool Punch2Start();
@@ -78,7 +84,7 @@ private:
 	void _ResetReadySkill();
 
 	// 발동 대기중 스킬 설정
-	void _SetReadySkill( function<void()> InReadySkillFunc );
+	void _SetReadySkill( EInputKeyType InReadyInputKey );
 
 	// 발동 대기중인 스킬 수행
 	void _ProcessReadySkill( float InDeltaTime );

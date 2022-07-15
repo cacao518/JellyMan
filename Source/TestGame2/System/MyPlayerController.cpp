@@ -34,11 +34,11 @@ void AMyPlayerController::BeginPlay()
 	InputComponent->BindAction( "Shift", IE_Pressed, MyPlayer, &ACharacter::Jump );
 	InputComponent->BindAction( "Shift", IE_Released, MyPlayer, &ACharacter::StopJumping );
 
-	InputComponent->BindAction( "Space", IE_Pressed, MyPlayer, &AGamePlayer::RollStart );
-	InputComponent->BindAction( "F", IE_Pressed, MyPlayer, &AGamePlayer::TakeDownStart );
-	InputComponent->BindAction( "LeftClick", IE_Pressed, MyPlayer, &AGamePlayer::LeftAttack );
-	InputComponent->BindAction( "RightClick", IE_Pressed, MyPlayer, &AGamePlayer::RightAttack );
-	InputComponent->BindAction( "1", IE_Pressed, MyPlayer, &AGamePlayer::EquipSword );
+	InputComponent->BindAction( "Space", IE_Pressed, MyPlayer, &AGamePlayer::ProcessSpace );
+	InputComponent->BindAction( "F", IE_Pressed, MyPlayer, &AGamePlayer::ProcessF );
+	InputComponent->BindAction( "LeftClick", IE_Pressed, MyPlayer, &AGamePlayer::ProcessLeftMouse );
+	InputComponent->BindAction( "RightClick", IE_Pressed, MyPlayer, &AGamePlayer::ProcessRightMouse );
+	InputComponent->BindAction( "1", IE_Pressed, MyPlayer, &AGamePlayer::Process1 );
 }
 
 void AMyPlayerController::MoveForward( float Value )
