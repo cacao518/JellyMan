@@ -27,3 +27,16 @@ void AActorSpawner::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 스폰 가능한지 여부를 확인한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AActorSpawner::CanSpawn()
+{
+	if( SpawnInterval <= SpawnIntervalCount )
+	{
+		if( SpawnCountTotal < SpawnCountMaxTotal && SpawnCountInWorld < SpawnCountMaxInWorld )
+			return true;
+	}
+
+	return false;
+}

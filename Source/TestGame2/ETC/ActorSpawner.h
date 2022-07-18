@@ -40,14 +40,11 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	UClass* GetActor(){ return Actor; };
-	int GetSpawnInterval(){ return SpawnInterval; };
-	int GetSpawnCountMaxTotal(){ return SpawnCountMaxTotal; };
-	int GetSpawnCountMaxInWorld(){ return SpawnCountMaxInWorld; };
+	// 스폰 가능한지 여부를 확인한다.
+	bool CanSpawn();
 
-	float GetSpawnIntervalCount(){ return SpawnIntervalCount; };
-	int GetSpawnCountTotal(){ return SpawnCountTotal; };
-	int GetSpawnCountInWorld(){ return SpawnCountInWorld; };
+	// 소환할 액터를 반환한다.
+	UClass* GetActor(){ return Actor; };
 
 	void AddSpawnIntervalCount( float InDeltaTime ){ SpawnIntervalCount += InDeltaTime; };
 	void ResetSpawnIntervalCount(){ SpawnIntervalCount = 0; };

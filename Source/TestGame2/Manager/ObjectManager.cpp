@@ -110,13 +110,11 @@ void ObjectManager::SpawnActorInSpawner( float InDeltaTime )
 	for( AActorSpawner* spawner : SpawnerList )
 	{
 		spawner->AddSpawnIntervalCount( InDeltaTime );
-		if( spawner->GetSpawnInterval() <= spawner->GetSpawnIntervalCount() )
-		{
-			if( spawner->GetSpawnCountTotal() >= spawner->GetSpawnCountMaxTotal() ||
-				spawner->GetSpawnCountInWorld() >= spawner->GetSpawnCountMaxInWorld() )
-				continue;
 
+		if( spawner->CanSpawn() )
+		{
 			SpawnActor( spawner->GetActor(), spawner->GetActorLocation(), spawner->GetActorRotation(), spawner );
+
 			spawner->AddSpawnCountTotal();
 			spawner->AddSpawnCountInWorld();
 			spawner->ResetSpawnIntervalCount();
