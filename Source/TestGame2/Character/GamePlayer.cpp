@@ -261,15 +261,11 @@ void AGamePlayer::_ResetReadySkill()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGamePlayer::_SetReadySkill( EInputKeyType InReadyInputKey )
 {
-	auto controller = Cast< AMyPlayerController >( GetController() );
-	if( !controller )
-		return;
-
 	if( ReadySkillInputKey == InReadyInputKey )
 		return;
 
 	ReadySkillFunc = InputTypeAndFuncMap[ InReadyInputKey ];
-	ReadySkillResetTime = 1.f;
+	ReadySkillResetTime = Const::READY_SKILL_DURATION;
 	ReadySkillInputKey = InReadyInputKey;
 }
 

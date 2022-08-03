@@ -29,6 +29,12 @@ public:
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = ( AllowPrivateAccess = "true" ) )
 	class UBoxComponent* AttackColl;
 
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
+	float PatrolRange;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
+	float DetectRange;
+
 public:
 	// Sets default values for this character's properties
 	AMonster();
