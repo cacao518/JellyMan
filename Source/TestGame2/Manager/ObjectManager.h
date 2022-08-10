@@ -48,6 +48,8 @@ public:
 	// 액터 제거
 	void DestroyActor( AActor* InActor );
 
+	// 리스트를 정리한다.
+	void Clear();
 
 	///////////////////////////////////////////////////////////////
 	/// 스포너
@@ -58,9 +60,6 @@ public:
 
 	// 스포너에서 스폰한다.
 	void SpawnActorInSpawner( float InDeltaTime );
-
-	// 스포너 리스트를 정리한다.
-	void ClearSpawnerList();
 
 	///////////////////////////////////////////////////////////////
 	/// 싱글톤 코드
