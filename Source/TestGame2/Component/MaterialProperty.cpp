@@ -9,6 +9,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "LandscapeComponent.h"
+#include "LandscapeProxy.h"
 
 UMaterialProperty::UMaterialProperty()
 {
@@ -134,7 +135,15 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 		auto landScape = Cast<ULandscapeComponent>( OtherActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
 		if( landScape )
 		{
-			auto material = landScape->GetMaterial( 0 );
+			auto proxy = landScape->GetLandscapeProxy();
+			if( !proxy )
+			{
+				if( GEngine )
+					GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, "proxy is null" );
+				return;
+			}
+
+			auto material = proxy->GetLandscapeMaterial( 0 );
 			if( !material )
 				return;
 

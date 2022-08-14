@@ -166,9 +166,9 @@ namespace Const
 	constexpr float READY_SKILL_DURATION      = 0.6f;     // 발동 대기중인 스킬 저장 지속시간
 
 	// Material 
-	constexpr float GRASS_MOVE_SPEED   = 1.1f;   
+	constexpr float GRASS_MOVE_SPEED   = 1.3f;   
 	constexpr float GRASS_ATTACK_SPEED = 1.1f;   
-	constexpr float GRASS_JUMP_POWER   = 1.1f;  
+	constexpr float GRASS_JUMP_POWER   = 1.5f;  
 
 	constexpr float ROCK_MOVE_SPEED   = 0.4f;   
 	constexpr float ROCK_ATTACK_SPEED = 0.5f;  
