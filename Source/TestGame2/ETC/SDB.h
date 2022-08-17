@@ -174,9 +174,9 @@ namespace Const
 	constexpr float ROCK_ATTACK_SPEED = 0.5f;  
 	constexpr float ROCK_JUMP_POWER   = 0.5f;   
 
-	constexpr float GRAVEL_MOVE_SPEED = 0.7f;   
+	constexpr float GRAVEL_MOVE_SPEED = 0.9f;   
 	constexpr float GRAVEL_ATTACK_SPEED = 0.8f;  
-	constexpr float GRAVEL_JUMP_POWER = 0.7f;  
+	constexpr float GRAVEL_JUMP_POWER = 0.8f;  
 
 	constexpr float WATER_MOVE_SPEED = 1.1f;   
 	constexpr float WATER_ATTACK_SPEED = 1.0f; 

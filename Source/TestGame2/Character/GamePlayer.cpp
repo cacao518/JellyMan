@@ -180,6 +180,9 @@ void AGamePlayer::ProcessF()
 
 void AGamePlayer::Process1()
 {
+	if( MatProperty->GetMatState() != EMaterialState::JELLY || WeaponChange->GetWeaponState() != EWeaponState::MAX )
+		return;
+
 	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
 	{
 		GameObject->SkillPlay( 5, GameObject->GetStat().AttackSpeed );
