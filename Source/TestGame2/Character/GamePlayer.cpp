@@ -116,7 +116,10 @@ void AGamePlayer::ProcessLeftMouse()
 	{
 		case EWeaponState::MAX:
 		{
-			result = Punch1Start();
+			if( GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) && GameObject->GetIsEnableDerivedKey() )
+				result = Punch3Start();
+			else
+				result = Punch1Start();
 			break;
 		}
 		case EWeaponState::SWORD:
@@ -175,14 +178,28 @@ void AGamePlayer::ProcessSpace()
 
 void AGamePlayer::ProcessF()
 {
+	if( !MatProperty )
+		return;
+
 	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
 	{
-		GameObject->SkillPlay( 4, GameObject->GetStat().AttackSpeed );
+		if( MatProperty->GetMatState() != EMaterialState::JELLY )
+		{
+			GameObject->SkillPlay( 10 );
+			MatProperty->SetMatState( EMaterialState::JELLY );
+		}
+		else
+		{
+			GameObject->SkillPlay( 4 );
+		}
 	}
 }
 
 void AGamePlayer::Process1()
 {
+	if( !MatProperty || !WeaponChange )
+		return;
+
 	if( MatProperty->GetMatState() != EMaterialState::JELLY || WeaponChange->GetWeaponState() != EWeaponState::MAX )
 		return;
 
@@ -206,9 +223,22 @@ bool AGamePlayer::Punch1Start()
 bool AGamePlayer::Punch2Start()
 {
 	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN ||
-		GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) )
+		GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) ||
+		GameObject->GetCurMontageName().Equals( "MTG_Punch3" ) )
 	{
 		GameObject->SkillPlay( 3, GameObject->GetStat().AttackSpeed );
+		return true;
+	}
+
+	return false;
+}
+
+bool AGamePlayer::Punch3Start()
+{
+	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN ||
+		GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) )
+	{
+		GameObject->SkillPlay( 9, GameObject->GetStat().AttackSpeed );
 		return true;
 	}
 

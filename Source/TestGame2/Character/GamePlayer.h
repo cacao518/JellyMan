@@ -71,6 +71,7 @@ public:
 
 	bool Punch1Start();
 	bool Punch2Start();
+	bool Punch3Start();
 	bool SwordAttack1Start();
 	bool SwordAttack2Start();
 	bool SwordAttack3Start();
