@@ -22,12 +22,14 @@ EBTNodeResult::Type UBTT_FindPatrolPos::ExecuteTask( UBehaviorTreeComponent& Own
 	if( !navSystem )
 		return EBTNodeResult::Failed;
 
-	if( AMonster* controllingMonster = Cast< AMonster >( OwnerComp.GetAIOwner()->GetPawn() ) )
-		PatrolRadius = controllingMonster->PatrolRange;
+	AMonster* controllingMonster = Cast< AMonster >( OwnerComp.GetAIOwner()->GetPawn() );
+	if( !controllingMonster )
+		return EBTNodeResult::Failed;
 
-	FVector origin = OwnerComp.GetBlackboardComponent()->GetValueAsVector( AMonsterAIController::HomePosKey );
+	PatrolRadius = controllingMonster->PatrolRange;
+	FVector origin = controllingMonster->GetActorLocation();
 	FNavLocation nextPatrol;
-	if( navSystem->GetRandomPointInNavigableRadius( FVector::ZeroVector, PatrolRadius, nextPatrol ) )
+	if( navSystem->GetRandomPointInNavigableRadius( origin, PatrolRadius, nextPatrol ) )
 	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsVector( AMonsterAIController::PatrolPosKey, nextPatrol.Location );
 		return EBTNodeResult::Succeeded;
