@@ -33,6 +33,7 @@ void UGameObject::BeginPlay()
 	Super::BeginPlay();
 
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
+	InitStat = Stat;
 
 	auto hitColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
 	if( hitColl )

@@ -214,41 +214,51 @@ void UMaterialProperty::_InitStatus()
 	{
 	case EMaterialState::JELLY:
 	{
-		gameObject->SetMoveSpeed( 1.f );
-		gameObject->SetAttackSpeed( 1.f );
-		gameObject->SetJumpPower( 1.f );
+		gameObject->SetMoveSpeed( Const::JEELY_MOVE_SPEED * gameObject->GetInitStat().MoveSpeed );
+		gameObject->SetAttackSpeed( Const::JEELY_ATTACK_SPEED * gameObject->GetInitStat().AttackSpeed );
+		gameObject->SetJumpPower( Const::JEELY_JUMP_POWER * gameObject->GetInitStat().JumpPower );
+		gameObject->SetAttackPower( Const::JEELY_MASS * gameObject->GetInitStat().AttackPower );
+		gameObject->SetDefensePower( Const::JEELY_MASS * gameObject->GetInitStat().DefensePower );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
 		break;
 	}
 	case EMaterialState::GRASS:
 	{
-		gameObject->SetMoveSpeed( Const::GRASS_MOVE_SPEED );
-		gameObject->SetAttackSpeed( Const::GRASS_ATTACK_SPEED );
-		gameObject->SetJumpPower( Const::GRASS_JUMP_POWER );
+		gameObject->SetMoveSpeed( Const::GRASS_MOVE_SPEED * gameObject->GetInitStat().MoveSpeed );
+		gameObject->SetAttackSpeed( Const::GRASS_ATTACK_SPEED * gameObject->GetInitStat().AttackSpeed );
+		gameObject->SetJumpPower( Const::GRASS_JUMP_POWER * gameObject->GetInitStat().JumpPower );
+		gameObject->SetAttackPower( Const::GRASS_MASS * gameObject->GetInitStat().AttackPower );
+		gameObject->SetDefensePower( Const::GRASS_MASS * gameObject->GetInitStat().DefensePower );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
 		break;
 	}
 	case EMaterialState::ROCK:
 	{
-		gameObject->SetMoveSpeed( Const::ROCK_MOVE_SPEED );
-		gameObject->SetAttackSpeed( Const::ROCK_ATTACK_SPEED );
-		gameObject->SetJumpPower( Const::ROCK_JUMP_POWER );
+		gameObject->SetMoveSpeed( Const::ROCK_MOVE_SPEED * gameObject->GetInitStat().MoveSpeed );
+		gameObject->SetAttackSpeed( Const::ROCK_ATTACK_SPEED * gameObject->GetInitStat().AttackSpeed );
+		gameObject->SetJumpPower( Const::ROCK_JUMP_POWER * gameObject->GetInitStat().JumpPower );
+		gameObject->SetAttackPower( Const::ROCK_MASS * gameObject->GetInitStat().AttackPower );
+		gameObject->SetDefensePower( Const::ROCK_MASS * gameObject->GetInitStat().DefensePower );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
 		break;
 	}
 	case EMaterialState::GRAVEL:
 	{
-		gameObject->SetMoveSpeed( Const::GRAVEL_MOVE_SPEED );
-		gameObject->SetAttackSpeed( Const::GRAVEL_ATTACK_SPEED );
-		gameObject->SetJumpPower( Const::GRAVEL_JUMP_POWER );
+		gameObject->SetMoveSpeed( Const::GRAVEL_MOVE_SPEED * gameObject->GetInitStat().MoveSpeed );
+		gameObject->SetAttackSpeed( Const::GRAVEL_ATTACK_SPEED * gameObject->GetInitStat().AttackSpeed );
+		gameObject->SetJumpPower( Const::GRAVEL_JUMP_POWER * gameObject->GetInitStat().JumpPower );
+		gameObject->SetAttackPower( Const::GRAVEL_MASS * gameObject->GetInitStat().AttackPower );
+		gameObject->SetDefensePower( Const::GRAVEL_MASS * gameObject->GetInitStat().DefensePower );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
 		break;
 	}
 	case EMaterialState::WATER:
 	{
-		gameObject->SetMoveSpeed( Const::WATER_MOVE_SPEED );
-		gameObject->SetAttackSpeed( Const::WATER_ATTACK_SPEED );
-		gameObject->SetJumpPower( Const::WATER_JUMP_POWER );
+		gameObject->SetMoveSpeed( Const::WATER_MOVE_SPEED * gameObject->GetInitStat().MoveSpeed );
+		gameObject->SetAttackSpeed( Const::WATER_ATTACK_SPEED * gameObject->GetInitStat().AttackSpeed );
+		gameObject->SetJumpPower( Const::WATER_JUMP_POWER * gameObject->GetInitStat().JumpPower );
+		gameObject->SetAttackPower( Const::WATER_MASS * gameObject->GetInitStat().AttackPower );
+		gameObject->SetDefensePower( Const::WATER_MASS * gameObject->GetInitStat().DefensePower );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Water" );
 		break;
 	}

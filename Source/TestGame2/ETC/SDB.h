@@ -166,19 +166,28 @@ namespace Const
 	constexpr float READY_SKILL_DURATION      = 0.4f;     // 발동 대기중인 스킬 저장 지속시간
 
 	// Material 
+	constexpr float JEELY_MOVE_SPEED = 1.0f;
+	constexpr float JEELY_ATTACK_SPEED = 1.0f;
+	constexpr float JEELY_JUMP_POWER = 1.0f;
+	constexpr float JEELY_MASS = 1.0f;
+
 	constexpr float GRASS_MOVE_SPEED   = 1.3f;   
 	constexpr float GRASS_ATTACK_SPEED = 1.1f;   
-	constexpr float GRASS_JUMP_POWER   = 1.5f;  
+	constexpr float GRASS_JUMP_POWER   = 1.5f; 
+	constexpr float GRASS_MASS = 0.3f;
 
 	constexpr float ROCK_MOVE_SPEED   = 0.4f;   
 	constexpr float ROCK_ATTACK_SPEED = 0.5f;  
 	constexpr float ROCK_JUMP_POWER   = 0.5f;   
+	constexpr float ROCK_MASS = 3.f;
 
 	constexpr float GRAVEL_MOVE_SPEED = 0.9f;   
 	constexpr float GRAVEL_ATTACK_SPEED = 0.8f;  
 	constexpr float GRAVEL_JUMP_POWER = 0.8f;  
+	constexpr float GRAVEL_MASS = 1.2f;
 
 	constexpr float WATER_MOVE_SPEED = 1.1f;   
 	constexpr float WATER_ATTACK_SPEED = 1.0f; 
 	constexpr float WATER_JUMP_POWER = 0.7f;  
+	constexpr float WATER_MASS = 0.2f;
 };

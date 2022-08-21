@@ -33,6 +33,7 @@ private:
 	EAnimState         AnimState;       	    // 애니메이션 상태
 	FCollisionInfo     AttackCollInfo;          // 공격 콜리전 정보
 	FVector            MovePos;                 // 이동할 위치
+	FStatusInfo        InitStat;                // 초기기본 능력치
 				       
 	bool               IsDie;                   // 사망 여부
 	bool               IsForceMove;             // 강제 이동 여부(스킬 이동, 넉백)
@@ -92,6 +93,12 @@ public:
 	// 공격속도를 설정한다.
 	void SetAttackSpeed( float InAttackSpeed ){ Stat.AttackSpeed = InAttackSpeed; };
 
+	// 공격력을 설정한다.
+	void SetAttackPower( float InAttackPower ) { Stat.AttackPower = InAttackPower; } ;
+
+	// 방어력을 설정한다.
+	void SetDefensePower( float InDefensePower ){ Stat.DefensePower = InDefensePower; };
+
 	// 강제 이동 여부를 셋팅한다.
 	void SetIsForceMove( bool InIsForceMove ){ IsForceMove = InIsForceMove; };
 
@@ -119,6 +126,9 @@ public:
 
 	// 현재 능력치를 반환한다.
 	const FStatusInfo& GetStat() { return Stat; };
+
+	// 초기 기본 능력치를 반환한다.
+	const FStatusInfo& GetInitStat() { return InitStat; };
 	
 	// 현재 HP를 반환한다. 
 	float GetHp() { return Stat.Hp; };
