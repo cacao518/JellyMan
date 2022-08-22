@@ -183,14 +183,21 @@ void AGamePlayer::ProcessF()
 
 	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
 	{
+		GameObject->SkillPlay( 4 );
+	}
+}
+
+void AGamePlayer::ProcessR()
+{
+	if( !MatProperty )
+		return;
+
+	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	{
 		if( MatProperty->GetMatState() != EMaterialState::JELLY )
 		{
 			GameObject->SkillPlay( 10 );
 			MatProperty->SetMatState( EMaterialState::JELLY );
-		}
-		else
-		{
-			GameObject->SkillPlay( 4 );
 		}
 	}
 }

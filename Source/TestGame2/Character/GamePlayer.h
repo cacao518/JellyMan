@@ -67,6 +67,7 @@ public:
 	void ProcessRightMouse();
 	void ProcessSpace();
 	void ProcessF();
+	void ProcessR();
 	void Process1();
 
 	bool Punch1Start();
