@@ -3,6 +3,7 @@
 
 #include "MyGameInstance.h"
 #include "../Manager/ObjectManager.h"
+#include "../Manager/DataInfoManager.h"
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +30,7 @@ void UMyGameInstance::Init()
 	Super::Init();
 
 	ObjectManager::CreateInstance();
+	DataInfoManager::CreateInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,6 +41,7 @@ void UMyGameInstance::Shutdown()
 	Super::Shutdown();
 
 	ObjectManager::DestroyInstance();
+	DataInfoManager::DestroyInstance();
 
 	GEngine->Exec( GWorld, TEXT( "Slate.SkipSecondPrepass 0" ) );
 }
@@ -46,6 +49,7 @@ void UMyGameInstance::Shutdown()
 void UMyGameInstance::Tick( float InDeltaTime )
 {
 	GetObjectManager().Tick( InDeltaTime );
+	GetDataInfoManager().Tick( InDeltaTime );
 }
 
 UMyGameInstance* UMyGameInstance::GetInstance()

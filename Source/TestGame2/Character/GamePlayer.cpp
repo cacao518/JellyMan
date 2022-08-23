@@ -84,9 +84,6 @@ void AGamePlayer::BeginPlay()
 	Super::BeginPlay();
 
 	PrimaryActorTick.bCanEverTick = true;
-
-	if( MatProperty )
-		MatProperty->SetMatState( EMaterialState::JELLY );
 }
 
 void AGamePlayer::Tick( float InDeltaTime )
@@ -197,7 +194,7 @@ void AGamePlayer::ProcessR()
 		if( MatProperty->GetMatState() != EMaterialState::JELLY )
 		{
 			GameObject->SkillPlay( 10 );
-			MatProperty->SetMatState( EMaterialState::JELLY );
+			MatProperty->SetMatState();
 		}
 	}
 }

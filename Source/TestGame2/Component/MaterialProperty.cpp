@@ -10,6 +10,7 @@
 #include "Components/CapsuleComponent.h"
 #include "LandscapeComponent.h"
 #include "LandscapeProxy.h"
+#include "../Manager/DataInfoManager.h"
 
 UMaterialProperty::UMaterialProperty()
 {
@@ -17,8 +18,6 @@ UMaterialProperty::UMaterialProperty()
 	OwningCharacter = nullptr;
 
 	MatState = EMaterialState::MAX;
-
-	_InitMatAssets();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,6 +34,8 @@ void UMaterialProperty::BeginPlay()
 		tileColl->OnComponentBeginOverlap.AddDynamic( this, &UMaterialProperty::TileCollBeginOverlap );
 
 	SetIsEnabledTileColl( false );
+
+	SetMatState();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,9 +51,18 @@ void UMaterialProperty::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 물질을 변경한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::SetMatState( EMaterialState InMatState, bool InChangeAnim )
+void UMaterialProperty::SetMatState( UMaterialInterface* InMatInterface )
 {
-	if( InMatState == EMaterialState::MAX || InMatState == MatState )
+	if( !InitMaterial )
+		return;
+
+	// 변화할 물질이 없으면 초기 물질 상태로 돌아간다.
+	if( !InMatInterface )
+		InMatInterface = InitMaterial;
+
+	EMaterialState matState = _ConvertMatAssetToMatState( InMatInterface );
+
+	if( matState == EMaterialState::MAX || matState == MatState )
 		return;
 
 	if( !OwningCharacter )
@@ -62,12 +72,12 @@ void UMaterialProperty::SetMatState( EMaterialState InMatState, bool InChangeAni
 	if( !curMesh )
 		return;
 
-	MatState = InMatState;
-	curMesh->SetMaterial( 0, Materials[ (uint8)MatState ] );
+	MatState = matState;
+	curMesh->SetMaterial( 0, InMatInterface );
 
 	auto weaponChange = OwningCharacter ? Cast<UWeaponChange>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "WeaponChange" ) ) ) : nullptr;
 	if( weaponChange && weaponChange->GetCurWeaponMesh() )
-		weaponChange->GetCurWeaponMesh()->SetMaterial( 0, Materials[ (uint8)MatState ] );
+		weaponChange->GetCurWeaponMesh()->SetMaterial( 0, InMatInterface );
 	
 	_InitStatus();
 
@@ -103,7 +113,7 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 	if( Cast<ACharacter>( OtherActor ) == OwningCharacter )
 		return;
 
-	EMaterialState matStateOnTile = EMaterialState::MAX;
+	UMaterialInterface* matInterface = nullptr;
 
 	// 몬스터나 플레이어
 	if( Cast<ACharacter>( OtherActor ) )
@@ -120,13 +130,11 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 		auto staticMesh = Cast<UStaticMeshComponent>( OtherActor->GetComponentByClass( UStaticMeshComponent::StaticClass() ) );
 		if( staticMesh )
 		{
-			auto material = staticMesh->GetMaterial( 0 );
-			if( !material )
+			matInterface = staticMesh->GetMaterial( 0 );
+			if( !matInterface )
 				return;
 
-			matStateOnTile = _ConvertMatAssetToMatState( material );
-
-			FString str = OwningCharacter->GetName()+TEXT( ": Material Change -> " )+material->GetName();
+			FString str = OwningCharacter->GetName()+TEXT( ": Material Change -> " )+ matInterface->GetName();
 			if( GEngine )
 				GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
 		}
@@ -143,58 +151,17 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 				return;
 			}
 
-			auto material = proxy->GetLandscapeMaterial( 0 );
-			if( !material )
+			matInterface = proxy->GetLandscapeMaterial( 0 );
+			if( !matInterface )
 				return;
 
-			matStateOnTile = _ConvertMatAssetToMatState( material );
-
-			FString str = OwningCharacter->GetName()+TEXT( ": Material Change -> " )+material->GetName();
+			FString str = OwningCharacter->GetName()+TEXT( ": Material Change -> " )+ matInterface->GetName();
 			if( GEngine )
 				GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
 		}
 	}
 
-	SetMatState( matStateOnTile, true );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief  머터리얼 애셋 주소를 저장한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::_InitMatAssets()
-{
-	for( uint8 matState = 0; matState < (uint8)EMaterialState::MAX; matState++ )
-	{ 
-		FString path = "";
-		switch( (EMaterialState)matState )
-		{
-		case EMaterialState::JELLY:
-			path = TEXT( "/Game/StarterContent/Materials/M_Basic_Floor.M_Basic_Floor" );
-			break;
-		case EMaterialState::GRASS:
-			path = TEXT( "/Game/StarterContent/Materials/M_Ground_Moss.M_Ground_Moss" );
-			break;
-		case EMaterialState::ROCK:
-			path = TEXT( "/Game/StarterContent/Materials/M_Rock_Basalt.M_Rock_Basalt" );
-			break;
-		case EMaterialState::GRAVEL:
-			path = TEXT( "/Game/StarterContent/Materials/M_Ground_Gravel.M_Ground_Gravel" );
-			break;
-		case EMaterialState::WATER:
-			path = TEXT( "/Game/StarterContent/Materials/M_Water_Lake.M_Water_Lake" );
-			break;
-		case EMaterialState::MAX:
-			break;
-		default:
-			break;
-		}
-
-		ConstructorHelpers::FObjectFinder<UMaterialInterface> materialAsset( *path );
-		if( materialAsset.Succeeded() )
-		{
-			Materials.Push( materialAsset.Object );
-		}
-	}
+	SetMatState( matInterface );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -210,62 +177,18 @@ void UMaterialProperty::_InitStatus()
 	if( !characterMovement )
 		return;
 
-	switch( MatState )
+	for( const auto pair : GetDataInfoManager().MaterialInfos )
 	{
-	case EMaterialState::JELLY:
-	{
-		gameObject->SetMoveSpeed( Const::JEELY_MOVE_SPEED * gameObject->GetInitStat().MoveSpeed );
-		gameObject->SetAttackSpeed( Const::JEELY_ATTACK_SPEED * gameObject->GetInitStat().AttackSpeed );
-		gameObject->SetJumpPower( Const::JEELY_JUMP_POWER * gameObject->GetInitStat().JumpPower );
-		gameObject->SetAttackPower( Const::JEELY_MASS * gameObject->GetInitStat().AttackPower );
-		gameObject->SetDefensePower( Const::JEELY_MASS * gameObject->GetInitStat().DefensePower );
-		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
-		break;
-	}
-	case EMaterialState::GRASS:
-	{
-		gameObject->SetMoveSpeed( Const::GRASS_MOVE_SPEED * gameObject->GetInitStat().MoveSpeed );
-		gameObject->SetAttackSpeed( Const::GRASS_ATTACK_SPEED * gameObject->GetInitStat().AttackSpeed );
-		gameObject->SetJumpPower( Const::GRASS_JUMP_POWER * gameObject->GetInitStat().JumpPower );
-		gameObject->SetAttackPower( Const::GRASS_MASS * gameObject->GetInitStat().AttackPower );
-		gameObject->SetDefensePower( Const::GRASS_MASS * gameObject->GetInitStat().DefensePower );
-		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
-		break;
-	}
-	case EMaterialState::ROCK:
-	{
-		gameObject->SetMoveSpeed( Const::ROCK_MOVE_SPEED * gameObject->GetInitStat().MoveSpeed );
-		gameObject->SetAttackSpeed( Const::ROCK_ATTACK_SPEED * gameObject->GetInitStat().AttackSpeed );
-		gameObject->SetJumpPower( Const::ROCK_JUMP_POWER * gameObject->GetInitStat().JumpPower );
-		gameObject->SetAttackPower( Const::ROCK_MASS * gameObject->GetInitStat().AttackPower );
-		gameObject->SetDefensePower( Const::ROCK_MASS * gameObject->GetInitStat().DefensePower );
-		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
-		break;
-	}
-	case EMaterialState::GRAVEL:
-	{
-		gameObject->SetMoveSpeed( Const::GRAVEL_MOVE_SPEED * gameObject->GetInitStat().MoveSpeed );
-		gameObject->SetAttackSpeed( Const::GRAVEL_ATTACK_SPEED * gameObject->GetInitStat().AttackSpeed );
-		gameObject->SetJumpPower( Const::GRAVEL_JUMP_POWER * gameObject->GetInitStat().JumpPower );
-		gameObject->SetAttackPower( Const::GRAVEL_MASS * gameObject->GetInitStat().AttackPower );
-		gameObject->SetDefensePower( Const::GRAVEL_MASS * gameObject->GetInitStat().DefensePower );
-		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Pawn" );
-		break;
-	}
-	case EMaterialState::WATER:
-	{
-		gameObject->SetMoveSpeed( Const::WATER_MOVE_SPEED * gameObject->GetInitStat().MoveSpeed );
-		gameObject->SetAttackSpeed( Const::WATER_ATTACK_SPEED * gameObject->GetInitStat().AttackSpeed );
-		gameObject->SetJumpPower( Const::WATER_JUMP_POWER * gameObject->GetInitStat().JumpPower );
-		gameObject->SetAttackPower( Const::WATER_MASS * gameObject->GetInitStat().AttackPower );
-		gameObject->SetDefensePower( Const::WATER_MASS * gameObject->GetInitStat().DefensePower );
-		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( "Water" );
-		break;
-	}
-	case EMaterialState::MAX:
-		break;
-	default:
-		break;
+		if( MatState == pair.first )
+		{ 
+			const MaterialInfo matInfo = pair.second;
+			gameObject->SetMoveSpeed   ( matInfo.MoveSpeed   * gameObject->GetInitStat().MoveSpeed );
+			gameObject->SetAttackSpeed ( matInfo.AttackSpeed * gameObject->GetInitStat().AttackSpeed );
+			gameObject->SetJumpPower   ( matInfo.JumpPower   * gameObject->GetInitStat().JumpPower );
+			gameObject->SetAttackPower ( matInfo.Mass        * gameObject->GetInitStat().AttackPower );
+			gameObject->SetDefensePower( matInfo.Mass        * gameObject->GetInitStat().DefensePower );
+			OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( matInfo.CollisonName );
+		}
 	}
 }
 
@@ -274,22 +197,16 @@ void UMaterialProperty::_InitStatus()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface* InMaterial )
 {
-	EMaterialState matState = EMaterialState::MAX;
-
 	FString path = InMaterial->GetPathName();
 
-	if( path == "/Game/StarterContent/Materials/M_Basic_Floor.M_Basic_Floor" )
-		matState = EMaterialState::JELLY;
-	else if( path =="/Game/StarterContent/Materials/M_Ground_Moss.M_Ground_Moss" )
-		matState = EMaterialState::GRASS;
-	else if( path =="/Game/StarterContent/Materials/M_Rock_Basalt.M_Rock_Basalt" )
-		matState = EMaterialState::ROCK;
-	else if( path=="/Game/StarterContent/Materials/M_Ground_Gravel.M_Ground_Gravel" )
-		matState = EMaterialState::GRAVEL;
-	else if( path=="/Game/StarterContent/Materials/M_Water_Lake.M_Water_Lake" )
-		matState = EMaterialState::WATER;
+	for( const auto pair : GetDataInfoManager().MaterialInfos )
+	{
+		const MaterialInfo matInfo = pair.second;
+		if( path == matInfo.AssetPath )
+			return pair.first;
+	}
 
-	return matState;
+	return EMaterialState::MAX;
 }
 
 void UMaterialProperty::_ProcessHeavyMaterial()

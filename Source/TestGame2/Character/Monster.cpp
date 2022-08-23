@@ -48,12 +48,12 @@ void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 // Called every frame
 void AMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 

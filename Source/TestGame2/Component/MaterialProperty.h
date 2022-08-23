@@ -17,6 +17,9 @@ class TESTGAME2_API UMaterialProperty : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
+	UMaterialInterface* InitMaterial;            // 초기 물질
+
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay )
 	EMaterialState      MatState;       	     // 물질 상태
 
@@ -41,7 +44,7 @@ public:
 	///////////////////////////////////////////////////////////////////////
 	
 	// 물질을 변경한다.
-	void SetMatState( EMaterialState InMatState, bool InChangeAnim = false );
+	void SetMatState( UMaterialInterface* InMatInterface = nullptr );
 
 	// 타일 콜리전 활성화 여부를 셋팅한다.
 	void SetIsEnabledTileColl( bool InIsEnabled );
@@ -62,9 +65,6 @@ public:
 	void TileCollBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult );
 
 private:
-	// 머터리얼 애셋 주소를 저장한다.
-	void _InitMatAssets();
-
 	// 머티리얼에 맞는 능력치를 초기화한다.
 	void _InitStatus();
 
