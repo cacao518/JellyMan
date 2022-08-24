@@ -24,7 +24,7 @@ typedef unordered_map< EMaterialState, MaterialInfo > MaterialInfoList;
 
 class DataInfoManager
 {
-public:
+private:
 	MaterialInfoList MaterialInfos;
 
 public:
@@ -36,6 +36,9 @@ public:
 
 	// Æ½ ÇÔ¼ö
 	void Tick( float InDeltaTime );
+
+	// ¹°Áú Á¤º¸ ¹ÝÈ¯
+	const MaterialInfoList& GetMaterialInfos() { return MaterialInfos; };
 
 	///////////////////////////////////////////////////////////////
 	/// ½Ì±ÛÅæ ÄÚµå

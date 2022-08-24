@@ -177,7 +177,7 @@ void UMaterialProperty::_InitStatus()
 	if( !characterMovement )
 		return;
 
-	for( const auto pair : GetDataInfoManager().MaterialInfos )
+	for( const auto pair : GetDataInfoManager().GetMaterialInfos() )
 	{
 		if( MatState == pair.first )
 		{ 
@@ -199,7 +199,7 @@ EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface
 {
 	FString path = InMaterial->GetPathName();
 
-	for( const auto pair : GetDataInfoManager().MaterialInfos )
+	for( const auto pair : GetDataInfoManager().GetMaterialInfos() )
 	{
 		const MaterialInfo matInfo = pair.second;
 		if( path == matInfo.AssetPath )

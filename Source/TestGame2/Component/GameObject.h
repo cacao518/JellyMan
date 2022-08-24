@@ -36,6 +36,7 @@ private:
 	FStatusInfo        InitStat;                // 초기기본 능력치
 				       
 	bool               IsDie;                   // 사망 여부
+	bool               IsFallWater;             // 물에 빠졌는지 여부
 	bool               IsForceMove;             // 강제 이동 여부(스킬 이동, 넉백)
 	bool               IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
 	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
@@ -160,6 +161,9 @@ public:
 	void HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult );
 
 private:
+	// 초기화 한다.
+	void _Init();
+
 	// 애니메이션 상태를 교체한다.
 	void _AnimStateChange();
 
@@ -177,4 +181,7 @@ private:
 
 	// 피격 처리를 한다.
 	void _ProcessHit( AActor* InOtherActor );
+
+	// 랜드스케이프 피격 처리를 한다.
+	void _ProcessLandscapeHit( AActor* InOtherActor );
 };

@@ -5,9 +5,12 @@
 #include "../ETC/CameraShakeEffect.h"
 #include "../Character/GamePlayer.h"
 #include "../Manager/ObjectManager.h"
+#include "../Manager/DataInfoManager.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
+#include "LandscapeComponent.h"
+#include "LandscapeProxy.h"
 #include "Kismet/KismetMathLibrary.h"
 
 UGameObject::UGameObject()
@@ -16,6 +19,8 @@ UGameObject::UGameObject()
 	OwningCharacter = nullptr;
 	IsForceMove = false;
 	IsEnabledAttackColl = false;
+	IsDie = false;
+	IsFallWater = false;
 	AnimState = EAnimState::IDLE_RUN;
 }
 
@@ -32,18 +37,7 @@ void UGameObject::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OwningCharacter = Cast<ACharacter>( GetOwner() );
-	InitStat = Stat;
-
-	auto hitColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
-	if( hitColl )
-		hitColl->OnComponentBeginOverlap.AddDynamic( this, &UGameObject::HitCollBeginOverlap );
-
-	SetMoveSpeed( Stat.MoveSpeed );
-	SetJumpPower( Stat.JumpPower );
-
-	for( const auto& skill : SkillInfos )
-		CoolingSkills.Add( skill.Num, 0 );
+	_Init();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -261,12 +255,34 @@ void UGameObject::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 	if( Cast<ACharacter>( OtherActor ) == OwningCharacter ) 
 		return;
 
-	// AttackColl이 충돌된 것이 아니면 무시한다.
 	auto boxComponent = Cast<UBoxComponent>( OtherComp );
-	if( !boxComponent || !boxComponent->GetName().Equals( TEXT( "AttackColl" ) ) )
+	if( boxComponent && boxComponent->GetName().Equals( TEXT( "AttackColl" ) ) )
+	{
+		_ProcessHit( OtherActor );
 		return;
-	
-	_ProcessHit( OtherActor );
+	}
+
+	_ProcessLandscapeHit( OtherActor );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 초기화 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameObject::_Init()
+{
+	InitStat = Stat;
+
+	OwningCharacter = Cast<ACharacter>( GetOwner() );
+
+	auto hitColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
+	if( hitColl )
+		hitColl->OnComponentBeginOverlap.AddDynamic( this, &UGameObject::HitCollBeginOverlap );
+
+	SetMoveSpeed( Stat.MoveSpeed );
+	SetJumpPower( Stat.JumpPower );
+
+	for( const auto& skill : SkillInfos )
+		CoolingSkills.Add( skill.Num, 0 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -415,4 +431,31 @@ void UGameObject::_ProcessHit( AActor* InOtherActor )
 		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
 
 	CameraShake();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 랜드스케이프 피격 처리를 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
+{
+	// 랜드스케이프 물에 빠졌을 때
+	auto landScape = Cast<ULandscapeComponent>( InOtherActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
+	if( !landScape )
+		return;
+
+	auto proxy = landScape->GetLandscapeProxy();
+	if( !proxy )
+		return;
+
+	UMaterialInterface* matInterface = proxy->GetLandscapeMaterial( 0 );
+	if( !matInterface )
+		return;
+
+	const MaterialInfoList& matInfoList = GetDataInfoManager().GetMaterialInfos();
+	auto iter = matInfoList.find( EMaterialState::WATER );
+	if( iter == matInfoList.end() )
+		return;
+
+	if( ( *iter ).second.AssetPath == matInterface->GetPathName() )
+		IsFallWater = true;
 }
