@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GameObject.h"
+#include "MaterialProperty.h"
 #include "../ETC/SDB.h"
 #include "../ETC/CameraShakeEffect.h"
 #include "../Character/GamePlayer.h"
@@ -13,6 +14,7 @@
 #include "LandscapeComponent.h"
 #include "LandscapeProxy.h"
 #include "Kismet/KismetMathLibrary.h"
+
 
 UGameObject::UGameObject()
 {
@@ -251,7 +253,7 @@ void UGameObject::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 									   AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 									   bool bFromSweep, const FHitResult& SweepResult )
 {
-	if( !OwningCharacter ) 
+	if( !OwningCharacter || IsDie || IsFallWater ) 
 		return;
 
 	// 자기 자신 충돌은 무시한다.
@@ -409,8 +411,7 @@ void UGameObject::_FallingWater( float InDeltaTime )
 	{
 		FallWaterTimeAmount += InDeltaTime;
 		FVector originPos = OwningCharacter->GetMesh()->GetRelativeLocation();
-		FVector resultPos = FVector( originPos.X, originPos.Y, originPos.Z - 1.3f );
-		OwningCharacter->GetMesh()->SetRelativeLocation( resultPos );
+		OwningCharacter->GetMesh()->SetRelativeLocation( FVector( originPos.X, originPos.Y, originPos.Z - 1.3f ) );
 	}
 	else
 	{
@@ -477,11 +478,19 @@ void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 		return;
 
 	const MaterialInfoList& matInfoList = GetDataInfoManager().GetMaterialInfos();
-	auto iter = matInfoList.find( EMaterialState::WATER );
-	if( iter == matInfoList.end() )
+	auto waterMatIter = matInfoList.find( EMaterialState::WATER );
+	if( waterMatIter == matInfoList.end() )
 		return;
 
-	if( ( *iter ).second.AssetPath == matInterface->GetPathName() )
+	/// 풀과 물은 물에 빠지지 않는다.
+	auto charMatProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "MatProperty" ) ) ) : nullptr;
+	if( charMatProperty )
+	{
+		if( charMatProperty->GetMatState() == EMaterialState::GRASS || charMatProperty->GetMatState() == EMaterialState::WATER )
+			return;
+	}
+
+	if( ( *waterMatIter ).second.AssetPath == matInterface->GetPathName() )
 	{
 		MontagePlay( HitAnim, 0.3f );
 		IsFallWater = true;
