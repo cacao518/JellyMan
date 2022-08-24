@@ -9,6 +9,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "LandscapeComponent.h"
 #include "LandscapeProxy.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -21,6 +22,7 @@ UGameObject::UGameObject()
 	IsEnabledAttackColl = false;
 	IsDie = false;
 	IsFallWater = false;
+	FallWaterTimeAmount = 0;
 	AnimState = EAnimState::IDLE_RUN;
 }
 
@@ -51,6 +53,7 @@ void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	_CheckDie();
 	_Move();
 	_CoolingSkills( DeltaTime );
+	_FallingWater( DeltaTime );
 
 	ResetInfo();
 }
@@ -395,6 +398,28 @@ void UGameObject::_CoolingSkills( float InDeltaTime )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 물에 빠지는 처리를 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameObject::_FallingWater( float InDeltaTime )
+{
+	if( !IsFallWater || Stat.Hp <= 0 )
+		return;
+
+	if( FallWaterTimeAmount <= 3.f )
+	{
+		FallWaterTimeAmount += InDeltaTime;
+		FVector originPos = OwningCharacter->GetMesh()->GetRelativeLocation();
+		FVector resultPos = FVector( originPos.X, originPos.Y, originPos.Z - 1.3f );
+		OwningCharacter->GetMesh()->SetRelativeLocation( resultPos );
+	}
+	else
+	{
+		Stat.Hp = 0;
+		IsFallWater = false;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 피격 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameObject::_ProcessHit( AActor* InOtherActor )
@@ -457,5 +482,8 @@ void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 		return;
 
 	if( ( *iter ).second.AssetPath == matInterface->GetPathName() )
+	{
+		MontagePlay( HitAnim, 0.3f );
 		IsFallWater = true;
+	}
 }

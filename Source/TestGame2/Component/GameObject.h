@@ -40,6 +40,7 @@ private:
 	bool               IsForceMove;             // 강제 이동 여부(스킬 이동, 넉백)
 	bool               IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
 	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
+	float              FallWaterTimeAmount;     // 물에 빠져있는 시간
 
 	TMap<int, float>   CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보 (key:스킬ID, value:남은쿨타임)
 
@@ -178,6 +179,9 @@ private:
 
 	// 스킬 쿨타임을 돌린다.
 	void _CoolingSkills( float InDeltaTime );
+
+	// 물에 빠지는 처리를 한다.
+	void _FallingWater( float InDeltaTime );
 
 	// 피격 처리를 한다.
 	void _ProcessHit( AActor* InOtherActor );
