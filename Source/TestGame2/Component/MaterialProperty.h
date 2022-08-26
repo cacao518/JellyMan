@@ -25,7 +25,6 @@ public:
 
 private:
 	ACharacter*         OwningCharacter;         // 부모 캐릭터 클래스
-	TArray<UMaterialInterface*> Materials;       // 모든 머터리얼 애셋
 
 	bool            IsEnabledTileColl;            // 타일 콜리전 활성화 여부
 	bool            FallingShakeToWeightOnce;     // 무게에 의한 흔들림을 한번만 시도하기위한 변수
