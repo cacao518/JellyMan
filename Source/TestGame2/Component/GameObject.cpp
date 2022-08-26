@@ -477,9 +477,9 @@ void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 	if( !matInterface )
 		return;
 
-	const MaterialInfoList& matInfoList = GetDataInfoManager().GetMaterialInfos();
-	auto waterMatIter = matInfoList.find( EMaterialState::WATER );
-	if( waterMatIter == matInfoList.end() )
+	const MaterialInfoMap& matInfoMap = GetDataInfoManager().GetMaterialInfos();
+	auto waterMatIter = matInfoMap.find( EMaterialState::WATER );
+	if( waterMatIter == matInfoMap.end() )
 		return;
 
 	/// 풀과 물은 물에 빠지지 않는다.

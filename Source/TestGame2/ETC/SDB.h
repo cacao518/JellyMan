@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "SDB.generated.h"
 
+
 // 오브젝트 종류
 UENUM( BlueprintType )
 enum class EObjectType : uint8
@@ -154,6 +155,33 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float Weight;   	// 무게 MAX:100 ( 점프, 에어본 관련 )
 };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// DataInfo
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 물질 정보
+struct MaterialInfo
+{
+	float MoveSpeed;         // 이동속도 증가율
+	float AttackSpeed;       // 공격속도 증가율
+	float JumpPower;         // 점프력
+	float Mass;              // 강도(공격력,방어력 증가율)
+	float MatGaugeMax;       // 최대 물질 게이지
+	FName CollisonName;      // 물질 변경 시 콜리전이름
+	FString AssetPath;       // 애셋 경로
+};
+
+// 무기 정보
+struct WeaponInfo
+{
+	float RequireJellyAmount;   // 무기를 생성하는데 필요한 젤리 양
+	FName ComponentName;        // 스테틱 메쉬 컴포넌트 이름
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// Const
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace Const
 { 

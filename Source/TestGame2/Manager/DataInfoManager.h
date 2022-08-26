@@ -9,23 +9,14 @@ using namespace std;
 
 class UMyGameInstance;
 
-// 물질 정보
-struct MaterialInfo
-{
-	float MoveSpeed;
-	float AttackSpeed;
-	float JumpPower;
-	float Mass;
-	FName CollisonName;
-	FString AssetPath;
-};
-
-typedef unordered_map< EMaterialState, MaterialInfo > MaterialInfoList;
+typedef unordered_map< EMaterialState, MaterialInfo > MaterialInfoMap;
+typedef unordered_map< EWeaponState, WeaponInfo > WeaponInfoMap;
 
 class DataInfoManager
 {
 private:
-	MaterialInfoList MaterialInfos;
+	MaterialInfoMap MaterialInfos;  // 물질 정보
+	WeaponInfoMap   WeaponInfos;    // 무기 정보
 
 public:
 	DataInfoManager();
@@ -37,8 +28,12 @@ public:
 	// 틱 함수
 	void Tick( float InDeltaTime );
 
-	// 물질 정보 반환
-	const MaterialInfoList& GetMaterialInfos() { return MaterialInfos; };
+	///////////////////////////////////////////////////////////////
+	/// Get
+	///////////////////////////////////////////////////////////////
+
+	const MaterialInfoMap& GetMaterialInfos() { return MaterialInfos; };
+	const WeaponInfoMap& GetWeaponInfos() { return WeaponInfos; };
 
 	///////////////////////////////////////////////////////////////
 	/// 싱글톤 코드

@@ -18,16 +18,21 @@ class TESTGAME2_API UMaterialProperty : public UActorComponent
 
 public:
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	UMaterialInterface* InitMaterial;            // 초기 물질
+	UMaterialInterface* InitMaterial;             // 초기 물질
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay )
-	EMaterialState      MatState;       	     // 물질 상태
+	EMaterialState      MatState;       	      // 물질 상태
 
 private:
-	ACharacter*         OwningCharacter;         // 부모 캐릭터 클래스
+	ACharacter*         OwningCharacter;          // 부모 캐릭터 클래스
 
-	bool            IsEnabledTileColl;            // 타일 콜리전 활성화 여부
-	bool            FallingShakeToWeightOnce;     // 무게에 의한 흔들림을 한번만 시도하기위한 변수
+	float               JellyGauge;               // 젤리 게이지
+	float               JellyGaugeMax;            // 젤리 게이지 최대
+	float               MatGauge;                 // 물질 게이지
+	float               MatGaugeMax;              // 물질 게이지 최대
+
+	bool                IsEnabledTileColl;        // 타일 콜리전 활성화 여부
+	bool                FallingShakeToWeightOnce; // 무게에 의한 흔들림을 한번만 시도하기위한 변수
 
 public:	
 	UMaterialProperty();
@@ -64,11 +69,17 @@ public:
 	void TileCollBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult );
 
 private:
+	// 초기화 한다.
+	void _Init();
+
 	// 머티리얼에 맞는 능력치를 초기화한다.
 	void _InitStatus();
 
 	// 머터리얼 애셋 주소를 EMaterialState로 바꿔준다.
 	EMaterialState _ConvertMatAssetToMatState( UMaterialInterface* InMaterial );
+
+	// 게이지 관련 로직을 실행한다.
+	void _ProcessGauge( float InDeltaTime );
 
 	// 무거운 상태 로직을 실행한다.
 	void _ProcessHeavyMaterial();

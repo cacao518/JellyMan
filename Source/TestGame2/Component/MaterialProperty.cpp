@@ -16,8 +16,6 @@ UMaterialProperty::UMaterialProperty()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	OwningCharacter = nullptr;
-
-	MatState = EMaterialState::MAX;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,15 +25,7 @@ void UMaterialProperty::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OwningCharacter = Cast<ACharacter>( GetOwner() );
-
-	auto tileColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "TileColl" ) ) ) : nullptr;
-	if( tileColl )
-		tileColl->OnComponentBeginOverlap.AddDynamic( this, &UMaterialProperty::TileCollBeginOverlap );
-
-	SetIsEnabledTileColl( false );
-
-	SetMatState();
+	_Init();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,6 +35,7 @@ void UMaterialProperty::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	_ProcessGauge( DeltaTime );
 	_ProcessHeavyMaterial();
 }
 
@@ -72,13 +63,14 @@ void UMaterialProperty::SetMatState( UMaterialInterface* InMatInterface )
 	if( !curMesh )
 		return;
 
-	MatState = matState;
 	curMesh->SetMaterial( 0, InMatInterface );
 
 	auto weaponChange = OwningCharacter ? Cast<UWeaponChange>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "WeaponChange" ) ) ) : nullptr;
 	if( weaponChange && weaponChange->GetCurWeaponMesh() )
 		weaponChange->GetCurWeaponMesh()->SetMaterial( 0, InMatInterface );
 	
+	MatState = matState;
+
 	_InitStatus();
 
 	SetIsEnabledTileColl( false );
@@ -165,6 +157,33 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief  초기화 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UMaterialProperty::_Init()
+{
+	MatState = EMaterialState::MAX;
+
+	JellyGauge = 0.f;
+	JellyGaugeMax = 0.f;
+	MatGauge = 0.f;
+	MatGaugeMax = 0.f;
+
+	auto iter = GetDataInfoManager().GetMaterialInfos().find( EMaterialState::JELLY );
+	if( iter != GetDataInfoManager().GetMaterialInfos().end() )
+		JellyGaugeMax = ( *iter ).second.MatGaugeMax;
+	
+	OwningCharacter = Cast<ACharacter>( GetOwner() );
+
+	auto tileColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "TileColl" ) ) ) : nullptr;
+	if( tileColl )
+		tileColl->OnComponentBeginOverlap.AddDynamic( this, &UMaterialProperty::TileCollBeginOverlap );
+
+	SetIsEnabledTileColl( false );
+
+	SetMatState();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief  머티리얼에 맞는 능력치를 초기화한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialProperty::_InitStatus()
@@ -188,6 +207,9 @@ void UMaterialProperty::_InitStatus()
 			gameObject->SetAttackPower ( matInfo.Mass        * gameObject->GetInitStat().AttackPower );
 			gameObject->SetDefensePower( matInfo.Mass        * gameObject->GetInitStat().DefensePower );
 			OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( matInfo.CollisonName );
+
+			MatGauge    = matInfo.MatGaugeMax;
+			MatGaugeMax = matInfo.MatGaugeMax;
 		}
 	}
 }
@@ -209,6 +231,18 @@ EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface
 	return EMaterialState::MAX;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 게이지 관련 로직을 실행한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UMaterialProperty::_ProcessGauge( float InDeltaTime )
+{
+	if( MatState == EMaterialState::JELLY )
+		JellyGauge < JellyGaugeMax ? JellyGauge += InDeltaTime * 2.f : JellyGauge = JellyGaugeMax;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 무거운 상태 로직을 실행한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialProperty::_ProcessHeavyMaterial()
 {
 	auto moveComponent = OwningCharacter->GetMovementComponent();
