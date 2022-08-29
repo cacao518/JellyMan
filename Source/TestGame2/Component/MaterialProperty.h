@@ -26,10 +26,10 @@ public:
 private:
 	ACharacter*         OwningCharacter;          // 부모 캐릭터 클래스
 
-	float               JellyGauge;               // 젤리 게이지
-	float               JellyGaugeMax;            // 젤리 게이지 최대
-	float               MatGauge;                 // 물질 게이지
-	float               MatGaugeMax;              // 물질 게이지 최대
+	float               JellyEnergy;              // 젤리 에너지
+	float               JellyEnergyMax;           // 젤리 에너지 최대
+	float               MatEnergy;                // 물질 에너지
+	float               MatEnergyMax;             // 물질 에너지 최대
 
 	bool                IsEnabledTileColl;        // 타일 콜리전 활성화 여부
 	bool                FallingShakeToWeightOnce; // 무게에 의한 흔들림을 한번만 시도하기위한 변수
@@ -53,12 +53,18 @@ public:
 	// 타일 콜리전 활성화 여부를 셋팅한다.
 	void SetIsEnabledTileColl( bool InIsEnabled );
 
+	// 젤리 에너지를 셋팅한다.
+	void SetJellyEnergy( float InJellyEnergy ){ JellyEnergyMax > InJellyEnergy ? JellyEnergy = InJellyEnergy : JellyEnergy = JellyEnergyMax; };
+
 	///////////////////////////////////////////////////////////////////////
 	// Getter
 	///////////////////////////////////////////////////////////////////////
 
 	// 현재 물질 상태를 반환한다.
 	EMaterialState GetMatState() { return MatState; };
+
+	// 현재 젤리 에너지를 반환한다.
+	float GetJellyEnergy() { return JellyEnergy; };
 
 	///////////////////////////////////////////////////////////////////////
 	// Delegate Function

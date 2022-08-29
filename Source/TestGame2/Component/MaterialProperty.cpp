@@ -163,14 +163,14 @@ void UMaterialProperty::_Init()
 {
 	MatState = EMaterialState::MAX;
 
-	JellyGauge = 0.f;
-	JellyGaugeMax = 0.f;
-	MatGauge = 0.f;
-	MatGaugeMax = 0.f;
+	JellyEnergy = 0.f;
+	JellyEnergyMax = 0.f;
+	MatEnergy = 0.f;
+	MatEnergyMax = 0.f;
 
 	auto iter = GetDataInfoManager().GetMaterialInfos().find( EMaterialState::JELLY );
 	if( iter != GetDataInfoManager().GetMaterialInfos().end() )
-		JellyGaugeMax = ( *iter ).second.MatGaugeMax;
+		JellyEnergyMax = ( *iter ).second.MatEnergyMax;
 	
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 
@@ -208,8 +208,8 @@ void UMaterialProperty::_InitStatus()
 			gameObject->SetDefensePower( matInfo.Mass        * gameObject->GetInitStat().DefensePower );
 			OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( matInfo.CollisonName );
 
-			MatGauge    = matInfo.MatGaugeMax;
-			MatGaugeMax = matInfo.MatGaugeMax;
+			MatEnergy    = matInfo.MatEnergyMax;
+			MatEnergyMax = matInfo.MatEnergyMax;
 		}
 	}
 }
@@ -237,7 +237,7 @@ EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface
 void UMaterialProperty::_ProcessGauge( float InDeltaTime )
 {
 	if( MatState == EMaterialState::JELLY )
-		JellyGauge < JellyGaugeMax ? JellyGauge += InDeltaTime * 2.f : JellyGauge = JellyGaugeMax;
+		JellyEnergy < JellyEnergyMax ? JellyEnergy += InDeltaTime * 2.f : JellyEnergy = JellyEnergyMax;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

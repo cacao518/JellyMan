@@ -63,6 +63,20 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 	if( WeaponMeshes.IsEmpty() )
 		return;
 
+	// MaterialProperty 가 있고 젤리 상태라면 WeaponInfo의 필요젤리양 만큼 젤리에너지가 소모된다.
+	auto matProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "MatProperty" ) ) ) : nullptr;
+	if( matProperty && matProperty->GetMatState() == EMaterialState::JELLY )
+	{
+		const auto& curWeaponInfo = GetDataInfoManager().GetWeaponInfos().Find( InWeaponState );
+		if( !curWeaponInfo )
+			return;
+
+		if( matProperty->GetJellyEnergy() >= curWeaponInfo->RequireJellyAmount )
+			matProperty->SetJellyEnergy( matProperty->GetJellyEnergy() - curWeaponInfo->RequireJellyAmount );
+		else
+			return;
+	}
+
 	WeaponState = InWeaponState;
 	CurWeaponMesh = WeaponMeshes.FindRef( WeaponState );
 
@@ -93,8 +107,8 @@ void UWeaponChange::_InitWeaponMesh()
 {
 	for( const auto& iter : GetDataInfoManager().GetWeaponInfos() )
 	{
-		auto staticMesh = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( iter.second.ComponentName ) );
-		WeaponMeshes.Add( iter.first, staticMesh );
+		auto staticMesh = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( iter.Value.ComponentName ) );
+		WeaponMeshes.Add( iter.Key, staticMesh );
 	}
 }
 

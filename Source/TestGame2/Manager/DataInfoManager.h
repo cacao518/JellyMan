@@ -10,7 +10,7 @@ using namespace std;
 class UMyGameInstance;
 
 typedef unordered_map< EMaterialState, MaterialInfo > MaterialInfoMap;
-typedef unordered_map< EWeaponState, WeaponInfo > WeaponInfoMap;
+typedef TMap< EWeaponState, WeaponInfo > WeaponInfoMap;
 
 class DataInfoManager
 {

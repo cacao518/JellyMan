@@ -167,7 +167,7 @@ struct MaterialInfo
 	float AttackSpeed;       // 공격속도 증가율
 	float JumpPower;         // 점프력
 	float Mass;              // 강도(공격력,방어력 증가율)
-	float MatGaugeMax;       // 최대 물질 게이지
+	float MatEnergyMax;      // 최대 물질 에너지
 	FName CollisonName;      // 물질 변경 시 콜리전이름
 	FString AssetPath;       // 애셋 경로
 };

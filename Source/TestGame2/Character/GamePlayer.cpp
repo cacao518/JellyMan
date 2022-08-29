@@ -5,6 +5,7 @@
 #include "../Component/GameObject.h"
 #include "../Component/MaterialProperty.h"
 #include "../Component/WeaponChange.h"
+#include "../Manager/DataInfoManager.h"
 #include "Animation/AnimInstance.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
@@ -201,16 +202,10 @@ void AGamePlayer::ProcessR()
 
 void AGamePlayer::Process1()
 {
-	if( !MatProperty || !WeaponChange )
+	if( !_CanWeaponChange( EWeaponState::SWORD ) )
 		return;
 
-	if( MatProperty->GetMatState() != EMaterialState::JELLY || WeaponChange->GetWeaponState() != EWeaponState::MAX )
-		return;
-
-	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
-	{
-		GameObject->SkillPlay( 5, GameObject->GetStat().AttackSpeed );
-	}
+	GameObject->SkillPlay( 5, GameObject->GetStat().AttackSpeed );
 }
 
 bool AGamePlayer::Punch1Start()
@@ -284,6 +279,33 @@ bool AGamePlayer::SwordAttack3Start()
 	}
 
 	return false;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 무기 소환 가능한지 여부
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AGamePlayer::_CanWeaponChange( EWeaponState InWeaponState )
+{
+	if( !GameObject || !MatProperty || !WeaponChange )
+		return false;
+
+	if( WeaponChange->GetWeaponState() != EWeaponState::MAX )
+		return false;
+
+	if( GameObject->GetAnimState() != EAnimState::IDLE_RUN )
+		return false;
+
+	if( MatProperty->GetMatState() != EMaterialState::JELLY )
+		return false;
+
+	const auto& curWeaponInfo = GetDataInfoManager().GetWeaponInfos().Find( InWeaponState );
+	if( !curWeaponInfo )
+		return false;
+
+	if( MatProperty->GetJellyEnergy() >= curWeaponInfo->RequireJellyAmount )
+		return true;
+	else
+		return false;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
