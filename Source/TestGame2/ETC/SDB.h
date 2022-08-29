@@ -186,10 +186,10 @@ struct WeaponInfo
 namespace Const
 { 
     // Common
-	constexpr float ANIM_LERP_MULITPLIER      = 5.f;      // 애니메이션 중 이동 속도 보간 값
-	constexpr float DEFAULT_MOVE_SPEED        = 450.f;    // 기본 이동속도
-	constexpr float DEFAULT_JUMP_POWER        = 600.f;    // 기본 점프력
-	constexpr float DEFAULT_ROTATION_RATE     = 1000.f;   // 기본 캐릭터 방향 전환 비율
-	constexpr float READY_SKILL_ROTATION_RATE = 10000.f;  // 발동 대기 스킬 보유 캐릭터 방향 전환 비율
-	constexpr float READY_SKILL_DURATION      = 0.4f;     // 발동 대기중인 스킬 저장 지속시간
+	constexpr float ANIM_LERP_MULITPLIER      = 5.f;       // 애니메이션 중 이동 속도 보간 값
+	constexpr float DEFAULT_MOVE_SPEED        = 450.f;     // 기본 이동속도
+	constexpr float DEFAULT_JUMP_POWER        = 600.f;     // 기본 점프력
+	constexpr float DEFAULT_ROTATION_RATE     = 1000.f;    // 기본 캐릭터 방향 전환 비율
+	constexpr float READY_SKILL_ROTATION_RATE = 100000.f;  // 발동 대기 스킬 보유 캐릭터 방향 전환 비율
+	constexpr float READY_SKILL_DURATION      = 0.4f;      // 발동 대기중인 스킬 저장 지속시간
 };
