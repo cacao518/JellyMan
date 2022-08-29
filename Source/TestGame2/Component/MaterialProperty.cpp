@@ -168,9 +168,9 @@ void UMaterialProperty::_Init()
 	MatEnergy = 0.f;
 	MatEnergyMax = 0.f;
 
-	auto iter = GetDataInfoManager().GetMaterialInfos().find( EMaterialState::JELLY );
-	if( iter != GetDataInfoManager().GetMaterialInfos().end() )
-		JellyEnergyMax = ( *iter ).second.MatEnergyMax;
+	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::JELLY );
+	if( matInfo )
+		JellyEnergyMax = matInfo->MatEnergyMax;
 	
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 
@@ -196,11 +196,11 @@ void UMaterialProperty::_InitStatus()
 	if( !characterMovement )
 		return;
 
-	for( const auto pair : GetDataInfoManager().GetMaterialInfos() )
+	for( const auto& matPair : GetDataInfoManager().GetMaterialInfos() )
 	{
-		if( MatState == pair.first )
+		if( MatState == matPair.Key )
 		{ 
-			const MaterialInfo matInfo = pair.second;
+			const MaterialInfo& matInfo = matPair.Value;
 			gameObject->SetMoveSpeed   ( matInfo.MoveSpeed   * gameObject->GetInitStat().MoveSpeed );
 			gameObject->SetAttackSpeed ( matInfo.AttackSpeed * gameObject->GetInitStat().AttackSpeed );
 			gameObject->SetJumpPower   ( matInfo.JumpPower   * gameObject->GetInitStat().JumpPower );
@@ -221,11 +221,11 @@ EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface
 {
 	FString path = InMaterial->GetPathName();
 
-	for( const auto pair : GetDataInfoManager().GetMaterialInfos() )
+	for( const auto& pair : GetDataInfoManager().GetMaterialInfos() )
 	{
-		const MaterialInfo matInfo = pair.second;
+		const MaterialInfo& matInfo = pair.Value;
 		if( path == matInfo.AssetPath )
-			return pair.first;
+			return pair.Key;
 	}
 
 	return EMaterialState::MAX;

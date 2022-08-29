@@ -477,9 +477,8 @@ void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 	if( !matInterface )
 		return;
 
-	const MaterialInfoMap& matInfoMap = GetDataInfoManager().GetMaterialInfos();
-	auto waterMatIter = matInfoMap.find( EMaterialState::WATER );
-	if( waterMatIter == matInfoMap.end() )
+	const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::WATER );
+	if( !waterMatInfo )
 		return;
 
 	/// 풀과 물은 물에 빠지지 않는다.
@@ -490,7 +489,7 @@ void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 			return;
 	}
 
-	if( ( *waterMatIter ).second.AssetPath == matInterface->GetPathName() )
+	if( waterMatInfo->AssetPath == matInterface->GetPathName() )
 	{
 		MontagePlay( HitAnim, 0.3f );
 		IsFallWater = true;

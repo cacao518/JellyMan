@@ -27,6 +27,8 @@ private:
 
 	UPROPERTY()
 	ActorSpawnerList SpawnerList;  // 모든 스포너 리스트
+
+	UPROPERTY()
 	SpawnerMap       SpawnerMap;   // key:소환된액터 아이디, value:스포너
 	
 	int ObjectId;                  // 오브젝트 고유 아이디
