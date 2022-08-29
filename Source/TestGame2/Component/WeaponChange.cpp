@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "../Manager/DataInfoManager.h"
 
 UWeaponChange::UWeaponChange()
 {
@@ -63,19 +64,15 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 		return;
 
 	WeaponState = InWeaponState;
-	CurWeaponMesh = WeaponMeshes[ (uint8)WeaponState ];
+	CurWeaponMesh = WeaponMeshes.FindRef( WeaponState );
 
 	if( !CurWeaponMesh )
 		return;
 
-	for( auto mesh : WeaponMeshes )
-		mesh->SetVisibility( false );
+	for( auto iter : WeaponMeshes )
+		iter.Value->SetVisibility( false );
 
 	CurWeaponMesh->SetVisibility( true );
-
-	auto curMesh = OwningCharacter->GetMesh();
-	if( !curMesh )
-		return;
 
 	if( InChangeAnim )
 	{ 
@@ -94,15 +91,10 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UWeaponChange::_InitWeaponMesh()
 {
-	for( uint8 i = 0; i<(uint8)EWeaponState::MAX; i++ )
+	for( const auto& iter : GetDataInfoManager().GetWeaponInfos() )
 	{
-		switch( (EWeaponState)i )
-		{
-		case EWeaponState::SWORD:
-			auto staticMesh = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "Sword" ) ) );
-			WeaponMeshes.Push( staticMesh );
-			break;
-		}
+		auto staticMesh = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( iter.second.ComponentName ) );
+		WeaponMeshes.Add( iter.first, staticMesh );
 	}
 }
 
