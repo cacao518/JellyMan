@@ -70,12 +70,10 @@ public:
 	void ProcessR();
 	void Process1();
 
-	bool Punch1Start();
-	bool Punch2Start();
-	bool Punch3Start();
-	bool SwordAttack1Start();
-	bool SwordAttack2Start();
-	bool SwordAttack3Start();
+	bool PunchLeftStart();
+	bool PunchRightStart();
+	bool SwordLeftStart();
+	bool SwordRightStart();
 
 private:
 	// 발동 대기중 스킬 초기화

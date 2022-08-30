@@ -114,22 +114,14 @@ void AGamePlayer::ProcessLeftMouse()
 	{
 		case EWeaponState::MAX:
 		{
-			if( GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) && GameObject->GetIsEnableDerivedKey() )
-				result = Punch3Start();
-			else
-				result = Punch1Start();
+			result = PunchLeftStart();
 			break;
 		}
 		case EWeaponState::SWORD:
 		{
-		   if( GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" ) && GameObject->GetIsEnableDerivedKey() )
-			   result = SwordAttack2Start();
-			else
-			   result = SwordAttack1Start();
+			result = SwordLeftStart();
 			break;
 		}
-		default:
-			break;
 	}
 
 	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
@@ -144,18 +136,16 @@ void AGamePlayer::ProcessRightMouse()
 
 	switch( WeaponChange->GetWeaponState() )
 	{
-	case EWeaponState::MAX:
-	{
-		result = Punch2Start();
-		break;
-	}
-	case EWeaponState::SWORD:
-	{
-		result = SwordAttack3Start();
-		break;
-	}
-	default:
-		break;
+		case EWeaponState::MAX:
+		{
+			result = PunchRightStart();
+			break;
+		}
+		case EWeaponState::SWORD:
+		{
+			result = SwordRightStart();
+			break;
+		}
 	}
 
 	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
@@ -211,9 +201,17 @@ void AGamePlayer::Process1()
 	GameObject->SkillPlay( 5, GameObject->GetStat().AttackSpeed );
 }
 
-bool AGamePlayer::Punch1Start()
+bool AGamePlayer::PunchLeftStart()
 {
-	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	if( !GameObject )
+		return false;
+
+	if( GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) && GameObject->GetIsEnableDerivedKey() )
+	{
+		GameObject->SkillPlay( 9, GameObject->GetStat().AttackSpeed );
+		return true;
+	}
+	else if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
 	{
 		GameObject->SkillPlay( 2, GameObject->GetStat().AttackSpeed );
 		return true;
@@ -222,9 +220,12 @@ bool AGamePlayer::Punch1Start()
 	return false;
 }
 
-bool AGamePlayer::Punch2Start()
+bool AGamePlayer::PunchRightStart()
 {
-	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN ||
+	if( !GameObject )
+		return false;
+
+	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN ||
 		GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) ||
 		GameObject->GetCurMontageName().Equals( "MTG_Punch3" ) )
 	{
@@ -235,21 +236,17 @@ bool AGamePlayer::Punch2Start()
 	return false;
 }
 
-bool AGamePlayer::Punch3Start()
+bool AGamePlayer::SwordLeftStart()
 {
-	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN ||
-		GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) )
+	if( !GameObject )
+		return false;
+
+	if( GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" ) && GameObject->GetIsEnableDerivedKey() )
 	{
-		GameObject->SkillPlay( 9, GameObject->GetStat().AttackSpeed );
+		GameObject->SkillPlay( 7, GameObject->GetStat().AttackSpeed );
 		return true;
 	}
-
-	return false;
-}
-
-bool AGamePlayer::SwordAttack1Start()
-{
-	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	else if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
 	{
 		GameObject->SkillPlay( 6, GameObject->GetStat().AttackSpeed );
 		return true;
@@ -258,24 +255,14 @@ bool AGamePlayer::SwordAttack1Start()
 	return false;
 }
 
-bool AGamePlayer::SwordAttack2Start()
+bool AGamePlayer::SwordRightStart()
 {
-	if( GameObject )
-	{
-		GameObject->SkillPlay( 7, GameObject->GetStat().AttackSpeed );
-		return true;
-	}
+	if( !GameObject )
+		return false;
 
-	return false;
-}
-
-
-bool AGamePlayer::SwordAttack3Start()
-{
-	if( GameObject &&
-		( GameObject->GetAnimState() == EAnimState::IDLE_RUN
+	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN
 		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" )
-		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack2" ) ) )
+		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack2" ) )
 	{
 		GameObject->SkillPlay( 8, GameObject->GetStat().AttackSpeed );
 		return true;
