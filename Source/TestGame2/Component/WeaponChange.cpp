@@ -14,6 +14,8 @@ UWeaponChange::UWeaponChange()
 	CurWeaponMesh                     = nullptr;
 	DissolveMaterial                  = nullptr;
 	DissovleMaterialInstance          = nullptr;
+	WeaponDurability                  = 0;
+	WeaponDurabilityMax               = 0;
 
 	WeaponState = EWeaponState::MAX;
 
@@ -83,9 +85,20 @@ bool UWeaponChange::CanWeaponChange( EWeaponState InWeaponState )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 무기 내구도를 감소시킨다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UWeaponChange::SubWeaponDurability( int InValue )
+{
+	if( WeaponDurability > 0 )
+		WeaponDurability -= 1;
+	else
+		UnEquipWeapon();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 무기를 변경한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAnim )
+void UWeaponChange::EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim )
 {
 	if( InWeaponState == EWeaponState::MAX )
 		return;
@@ -93,14 +106,14 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 	if( WeaponMeshes.IsEmpty() )
 		return;
 
+	const auto& curWeaponInfo = GetDataInfoManager().GetWeaponInfos().Find( InWeaponState );
+	if( !curWeaponInfo )
+		return;
+
 	// MaterialProperty 가 있고 젤리 상태라면 WeaponInfo의 필요젤리양 만큼 젤리에너지가 소모된다.
 	auto matProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "MatProperty" ) ) ) : nullptr;
 	if( matProperty && matProperty->GetMatState() == EMaterialState::JELLY )
 	{
-		const auto& curWeaponInfo = GetDataInfoManager().GetWeaponInfos().Find( InWeaponState );
-		if( !curWeaponInfo )
-			return;
-
 		if( matProperty->GetJellyEnergy() >= curWeaponInfo->RequireJellyAmount )
 			matProperty->SetJellyEnergy( matProperty->GetJellyEnergy() - curWeaponInfo->RequireJellyAmount );
 		else
@@ -109,6 +122,8 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 
 	WeaponState = InWeaponState;
 	CurWeaponMesh = WeaponMeshes.FindRef( WeaponState );
+	WeaponDurability = curWeaponInfo->DurabilityMax;
+	WeaponDurabilityMax = curWeaponInfo->DurabilityMax;
 
 	if( !CurWeaponMesh )
 		return;
@@ -128,6 +143,18 @@ void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAni
 	{
 		_DissovleAnimEnd();
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 무기를 해제한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UWeaponChange::UnEquipWeapon()
+{
+	CurWeaponMesh = nullptr;
+	WeaponState = EWeaponState::MAX;
+
+	for( auto iter : WeaponMeshes )
+		iter.Value->SetVisibility( false );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

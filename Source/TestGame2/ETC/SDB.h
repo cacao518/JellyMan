@@ -175,6 +175,7 @@ struct MaterialInfo
 // 무기 정보
 struct WeaponInfo
 {
+	int   DurabilityMax;        // 무기 내구도 최대
 	float RequireJellyAmount;   // 무기를 생성하는데 필요한 젤리 양
 	FName ComponentName;        // 스테틱 메쉬 컴포넌트 이름
 };

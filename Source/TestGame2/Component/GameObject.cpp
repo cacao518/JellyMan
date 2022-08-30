@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "MaterialProperty.h"
+#include "WeaponChange.h"
 #include "../ETC/SDB.h"
 #include "../ETC/CameraShakeEffect.h"
 #include "../Character/GamePlayer.h"
@@ -150,6 +151,18 @@ void UGameObject::CameraShake( float InScale, bool InShakeByWeight )
 	{
 		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 공격 성공 처리를 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameObject::OnAttackSuccess()
+{
+	auto weaponChange = OwningCharacter ? Cast<UWeaponChange>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "WeaponChange" ) ) ) : nullptr;
+	if( !weaponChange )
+		return;
+
+	weaponChange->SubWeaponDurability();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -428,6 +441,8 @@ void UGameObject::_ProcessHit( AActor* InOtherActor )
 	auto othetGameObject = InOtherActor ? Cast<UGameObject>( InOtherActor->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
 	if( !othetGameObject )
 		return;
+
+	othetGameObject->OnAttackSuccess();
 
 	// 체력 감소
 	float totalDamage = othetGameObject->GetAttackCollInfo().Power * othetGameObject->GetStat().AttackPower;

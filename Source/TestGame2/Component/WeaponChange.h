@@ -22,12 +22,15 @@ public:
 
 private:
 	ACharacter*                     OwningCharacter;             // 부모 캐릭터 클래스
-	class UStaticMeshComponent*     CurWeaponMesh;               // 현재 무기 스태틱매쉬
 	WeaponMeshMap                   WeaponMeshes;                // 무기 스태틱 메시 애셋들
+	class UStaticMeshComponent*     CurWeaponMesh;               // 현재 무기 스태틱매쉬
 
 	class UMaterialInstanceDynamic* DissovleMaterialInstance;    // 디졸브 머티리얼 인스턴스
 	UMaterialInterface*             DissolveMaterial;            // 디졸브 머티리얼 주소
 	float                           DissolveAmount;              // 디졸브 변환 값
+
+	int                             WeaponDurability;            // 무기 내구도
+	int                             WeaponDurabilityMax;         // 무기 내구도 최대
 
 public:	
 	UWeaponChange();
@@ -40,13 +43,19 @@ public:
 
 	// 무기 소환 가능한지 여부
 	bool CanWeaponChange( EWeaponState InWeaponState );
+
+	// 무기 내구도를 감소시킨다.
+	void SubWeaponDurability( int InValue = 1 );
 	
 	///////////////////////////////////////////////////////////////////////
 	// Setter
 	///////////////////////////////////////////////////////////////////////
 	
 	// 무기를 변경한다.
-	void SetWeaponState( EWeaponState InWeaponState, bool InChangeAnim = true );
+	void EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim = true );
+
+	// 무기를 해제한다.
+	void UnEquipWeapon();
 
 	///////////////////////////////////////////////////////////////////////
 	// Getter
