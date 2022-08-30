@@ -49,7 +49,6 @@ void UMyGameInstance::Shutdown()
 void UMyGameInstance::Tick( float InDeltaTime )
 {
 	GetObjectManager().Tick( InDeltaTime );
-	GetDataInfoManager().Tick( InDeltaTime );
 }
 
 UMyGameInstance* UMyGameInstance::GetInstance()
