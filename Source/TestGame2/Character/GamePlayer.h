@@ -78,9 +78,6 @@ public:
 	bool SwordAttack3Start();
 
 private:
-	// 무기 소환 가능한지 여부
-	bool _CanWeaponChange( EWeaponState InWeaponState );
-
 	// 발동 대기중 스킬 초기화
 	void _ResetReadySkill();
 

@@ -202,7 +202,10 @@ void AGamePlayer::ProcessR()
 
 void AGamePlayer::Process1()
 {
-	if( !_CanWeaponChange( EWeaponState::SWORD ) )
+	if( !WeaponChange )
+		return;
+
+	if( !( WeaponChange->CanWeaponChange( EWeaponState::SWORD ) ) )
 		return;
 
 	GameObject->SkillPlay( 5, GameObject->GetStat().AttackSpeed );
@@ -279,33 +282,6 @@ bool AGamePlayer::SwordAttack3Start()
 	}
 
 	return false;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 무기 소환 가능한지 여부
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-bool AGamePlayer::_CanWeaponChange( EWeaponState InWeaponState )
-{
-	if( !GameObject || !MatProperty || !WeaponChange )
-		return false;
-
-	if( WeaponChange->GetWeaponState() != EWeaponState::MAX )
-		return false;
-
-	if( GameObject->GetAnimState() != EAnimState::IDLE_RUN )
-		return false;
-
-	if( MatProperty->GetMatState() != EMaterialState::JELLY )
-		return false;
-
-	const auto& curWeaponInfo = GetDataInfoManager().GetWeaponInfos().Find( InWeaponState );
-	if( !curWeaponInfo )
-		return false;
-
-	if( MatProperty->GetJellyEnergy() >= curWeaponInfo->RequireJellyAmount )
-		return true;
-	else
-		return false;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

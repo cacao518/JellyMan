@@ -53,6 +53,36 @@ void UWeaponChange::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 무기 소환 가능한지 여부
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+bool UWeaponChange::CanWeaponChange( EWeaponState InWeaponState )
+{
+	auto matProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "MatProperty" ) ) ) : nullptr;
+	auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+
+	if( !gameObject || !matProperty )
+		return false;
+
+	if( WeaponState != EWeaponState::MAX )
+		return false;
+
+	if( gameObject->GetAnimState() != EAnimState::IDLE_RUN )
+		return false;
+
+	if( matProperty->GetMatState() != EMaterialState::JELLY )
+		return false;
+
+	const auto& curWeaponInfo = GetDataInfoManager().GetWeaponInfos().Find( InWeaponState );
+	if( !curWeaponInfo )
+		return false;
+
+	if( matProperty->GetJellyEnergy() >= curWeaponInfo->RequireJellyAmount )
+		return true;
+	else
+		return false;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 무기를 변경한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UWeaponChange::SetWeaponState( EWeaponState InWeaponState, bool InChangeAnim )

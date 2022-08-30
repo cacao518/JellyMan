@@ -37,6 +37,9 @@ public:
 
 	// Tick 함수
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
+
+	// 무기 소환 가능한지 여부
+	bool CanWeaponChange( EWeaponState InWeaponState );
 	
 	///////////////////////////////////////////////////////////////////////
 	// Setter
