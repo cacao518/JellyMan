@@ -170,7 +170,10 @@ void UMaterialProperty::_Init()
 
 	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::JELLY );
 	if( matInfo )
+	{
+		JellyEnergy    = matInfo->MatEnergyMax;
 		JellyEnergyMax = matInfo->MatEnergyMax;
+	}
 	
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 

@@ -27,5 +27,5 @@ void DataInfoManager::DataCreate()
 	MaterialInfos.Add( EMaterialState::ROCK,   MaterialInfo{ 0.4f, 0.5f, 0.5f, 3.0f, 100.f, "Pawn", "/Game/StarterContent/Materials/M_Rock_Basalt.M_Rock_Basalt" } );
 	MaterialInfos.Add( EMaterialState::WATER,  MaterialInfo{ 1.1f, 1.0f, 0.7f, 0.2f, 30.f, "Water", "/Game/StarterContent/Materials/M_Water_Lake.M_Water_Lake" } );
 
-	WeaponInfos.Add( EWeaponState::SWORD, WeaponInfo{ 7, 50.0f, "Sword" } );
+	WeaponInfos.Add( EWeaponState::SWORD, WeaponInfo{ 5, 50.0f, "Sword" } );
 }
