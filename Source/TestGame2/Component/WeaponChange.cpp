@@ -89,9 +89,9 @@ bool UWeaponChange::CanWeaponChange( EWeaponState InWeaponState )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UWeaponChange::SubWeaponDurability( int InValue )
 {
-	if( WeaponDurability > 0 )
-		WeaponDurability -= 1;
-	else
+	WeaponDurability -= 1;
+
+	if( WeaponDurability <= 0 )
 		UnEquipWeapon();
 }
 
