@@ -158,7 +158,7 @@ void UGameObject::CameraShake( float InScale, bool InShakeByWeight )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameObject::OnAttackSuccess()
 {
-	auto weaponChange = OwningCharacter ? Cast<UWeaponChange>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "WeaponChange" ) ) ) : nullptr;
+	auto weaponChange = OwningCharacter ? Cast<UWeaponChange>( OwningCharacter->FindComponentByClass<UWeaponChange>() ) : nullptr;
 	if( !weaponChange )
 		return;
 
@@ -438,7 +438,7 @@ void UGameObject::_FallingWater( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameObject::_ProcessHit( AActor* InOtherActor )
 {
-	auto othetGameObject = InOtherActor ? Cast<UGameObject>( InOtherActor->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+	auto othetGameObject = InOtherActor ? Cast<UGameObject>( InOtherActor->FindComponentByClass<UGameObject>() ) : nullptr;
 	if( !othetGameObject )
 		return;
 
@@ -497,7 +497,7 @@ void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 		return;
 
 	/// 풀과 물은 물에 빠지지 않는다.
-	auto charMatProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "MatProperty" ) ) ) : nullptr;
+	auto charMatProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->FindComponentByClass<UMaterialProperty>() ) : nullptr;
 	if( charMatProperty )
 	{
 		if( charMatProperty->GetMatState() == EMaterialState::GRASS || charMatProperty->GetMatState() == EMaterialState::WATER )

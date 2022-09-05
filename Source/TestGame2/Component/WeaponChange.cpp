@@ -59,8 +59,8 @@ void UWeaponChange::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UWeaponChange::CanWeaponChange( EWeaponState InWeaponState )
 {
-	auto matProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "MatProperty" ) ) ) : nullptr;
-	auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+	auto matProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->FindComponentByClass<UMaterialProperty>() ) : nullptr;
+	auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->FindComponentByClass<UGameObject>() ) : nullptr;
 
 	if( !gameObject || !matProperty )
 		return false;
@@ -111,7 +111,7 @@ void UWeaponChange::EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim )
 		return;
 
 	// MaterialProperty 가 있고 젤리 상태라면 WeaponInfo의 필요젤리양 만큼 젤리에너지가 소모된다.
-	auto matProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "MatProperty" ) ) ) : nullptr;
+	auto matProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->FindComponentByClass<UMaterialProperty>() ) : nullptr;
 	if( matProperty && matProperty->GetMatState() == EMaterialState::JELLY )
 	{
 		if( matProperty->GetJellyEnergy() >= curWeaponInfo->RequireJellyAmount )

@@ -65,7 +65,7 @@ void UMaterialProperty::SetMatState( UMaterialInterface* InMatInterface )
 
 	curMesh->SetMaterial( 0, InMatInterface );
 
-	auto weaponChange = OwningCharacter ? Cast<UWeaponChange>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "WeaponChange" ) ) ) : nullptr;
+	auto weaponChange = OwningCharacter ? Cast<UWeaponChange>( OwningCharacter->FindComponentByClass<UWeaponChange>() ) : nullptr;
 	if( weaponChange && weaponChange->GetCurWeaponMesh() )
 		weaponChange->GetCurWeaponMesh()->SetMaterial( 0, InMatInterface );
 	
@@ -191,7 +191,7 @@ void UMaterialProperty::_Init()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialProperty::_InitStatus()
 {
-	auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+	auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->FindComponentByClass<UGameObject>() ) : nullptr;
 	if( !gameObject )
 		return;
 
@@ -257,7 +257,7 @@ void UMaterialProperty::_ProcessHeavyMaterial()
 		}
 		else if( !FallingShakeToWeightOnce )
 		{
-			auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+			auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->FindComponentByClass<UGameObject>() ) : nullptr;
 			if( gameObject )
 			{
 				gameObject->CameraShake( 1.f, true );
