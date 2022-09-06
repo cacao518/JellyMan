@@ -11,6 +11,9 @@ FString UAnimNotify_WeaponChange::GetNotifyName_Implementation() const
 
 void UAnimNotify_WeaponChange::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
 {
+	if( !MeshComp || !( MeshComp->GetOwner() ) )
+		return;
+
 	UWeaponChange* weaponChange = Cast<UWeaponChange>( MeshComp->GetOwner()->FindComponentByClass<UWeaponChange>() );
 	if( !weaponChange ) return;
 

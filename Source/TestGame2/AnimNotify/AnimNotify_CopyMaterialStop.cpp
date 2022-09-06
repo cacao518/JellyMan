@@ -11,6 +11,9 @@ FString UAnimNotify_CopyMaterialStop::GetNotifyName_Implementation() const
 
 void UAnimNotify_CopyMaterialStop::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
 {
+	if( !MeshComp || !( MeshComp->GetOwner() ) )
+		return;
+
 	UMaterialProperty* matProperty = Cast<UMaterialProperty>( MeshComp->GetOwner()->FindComponentByClass<UMaterialProperty>() );
 	if( !matProperty ) return;
 

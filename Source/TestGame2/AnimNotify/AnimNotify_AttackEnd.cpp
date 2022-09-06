@@ -11,6 +11,9 @@ FString UAnimNotify_AttackEnd::GetNotifyName_Implementation() const
 
 void UAnimNotify_AttackEnd::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
 {
+	if( !MeshComp || !( MeshComp->GetOwner() ) )
+		return;
+
 	UGameObject* obj = Cast<UGameObject>( MeshComp->GetOwner()->FindComponentByClass<UGameObject>() );
 	if( !obj ) return;
 
