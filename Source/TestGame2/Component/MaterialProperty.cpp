@@ -36,7 +36,6 @@ void UMaterialProperty::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	_ProcessGauge( DeltaTime );
-	_ProcessHeavyMaterial();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -241,28 +240,4 @@ void UMaterialProperty::_ProcessGauge( float InDeltaTime )
 {
 	if( MatState == EMaterialState::JELLY )
 		JellyEnergy < JellyEnergyMax ? JellyEnergy += InDeltaTime * 2.f : JellyEnergy = JellyEnergyMax;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 무거운 상태 로직을 실행한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::_ProcessHeavyMaterial()
-{
-	auto moveComponent = OwningCharacter->GetMovementComponent();
-	if( moveComponent )
-	{
-		if( moveComponent->IsFalling() )
-		{
-			FallingShakeToWeightOnce = false;
-		}
-		else if( !FallingShakeToWeightOnce )
-		{
-			auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->FindComponentByClass<UGameObject>() ) : nullptr;
-			if( gameObject )
-			{
-				gameObject->CameraShake( 1.f, true );
-				FallingShakeToWeightOnce = true;
-			}
-		}
-	}
 }

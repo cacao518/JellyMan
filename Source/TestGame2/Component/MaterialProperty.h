@@ -32,7 +32,6 @@ private:
 	float               MatEnergyMax;             // 물질 에너지 최대
 
 	bool                IsEnabledTileColl;        // 타일 콜리전 활성화 여부
-	bool                FallingShakeToWeightOnce; // 무게에 의한 흔들림을 한번만 시도하기위한 변수
 
 public:	
 	UMaterialProperty();
@@ -86,7 +85,4 @@ private:
 
 	// 게이지 관련 로직을 실행한다.
 	void _ProcessGauge( float InDeltaTime );
-
-	// 무거운 상태 로직을 실행한다.
-	void _ProcessHeavyMaterial();
 };

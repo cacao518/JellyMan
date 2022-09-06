@@ -25,6 +25,7 @@ UGameObject::UGameObject()
 	IsEnabledAttackColl = false;
 	IsDie = false;
 	IsFallWater = false;
+	LandOnce = false;
 	FallWaterTimeAmount = 0;
 	AnimState = EAnimState::IDLE_RUN;
 }
@@ -57,6 +58,7 @@ void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	_Move();
 	_CoolingSkills( DeltaTime );
 	_FallingWater( DeltaTime );
+	_ProcessLand();
 
 	ResetInfo();
 }
@@ -420,6 +422,13 @@ void UGameObject::_FallingWater( float InDeltaTime )
 	if( !IsFallWater || Stat.Hp <= 0 )
 		return;
 
+	auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
+	if( curMontage )
+	{
+		if( curMontage->GetName() != HitAnim->GetName() )
+			MontagePlay( HitAnim, 0.3f );
+	}
+
 	if( FallWaterTimeAmount <= 3.f )
 	{
 		FallWaterTimeAmount += InDeltaTime;
@@ -506,7 +515,27 @@ void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 
 	if( waterMatInfo->AssetPath == matInterface->GetPathName() )
 	{
-		MontagePlay( HitAnim, 0.3f );
 		IsFallWater = true;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 착지 로직을 실행한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameObject::_ProcessLand()
+{
+	auto moveComponent = OwningCharacter->GetMovementComponent();
+	if( moveComponent )
+	{
+		if( moveComponent->IsFalling() )
+		{
+			LandOnce = true;
+		}
+		else if( LandOnce )
+		{
+			MontagePlay( LandAnim );
+			CameraShake( 1.f, true );
+			LandOnce = false;
+		}
 	}
 }

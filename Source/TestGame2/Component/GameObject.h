@@ -27,6 +27,9 @@ public:
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	UAnimMontage*      HitAnim;                 // 피격 애니메이션
 
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
+	UAnimMontage*      LandAnim;                // 착지 애니메이션
+
 private:
 	int                Id;                      // 오브젝트 아이디 값
 	ACharacter*        OwningCharacter;         // 부모 캐릭터 클래스
@@ -40,6 +43,7 @@ private:
 	bool               IsForceMove;             // 강제 이동 여부(스킬 이동, 넉백)
 	bool               IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
 	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
+	bool               LandOnce;                // 착지 체크 변수
 	float              FallWaterTimeAmount;     // 물에 빠져있는 시간
 
 	TMap<int, float>   CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보 (key:스킬ID, value:남은쿨타임)
@@ -191,4 +195,7 @@ private:
 
 	// 랜드스케이프 피격 처리를 한다.
 	void _ProcessLandscapeHit( AActor* InOtherActor );
+
+	// 착지 로직을 실행한다.
+	void _ProcessLand();
 };
