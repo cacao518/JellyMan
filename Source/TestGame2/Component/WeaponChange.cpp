@@ -128,8 +128,8 @@ void UWeaponChange::EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim )
 	if( !CurWeaponMesh )
 		return;
 
-	for( auto iter : WeaponMeshes )
-		iter.Value->SetVisibility( false );
+	for( auto& [_, mesh] : WeaponMeshes )
+		mesh->SetVisibility( false );
 
 	CurWeaponMesh->SetVisibility( true );
 
@@ -153,8 +153,8 @@ void UWeaponChange::UnEquipWeapon()
 	CurWeaponMesh = nullptr;
 	WeaponState = EWeaponState::MAX;
 
-	for( auto iter : WeaponMeshes )
-		iter.Value->SetVisibility( false );
+	for( auto& [_, mesh] : WeaponMeshes )
+		mesh->SetVisibility( false );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,10 +162,10 @@ void UWeaponChange::UnEquipWeapon()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UWeaponChange::_InitWeaponMesh()
 {
-	for( const auto& iter : GetDataInfoManager().GetWeaponInfos() )
+	for( const auto& [state, weaponInfo] : GetDataInfoManager().GetWeaponInfos() )
 	{
-		auto staticMesh = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( iter.Value.ComponentName ) );
-		WeaponMeshes.Add( iter.Key, staticMesh );
+		auto staticMesh = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( weaponInfo.ComponentName ) );
+		WeaponMeshes.Add( state, staticMesh );
 	}
 }
 

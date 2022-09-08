@@ -423,11 +423,8 @@ void UGameObject::_FallingWater( float InDeltaTime )
 		return;
 
 	auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
-	if( curMontage )
-	{
-		if( curMontage->GetName() != HitAnim->GetName() )
-			MontagePlay( HitAnim, 0.3f );
-	}
+	if( !curMontage || ( curMontage && curMontage->GetName() != HitAnim->GetName() ) )
+		MontagePlay( HitAnim, 0.3f );
 
 	if( FallWaterTimeAmount <= 3.f )
 	{

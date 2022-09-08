@@ -198,11 +198,10 @@ void UMaterialProperty::_InitStatus()
 	if( !characterMovement )
 		return;
 
-	for( const auto& matPair : GetDataInfoManager().GetMaterialInfos() )
+	for( const auto& [state, matInfo] : GetDataInfoManager().GetMaterialInfos() )
 	{
-		if( MatState == matPair.Key )
+		if( MatState == state )
 		{ 
-			const MaterialInfo& matInfo = matPair.Value;
 			gameObject->SetMoveSpeed   ( matInfo.MoveSpeed   * gameObject->GetInitStat().MoveSpeed );
 			gameObject->SetAttackSpeed ( matInfo.AttackSpeed * gameObject->GetInitStat().AttackSpeed );
 			gameObject->SetJumpPower   ( matInfo.JumpPower   * gameObject->GetInitStat().JumpPower );
@@ -223,11 +222,10 @@ EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface
 {
 	FString path = InMaterial->GetPathName();
 
-	for( const auto& pair : GetDataInfoManager().GetMaterialInfos() )
+	for( const auto& [state, matInfo] : GetDataInfoManager().GetMaterialInfos() )
 	{
-		const MaterialInfo& matInfo = pair.Value;
 		if( path == matInfo.AssetPath )
-			return pair.Key;
+			return state;
 	}
 
 	return EMaterialState::MAX;
