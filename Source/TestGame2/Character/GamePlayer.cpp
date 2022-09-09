@@ -151,6 +151,41 @@ void AGamePlayer::ProcessRightMouse()
 	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
 }
 
+void AGamePlayer::ProcessWheel()
+{
+	UWorld* world = GetWorld();
+	if( !world )
+		return;
+
+	FVector center = GetActorLocation();
+
+	TArray<FOverlapResult> overlapResults;
+	FCollisionQueryParams collisionQueryParam( NAME_None, false, this );
+	bool bResult = world->OverlapMultiByChannel(
+		overlapResults,
+		center,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel4,
+		FCollisionShape::MakeSphere( 600.f ),
+		collisionQueryParam
+	);
+
+	if( !bResult )
+		return;
+
+	for( FOverlapResult overlapResult : overlapResults )
+	{
+		ACharacter* character = Cast<ACharacter>( overlapResult.GetActor() );
+		if( character )
+		{
+			LockOnCharacter = character;
+			return;
+		}
+	}
+
+	LockOnCharacter = nullptr;
+}
+
 void AGamePlayer::ProcessSpace()
 {
 	bool result = false;

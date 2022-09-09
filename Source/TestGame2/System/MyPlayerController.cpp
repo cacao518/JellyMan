@@ -39,6 +39,7 @@ void AMyPlayerController::BeginPlay()
 	InputComponent->BindAction( "R", IE_Pressed, MyPlayer, &AGamePlayer::ProcessR );
 	InputComponent->BindAction( "LeftClick", IE_Pressed, MyPlayer, &AGamePlayer::ProcessLeftMouse );
 	InputComponent->BindAction( "RightClick", IE_Pressed, MyPlayer, &AGamePlayer::ProcessRightMouse );
+	InputComponent->BindAction( "WheelClick", IE_Pressed, MyPlayer, &AGamePlayer::ProcessWheel );
 	InputComponent->BindAction( "1", IE_Pressed, MyPlayer, &AGamePlayer::Process1 );
 }
 

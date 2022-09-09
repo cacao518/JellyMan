@@ -53,6 +53,8 @@ private:
 	float                 ReadySkillResetTime;  // 발동 대기중인 스킬 초기화 시간
 	function<void()>      ReadySkillFunc;       // 발동 대기중인 마지막으로 입력한 스킬 함수
 	EInputKeyType         ReadySkillInputKey;   // 발동 대기중인 마지막으로 입력한 키 종류
+	ACharacter*           LockOnCharacter;      // 락온 된 캐릭터
+
 
 public:
 	AGamePlayer();
@@ -65,6 +67,7 @@ public:
 
 	void ProcessLeftMouse();
 	void ProcessRightMouse();
+	void ProcessWheel();
 	void ProcessSpace();
 	void ProcessF();
 	void ProcessR();
