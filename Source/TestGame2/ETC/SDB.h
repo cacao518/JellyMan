@@ -193,4 +193,7 @@ namespace Const
 	constexpr float DEFAULT_ROTATION_RATE     = 1000.f;    // 기본 캐릭터 방향 전환 비율
 	constexpr float READY_SKILL_ROTATION_RATE = 100000.f;  // 발동 대기 스킬 보유 캐릭터 방향 전환 비율
 	constexpr float READY_SKILL_DURATION      = 0.4f;      // 발동 대기중인 스킬 저장 지속시간
+
+	constexpr float LOCKON_RANGE = 600.f;                    // 락온 범위
+	constexpr float LOCKON_CAMERA_ROTAION_LAG_SPEED = 5.f;   // 락온 카메라 회전 딜레이 속도
 };

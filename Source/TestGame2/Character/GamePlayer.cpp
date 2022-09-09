@@ -16,6 +16,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 using namespace Const;
 
@@ -92,6 +93,7 @@ void AGamePlayer::Tick( float InDeltaTime )
 	Super::Tick(InDeltaTime);
 
 	_ProcessReadySkill( InDeltaTime );
+	_ProcessLockOn();
 }
 
 void AGamePlayer::Jump()
@@ -153,6 +155,13 @@ void AGamePlayer::ProcessRightMouse()
 
 void AGamePlayer::ProcessWheel()
 {
+	if( LockOnTarget )
+	{
+		LockOnTarget = nullptr;
+		CameraBoom->CameraRotationLagSpeed = 0.f;
+		return;
+	}
+
 	UWorld* world = GetWorld();
 	if( !world )
 		return;
@@ -166,7 +175,7 @@ void AGamePlayer::ProcessWheel()
 		center,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel4,
-		FCollisionShape::MakeSphere( 600.f ),
+		FCollisionShape::MakeSphere( Const::LOCKON_RANGE ),
 		collisionQueryParam
 	);
 
@@ -178,12 +187,13 @@ void AGamePlayer::ProcessWheel()
 		ACharacter* character = Cast<ACharacter>( overlapResult.GetActor() );
 		if( character )
 		{
-			LockOnCharacter = character;
+			LockOnTarget = character;
+			CameraBoom->CameraRotationLagSpeed = Const::LOCKON_CAMERA_ROTAION_LAG_SPEED;
 			return;
 		}
 	}
 
-	LockOnCharacter = nullptr;
+	LockOnTarget = nullptr;
 }
 
 void AGamePlayer::ProcessSpace()
@@ -350,4 +360,27 @@ void AGamePlayer::_ProcessReadySkill( float InDeltaTime )
 		if( ReadySkillFunc )
 			ReadySkillFunc();
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 락온 기능 수행
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AGamePlayer::_ProcessLockOn()
+{
+	if( !LockOnTarget )
+		return;
+
+	if( LockOnTarget->GetDistanceTo( this ) > Const::LOCKON_RANGE )
+	{
+		LockOnTarget = nullptr;
+		CameraBoom->CameraRotationLagSpeed = 0.f;
+		return;
+	}
+
+	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN && !GetCharacterMovement()->IsWalking() )
+		GameObject->LookAt( LockOnTarget );
+
+	FRotator rotator = UKismetMathLibrary::FindLookAtRotation( GetActorLocation(), LockOnTarget->GetActorLocation() );
+	rotator.Pitch = GetControlRotation().Pitch;
+	GetController()->SetControlRotation( rotator );
 }
