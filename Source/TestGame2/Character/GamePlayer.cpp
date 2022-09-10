@@ -370,7 +370,7 @@ void AGamePlayer::_ProcessLockOn()
 	if( !LockOnTarget )
 		return;
 
-	if( LockOnTarget->GetDistanceTo( this ) > Const::LOCKON_RANGE )
+	if( !GetValid( LockOnTarget ) || LockOnTarget->GetDistanceTo( this ) > Const::LOCKON_RANGE )
 	{
 		LockOnTarget = nullptr;
 		CameraBoom->CameraRotationLagSpeed = 0.f;
