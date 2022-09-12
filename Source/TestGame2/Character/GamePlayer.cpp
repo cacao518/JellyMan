@@ -251,6 +251,9 @@ bool AGamePlayer::PunchLeftStart()
 	if( !GameObject )
 		return false;
 
+	if( LockOnTarget )
+		GameObject->LookAt( LockOnTarget );
+
 	if( GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) && GameObject->GetIsEnableDerivedKey() )
 	{
 		GameObject->SkillPlay( 9, GameObject->GetStat().AttackSpeed );
@@ -270,6 +273,9 @@ bool AGamePlayer::PunchRightStart()
 	if( !GameObject )
 		return false;
 
+	if( LockOnTarget )
+		GameObject->LookAt( LockOnTarget );
+
 	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN ||
 		GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) ||
 		GameObject->GetCurMontageName().Equals( "MTG_Punch3" ) )
@@ -285,6 +291,9 @@ bool AGamePlayer::SwordLeftStart()
 {
 	if( !GameObject )
 		return false;
+
+	if( LockOnTarget )
+		GameObject->LookAt( LockOnTarget );
 
 	if( GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" ) && GameObject->GetIsEnableDerivedKey() )
 	{
@@ -304,6 +313,9 @@ bool AGamePlayer::SwordRightStart()
 {
 	if( !GameObject )
 		return false;
+
+	if( LockOnTarget )
+		GameObject->LookAt( LockOnTarget );
 
 	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN
 		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" )
@@ -376,9 +388,6 @@ void AGamePlayer::_ProcessLockOn()
 		CameraBoom->CameraRotationLagSpeed = 0.f;
 		return;
 	}
-
-	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN && !GetCharacterMovement()->IsWalking() )
-		GameObject->LookAt( LockOnTarget );
 
 	FRotator rotator = UKismetMathLibrary::FindLookAtRotation( GetActorLocation(), LockOnTarget->GetActorLocation() );
 	rotator.Pitch = GetControlRotation().Pitch;
