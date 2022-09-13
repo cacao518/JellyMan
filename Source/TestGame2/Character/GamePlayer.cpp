@@ -8,11 +8,14 @@
 #include "../Manager/DataInfoManager.h"
 #include "Animation/AnimInstance.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
+#include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Misc/OutputDeviceNull.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -157,43 +160,11 @@ void AGamePlayer::ProcessWheel()
 {
 	if( LockOnTarget )
 	{
-		LockOnTarget = nullptr;
-		CameraBoom->CameraRotationLagSpeed = 0.f;
+		_LockOnRelease();
 		return;
 	}
 
-	UWorld* world = GetWorld();
-	if( !world )
-		return;
-
-	FVector center = GetActorLocation();
-
-	TArray<FOverlapResult> overlapResults;
-	FCollisionQueryParams collisionQueryParam( NAME_None, false, this );
-	bool bResult = world->OverlapMultiByChannel(
-		overlapResults,
-		center,
-		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel4,
-		FCollisionShape::MakeSphere( Const::LOCKON_RANGE ),
-		collisionQueryParam
-	);
-
-	if( !bResult )
-		return;
-
-	for( FOverlapResult overlapResult : overlapResults )
-	{
-		ACharacter* character = Cast<ACharacter>( overlapResult.GetActor() );
-		if( character )
-		{
-			LockOnTarget = character;
-			CameraBoom->CameraRotationLagSpeed = Const::LOCKON_CAMERA_ROTAION_LAG_SPEED;
-			return;
-		}
-	}
-
-	LockOnTarget = nullptr;
+	_LockOnStart();
 }
 
 void AGamePlayer::ProcessSpace()
@@ -375,6 +346,71 @@ void AGamePlayer::_ProcessReadySkill( float InDeltaTime )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 락온 시작
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AGamePlayer::_LockOnStart()
+{
+	UWorld* world = GetWorld();
+	if( !world )
+		return;
+
+	FVector center = GetActorLocation();
+
+	TArray<FOverlapResult> overlapResults;
+	FCollisionQueryParams collisionQueryParam( NAME_None, false, this );
+	bool bResult = world->OverlapMultiByChannel(
+		overlapResults,
+		center,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel4,
+		FCollisionShape::MakeSphere( Const::LOCKON_RANGE ),
+		collisionQueryParam
+	);
+
+	if( !bResult )
+		return;
+
+	for( FOverlapResult overlapResult : overlapResults )
+	{
+		ACharacter* character = Cast<ACharacter>( overlapResult.GetActor() );
+		if( !character )
+			continue;
+
+		if( auto widgetComp = Cast<UWidgetComponent>( character->GetDefaultSubobjectByName( TEXT( "LockOnMark" ) ) ) )
+		{
+			if( auto userWidget = Cast<UUserWidget>( widgetComp->GetUserWidgetObject() ) )
+			{
+				FOutputDeviceNull ar;
+				userWidget->CallFunctionByNameWithArguments( TEXT( "AnimStart" ), ar, NULL, true );
+				userWidget->SetVisibility( ESlateVisibility::SelfHitTestInvisible );
+
+				LockOnTarget = character;
+				CameraBoom->CameraRotationLagSpeed = Const::LOCKON_CAMERA_ROTAION_LAG_SPEED;
+				return;
+			}
+		}
+	}
+
+	LockOnTarget = nullptr;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 락온 해제
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AGamePlayer::_LockOnRelease()
+{
+	if( auto widgetComp = Cast<UWidgetComponent>( LockOnTarget->GetDefaultSubobjectByName( TEXT( "LockOnMark" ) ) ) )
+	{
+		if( auto userWidget = Cast<UUserWidget>( widgetComp->GetUserWidgetObject() ) )
+			userWidget->SetVisibility( ESlateVisibility::Collapsed );
+	}
+
+	LockOnTarget = nullptr;
+	CameraBoom->CameraRotationLagSpeed = 0.f;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 락온 기능 수행
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGamePlayer::_ProcessLockOn()
@@ -384,8 +420,7 @@ void AGamePlayer::_ProcessLockOn()
 
 	if( !GetValid( LockOnTarget ) || LockOnTarget->GetDistanceTo( this ) > Const::LOCKON_RANGE )
 	{
-		LockOnTarget = nullptr;
-		CameraBoom->CameraRotationLagSpeed = 0.f;
+		_LockOnRelease();
 		return;
 	}
 

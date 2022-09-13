@@ -88,6 +88,12 @@ private:
 	// 발동 대기중인 스킬 수행
 	void _ProcessReadySkill( float InDeltaTime );
 
+	// 록온 시작
+	void _LockOnStart();
+
+	// 록온 해제
+	void _LockOnRelease();
+
 	// 락온 기능 수행
 	void _ProcessLockOn();
 };
