@@ -400,10 +400,8 @@ void UGameObject::_RegisterCoolTime( const FSkillInfo& InSkillInfo )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameObject::_CoolingSkills( float InDeltaTime )
 {
-	for( auto& pair : CoolingSkills )
+	for( auto& [_, remainCoolTime] : CoolingSkills )
 	{
-		float& remainCoolTime = pair.Value;
-
 		if( remainCoolTime > 0 )
 			remainCoolTime -= InDeltaTime;
 		else
