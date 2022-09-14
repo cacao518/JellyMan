@@ -14,9 +14,9 @@ class AActorSpawner;
 class UMyGameInstance;
 
 
-typedef unordered_map<int, AActor*> ActorMap;
-typedef unordered_map<int, AActorSpawner*> SpawnerMap;
-typedef list< AActorSpawner* > ActorSpawnerList;
+using ActorMap         = unordered_map< int, AActor* >;
+using SpawnerMap       = unordered_map< int, AActorSpawner* >;
+using ActorSpawnerList = list< AActorSpawner* >;
 
 
 class ObjectManager

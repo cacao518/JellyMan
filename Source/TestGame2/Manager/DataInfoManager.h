@@ -9,8 +9,8 @@ using namespace std;
 
 class UMyGameInstance;
 
-typedef TMap< EMaterialState, MaterialInfo > MaterialInfoMap;
-typedef TMap< EWeaponState, WeaponInfo > WeaponInfoMap;
+using MaterialInfoMap = TMap< EMaterialState, MaterialInfo >;
+using WeaponInfoMap   = TMap< EWeaponState, WeaponInfo >;
 
 class DataInfoManager
 {
