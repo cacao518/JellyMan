@@ -8,7 +8,7 @@
 #include "WeaponChange.generated.h"
 
 
-typedef TMap< EWeaponState, UStaticMeshComponent* > WeaponMeshMap;
+using WeaponMeshMap = TMap< EWeaponState, UStaticMeshComponent* >;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

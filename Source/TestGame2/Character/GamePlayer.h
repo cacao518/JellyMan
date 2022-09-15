@@ -15,7 +15,7 @@ class UAnimMontage;
 class USkeletalMeshComponent;
 
 
-typedef map<EInputKeyType, function<void()> > InputMap;
+using InputMap = map<EInputKeyType, function<void()> >;
 
 
 UCLASS(config=Game)
