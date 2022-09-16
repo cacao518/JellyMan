@@ -12,6 +12,9 @@ class UAnimMontage;
 class AActorSpawner;
 
 
+using CooltimeMap = TMap<int, float>; // (key:스킬ID, value:남은쿨타임)
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TESTGAME2_API UGameObject : public UActorComponent
 {
@@ -37,7 +40,8 @@ private:
 	FCollisionInfo     AttackCollInfo;          // 공격 콜리전 정보
 	FVector            MovePos;                 // 이동할 위치
 	FStatusInfo        InitStat;                // 초기기본 능력치
-				       
+	CooltimeMap        CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보			       
+
 	bool               IsDie;                   // 사망 여부
 	bool               IsFallWater;             // 물에 빠졌는지 여부
 	bool               IsForceMove;             // 강제 이동 여부(스킬 이동, 넉백)
@@ -45,8 +49,6 @@ private:
 	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
 	bool               LandOnce;                // 착지 체크 변수
 	float              FallWaterTimeAmount;     // 물에 빠져있는 시간
-
-	TMap<int, float>   CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보 (key:스킬ID, value:남은쿨타임)
 
 public:	
 

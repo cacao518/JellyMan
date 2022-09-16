@@ -7,10 +7,13 @@
 
 using namespace std;
 
+
 class UMyGameInstance;
+
 
 using MaterialInfoMap = TMap< EMaterialState, MaterialInfo >;
 using WeaponInfoMap   = TMap< EWeaponState, WeaponInfo >;
+
 
 class DataInfoManager
 {
