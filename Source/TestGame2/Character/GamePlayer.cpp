@@ -182,7 +182,7 @@ void AGamePlayer::ProcessSpace()
 
 void AGamePlayer::ProcessF()
 {
-	if( !MatProperty )
+	if( MatProperty && MatProperty->GetMatState() != EMaterialState::JELLY )
 		return;
 
 	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
