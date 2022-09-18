@@ -79,6 +79,7 @@ AGamePlayer::AGamePlayer()
 
 	InputTypeAndFuncMap[ EInputKeyType::LEFT_MOUSE  ] = bind( &AGamePlayer::ProcessLeftMouse,  this );
 	InputTypeAndFuncMap[ EInputKeyType::RIGHT_MOUSE ] = bind( &AGamePlayer::ProcessRightMouse, this );
+	InputTypeAndFuncMap[ EInputKeyType::BOTH_MOUSE ]  = bind( &AGamePlayer::ProcessBothMouse, this );
 	InputTypeAndFuncMap[ EInputKeyType::SPACE       ] = bind( &AGamePlayer::ProcessSpace,      this );
 
 	_ResetReadySkill();
@@ -154,6 +155,22 @@ void AGamePlayer::ProcessRightMouse()
 	}
 
 	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
+}
+
+void AGamePlayer::ProcessBothMouse()
+{
+	bool result = false;
+
+	if( !GameObject )
+		return;
+
+	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	{
+		GameObject->SkillPlay( 4 );
+		result = true;
+	}
+
+	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::BOTH_MOUSE );
 }
 
 void AGamePlayer::ProcessWheel()

@@ -55,6 +55,7 @@ enum class EInputKeyType : uint8
 {
 	LEFT_MOUSE            UMETA( DisplayName = "LeftMouse" ),
 	RIGHT_MOUSE           UMETA( DisplayName = "RightMouse" ),
+	BOTH_MOUSE            UMETA( DisplayName = "BothMouse" ),
 	SPACE                 UMETA( DisplayName = "Space" ),
 
 	MAX,

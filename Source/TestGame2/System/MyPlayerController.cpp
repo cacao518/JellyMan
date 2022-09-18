@@ -18,6 +18,8 @@ void AMyPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PrimaryActorTick.bCanEverTick = true;
+
 	MyPlayer = Cast<AGamePlayer>( GetPawn() );
 	if( !MyPlayer )
 		return;
@@ -41,6 +43,14 @@ void AMyPlayerController::BeginPlay()
 	InputComponent->BindAction( "RightClick", IE_Pressed, MyPlayer, &AGamePlayer::ProcessRightMouse );
 	InputComponent->BindAction( "WheelClick", IE_Pressed, MyPlayer, &AGamePlayer::ProcessWheel );
 	InputComponent->BindAction( "1", IE_Pressed, MyPlayer, &AGamePlayer::Process1 );
+}
+
+void AMyPlayerController::Tick( float InDeltaTime )
+{
+	Super::Tick( InDeltaTime );
+
+	if( MyPlayer && IsInputKeyDown( EKeys::LeftMouseButton ) && IsInputKeyDown( EKeys::RightMouseButton ) )
+		MyPlayer->ProcessBothMouse();
 }
 
 void AMyPlayerController::MoveForward( float Value )

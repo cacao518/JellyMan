@@ -26,6 +26,8 @@ public:
 public:
 	virtual void BeginPlay() override;
 
+	virtual void Tick( float InDeltaTime ) override;
+
 	void MoveForward( float Value );
 
 	void MoveRight( float Value );
