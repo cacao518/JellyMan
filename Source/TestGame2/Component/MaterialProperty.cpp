@@ -198,20 +198,18 @@ void UMaterialProperty::_InitStatus()
 	if( !characterMovement )
 		return;
 
-	for( const auto& [state, matInfo] : GetDataInfoManager().GetMaterialInfos() )
+	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( MatState );
+	if( matInfo )
 	{
-		if( MatState == state )
-		{ 
-			gameObject->SetMoveSpeed   ( matInfo.MoveSpeed   * gameObject->GetInitStat().MoveSpeed );
-			gameObject->SetAttackSpeed ( matInfo.AttackSpeed * gameObject->GetInitStat().AttackSpeed );
-			gameObject->SetJumpPower   ( matInfo.JumpPower   * gameObject->GetInitStat().JumpPower );
-			gameObject->SetAttackPower ( matInfo.Mass        * gameObject->GetInitStat().AttackPower );
-			gameObject->SetDefensePower( matInfo.Mass        * gameObject->GetInitStat().DefensePower );
-			OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( matInfo.CollisonName );
+		gameObject->SetMoveSpeed   ( matInfo->MoveSpeed   * gameObject->GetInitStat().MoveSpeed );
+		gameObject->SetAttackSpeed ( matInfo->AttackSpeed * gameObject->GetInitStat().AttackSpeed );
+		gameObject->SetJumpPower   ( matInfo->JumpPower	  * gameObject->GetInitStat().JumpPower );
+		gameObject->SetAttackPower ( matInfo->Mass		  * gameObject->GetInitStat().AttackPower );
+		gameObject->SetDefensePower( matInfo->Mass		  * gameObject->GetInitStat().DefensePower );
+		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( matInfo->CollisonName );
 
-			MatEnergy    = matInfo.MatEnergyMax;
-			MatEnergyMax = matInfo.MatEnergyMax;
-		}
+		MatEnergy    = matInfo->MatEnergyMax;
+		MatEnergyMax = matInfo->MatEnergyMax;
 	}
 }
 
