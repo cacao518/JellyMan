@@ -5,7 +5,6 @@
 #include "../Component/GameObject.h"
 #include "GameFramework/Actor.h"
 
-DataInfoManager* DataInfoManager::Instance = nullptr;
 
 DataInfoManager::DataInfoManager()
 {

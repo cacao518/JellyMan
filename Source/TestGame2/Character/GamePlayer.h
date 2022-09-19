@@ -9,7 +9,6 @@
 #include "GameFramework/Character.h"
 #include "GamePlayer.generated.h"
 
-using namespace std;
 
 class UAnimMontage;
 class USkeletalMeshComponent;

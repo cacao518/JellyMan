@@ -1,21 +1,17 @@
 #pragma once
 
 #include "../ETC/SDB.h"
+#include "SingletonBase.h"
 #include "CoreMinimal.h"
 #include <unordered_map>
 #include <list>
-
-using namespace std;
-
-
-class UMyGameInstance;
 
 
 using MaterialInfoMap = TMap< EMaterialState, MaterialInfo >;
 using WeaponInfoMap   = TMap< EWeaponState, WeaponInfo >;
 
 
-class DataInfoManager
+class DataInfoManager : public SingletonBase< DataInfoManager >
 {
 private:
 	MaterialInfoMap MaterialInfos;  // ¹°Áú Á¤º¸
@@ -35,22 +31,5 @@ public:
 	const MaterialInfoMap& GetMaterialInfos() { return MaterialInfos; };
 	const WeaponInfoMap& GetWeaponInfos() { return WeaponInfos; };
 
-	///////////////////////////////////////////////////////////////
-	/// ½Ì±ÛÅæ ÄÚµå
-	///////////////////////////////////////////////////////////////
-	static class DataInfoManager* Instance;
-	static DataInfoManager& GetInstance(){ return *Instance; }
-	static DataInfoManager* CreateInstance() { return !Instance ? Instance = new DataInfoManager() : Instance; }
-	static void DestroyInstance() { if( !Instance ) delete Instance; Instance = nullptr; }
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	/// @brief  LoadClass
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	template< typename T >
-	UClass* LoadClass( const FString& InPath )
-	{
-		FString copiedPath = InPath;
-		return ConstructorHelpersInternal::FindOrLoadClass( copiedPath, T::StaticClass() );
-	}
 };
 inline DataInfoManager& GetDataInfoManager() { return DataInfoManager::GetInstance(); };

@@ -5,7 +5,6 @@
 #include "../Component/GameObject.h"
 #include "GameFramework/Actor.h"
 
-ObjectManager* ObjectManager::Instance = nullptr;
 
 ObjectManager::ObjectManager()
 {

@@ -4,6 +4,9 @@
 #include "SDB.generated.h"
 
 
+using namespace std;
+
+
 // 오브젝트 종류
 UENUM( BlueprintType )
 enum class EObjectType : uint8
