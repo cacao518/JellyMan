@@ -2,6 +2,7 @@
 
 #include "GamePlayer.h"
 #include "../System/MyPlayerController.h"
+#include "../System/MyAnimInstance.h"
 #include "../Component/GameObject.h"
 #include "../Component/MaterialProperty.h"
 #include "../Component/WeaponChange.h"
@@ -159,14 +160,19 @@ void AGamePlayer::ProcessRightMouse()
 
 void AGamePlayer::ProcessBothMouse()
 {
-	bool result = false;
-
 	if( !MatProperty )
 		return;
 
-	result = MatProperty->SpecialSkillStart();
-
-	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::BOTH_MOUSE );
+	switch( MatProperty->GetMatState() )
+	{
+		case EMaterialState::GRASS:
+		{
+			UMyAnimInstance* animInstance = Cast< UMyAnimInstance >( GetMesh()->GetAnimInstance() );
+			if( animInstance && animInstance->IsJump )
+				animInstance->IsFly = true;
+		}
+		break;
+	}
 }
 
 void AGamePlayer::ProcessWheel()

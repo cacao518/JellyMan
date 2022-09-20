@@ -42,9 +42,6 @@ public:
 	// Tick 함수
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
-	// 특수 스킬 사용
-	bool SpecialSkillStart();
-
 	///////////////////////////////////////////////////////////////////////
 	// Setter
 	///////////////////////////////////////////////////////////////////////

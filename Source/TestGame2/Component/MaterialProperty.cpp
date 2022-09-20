@@ -43,30 +43,6 @@ void UMaterialProperty::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 특수 스킬 사용
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-bool UMaterialProperty::SpecialSkillStart()
-{
-	switch( MatState )
-	{
-		case EMaterialState::GRASS :
-		{
-			UMyAnimInstance* animInstance = Cast< UMyAnimInstance >( OwningCharacter->GetMesh()->GetAnimInstance() );
-			if( !animInstance )
-				return false;
-
-			if( !animInstance->IsJump )
-				return false;
-
-			animInstance->IsFly = true;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 물질을 변경한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialProperty::SetMatState( UMaterialInterface* InMatInterface )
