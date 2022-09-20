@@ -193,7 +193,7 @@ namespace Const
     // Common
 	constexpr float ANIM_LERP_MULITPLIER      = 5.f;       // 애니메이션 중 이동 속도 보간 값
 	constexpr float DEFAULT_MOVE_SPEED        = 450.f;     // 기본 이동속도
-	constexpr float DEFAULT_JUMP_POWER        = 600.f;     // 기본 점프력
+	constexpr float DEFAULT_JUMP_POWER        = 750.f;     // 기본 점프력
 	constexpr float DEFAULT_ROTATION_RATE     = 1000.f;    // 기본 캐릭터 방향 전환 비율
 	constexpr float FLY_ROTATION_RATE         = 100.f;     // 날기 캐릭터 방향 전환 비율
 	constexpr float READY_SKILL_ROTATION_RATE = 100000.f;  // 발동 대기 스킬 보유 캐릭터 방향 전환 비율
@@ -202,7 +202,7 @@ namespace Const
 	constexpr float DEFAULT_TARGET_ARM_LENGTH = 280.f;     // 기본 카메라 암 길이
 	constexpr float FLY_TARGET_ARM_LENGTH     = 400.f;     // 날기 카메라 암 길이
 
-	constexpr float DEFAULT_GRAVITY_SCALE     = 1.5f;      // 기본 중력
+	constexpr float DEFAULT_GRAVITY_SCALE     = 2.0f;      // 기본 중력
 	constexpr float FLY_GRAVITY_SCALE         = 0.3f;      // 날기 중력
 
 	constexpr float LOCKON_RANGE = 800.f;                  // 락온 범위
