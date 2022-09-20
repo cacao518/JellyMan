@@ -42,6 +42,9 @@ public:
 	// Tick 함수
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
+	// 특수 스킬 사용
+	bool SpecialSkillStart();
+
 	///////////////////////////////////////////////////////////////////////
 	// Setter
 	///////////////////////////////////////////////////////////////////////
@@ -85,4 +88,7 @@ private:
 
 	// 게이지 관련 로직을 실행한다.
 	void _ProcessGauge( float InDeltaTime );
+
+	// 풀재질 관련 로직을 실행한다.
+	void _ProcessGrass( float InDeltaTime );
 };

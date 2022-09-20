@@ -5,12 +5,15 @@
 #include "WeaponChange.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Materials/MaterialInterface.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "LandscapeComponent.h"
 #include "LandscapeProxy.h"
+#include "../Character/GamePlayer.h"
 #include "../Manager/DataInfoManager.h"
+#include "../System/MyAnimInstance.h"
 
 UMaterialProperty::UMaterialProperty()
 {
@@ -36,6 +39,31 @@ void UMaterialProperty::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	_ProcessGauge( DeltaTime );
+	_ProcessGrass( DeltaTime );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 특수 스킬 사용
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+bool UMaterialProperty::SpecialSkillStart()
+{
+	switch( MatState )
+	{
+		case EMaterialState::GRASS :
+		{
+			UMyAnimInstance* animInstance = Cast< UMyAnimInstance >( OwningCharacter->GetMesh()->GetAnimInstance() );
+			if( !animInstance )
+				return false;
+
+			if( !animInstance->IsJump )
+				return false;
+
+			animInstance->IsFly = true;
+			return true;
+		}
+	}
+
+	return false;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,4 +264,43 @@ void UMaterialProperty::_ProcessGauge( float InDeltaTime )
 {
 	if( MatState == EMaterialState::JELLY )
 		JellyEnergy < JellyEnergyMax ? JellyEnergy += InDeltaTime * 2.f : JellyEnergy = JellyEnergyMax;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 풀재질 관련 로직을 실행한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UMaterialProperty::_ProcessGrass( float InDeltaTime )
+{
+	if( MatState != EMaterialState::GRASS )
+		return;
+
+	UMyAnimInstance* animInstance = Cast< UMyAnimInstance >( OwningCharacter->GetMesh()->GetAnimInstance() );
+	if( !animInstance )
+		return;
+
+	AGamePlayer* gamePlayer = Cast< AGamePlayer >( OwningCharacter );
+	if( !gamePlayer )
+		return;
+
+	auto charMovement = gamePlayer->GetCharacterMovement();
+	if( !charMovement )
+		return;
+	
+	auto cameraBoom = gamePlayer->CameraBoom;
+	if( !cameraBoom )
+		return;
+	
+	if( animInstance->IsFly )
+	{
+		charMovement->GravityScale = Const::FLY_GRAVITY_SCALE;
+		charMovement->RotationRate = FRotator( 0.0f, Const::FLY_ROTATION_RATE, 0.0f );
+		cameraBoom->TargetArmLength = FMath::Lerp( cameraBoom->TargetArmLength, Const::FLY_TARGET_ARM_LENGTH, InDeltaTime * 10.f );
+	}
+	else
+	{
+		charMovement->GravityScale = Const::DEFAULT_GRAVITY_SCALE;
+		charMovement->RotationRate = FRotator( 0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f );
+		cameraBoom->TargetArmLength = FMath::Lerp( cameraBoom->TargetArmLength, Const::DEFAULT_TARGET_ARM_LENGTH, InDeltaTime * 5.f );
+	}
+
 }

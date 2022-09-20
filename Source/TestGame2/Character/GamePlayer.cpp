@@ -45,7 +45,7 @@ AGamePlayer::AGamePlayer()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>( TEXT( "CameraBoom" ) );
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 280.0f; 
+	CameraBoom->TargetArmLength = Const::DEFAULT_TARGET_ARM_LENGTH;
 	CameraBoom->bUsePawnControlRotation = true;
 
 	// Create a follow camera
@@ -161,14 +161,10 @@ void AGamePlayer::ProcessBothMouse()
 {
 	bool result = false;
 
-	if( !GameObject )
+	if( !MatProperty )
 		return;
 
-	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
-	{
-		GameObject->SkillPlay( 4 );
-		result = true;
-	}
+	result = MatProperty->SpecialSkillStart();
 
 	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::BOTH_MOUSE );
 }
