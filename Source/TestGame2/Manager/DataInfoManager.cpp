@@ -13,6 +13,8 @@ DataInfoManager::DataInfoManager()
 
 DataInfoManager::~DataInfoManager()
 {
+	MaterialInfos.Empty();
+	WeaponInfos.Empty();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
