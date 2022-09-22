@@ -257,25 +257,9 @@ void UMaterialProperty::_ProcessGrass( float InDeltaTime )
 	auto charMovement = OwningCharacter->GetCharacterMovement();
 	if( !charMovement )
 		return;
-	
-	USpringArmComponent* cameraBoom = nullptr;
-	AGamePlayer* gamePlayer = Cast< AGamePlayer >( OwningCharacter );
-	if( gamePlayer )
-		cameraBoom = gamePlayer->CameraBoom;
 
 	if( animInstance->IsFly )
-	{
 		charMovement->GravityScale = Const::FLY_GRAVITY_SCALE;
-		charMovement->RotationRate = FRotator( 0.0f, Const::FLY_ROTATION_RATE, 0.0f );
-		if( cameraBoom )
-			cameraBoom->TargetArmLength = FMath::Lerp( cameraBoom->TargetArmLength, Const::FLY_TARGET_ARM_LENGTH, InDeltaTime * 10.f );
-	}
 	else
-	{
 		charMovement->GravityScale = Const::DEFAULT_GRAVITY_SCALE;
-		charMovement->RotationRate = FRotator( 0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f );
-		if( cameraBoom )
-			cameraBoom->TargetArmLength = FMath::Lerp( cameraBoom->TargetArmLength, Const::DEFAULT_TARGET_ARM_LENGTH, InDeltaTime * 5.f );
-	}
-
 }

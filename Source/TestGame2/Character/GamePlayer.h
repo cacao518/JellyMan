@@ -54,7 +54,6 @@ private:
 	EInputKeyType         ReadySkillInputKey;   // 발동 대기중인 마지막으로 입력한 키 종류
 	ACharacter*           LockOnTarget;         // 락온 된 대상
 
-
 public:
 	AGamePlayer();
 
@@ -85,15 +84,22 @@ private:
 	// 발동 대기중 스킬 설정
 	void _SetReadySkill( EInputKeyType InReadyInputKey );
 
-	// 발동 대기중인 스킬 수행
-	void _ProcessReadySkill( float InDeltaTime );
-
 	// 록온 시작
 	void _LockOnStart();
 
 	// 록온 해제
 	void _LockOnRelease();
 
+	///////////////////////////////////////////////////////////////////////
+	// Update
+	///////////////////////////////////////////////////////////////////////
+
+	// 발동 대기중인 스킬 수행
+	void _ProcessReadySkill( float InDeltaTime );
+
 	// 락온 기능 수행
 	void _ProcessLockOn();
+
+	// 회전 비율 값을 셋팅한다.
+	void _ProcessRotationRate();
 };

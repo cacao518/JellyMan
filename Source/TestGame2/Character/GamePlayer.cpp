@@ -102,6 +102,7 @@ void AGamePlayer::Tick( float InDeltaTime )
 {
 	Super::Tick(InDeltaTime);
 
+	_ProcessRotationRate();
 	_ProcessReadySkill( InDeltaTime );
 	_ProcessLockOn();
 }
@@ -383,29 +384,6 @@ void AGamePlayer::_SetReadySkill( EInputKeyType InReadyInputKey )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 발동 대기중인 스킬 수행
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void AGamePlayer::_ProcessReadySkill( float InDeltaTime )
-{
-	// 타임아웃 초기화
-	if( ReadySkillResetTime <= 0 )
-	{
-		GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f );
-		_ResetReadySkill();
-		return;
-	}
-	else
-	{
-		GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::READY_SKILL_ROTATION_RATE, 0.0f );
-		ReadySkillResetTime -= InDeltaTime;
-
-		// 대기중인 스킬 발동
-		if( ReadySkillFunc )
-			ReadySkillFunc();
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 락온 시작
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGamePlayer::_LockOnStart()
@@ -469,6 +447,26 @@ void AGamePlayer::_LockOnRelease()
 	CameraBoom->CameraRotationLagSpeed = 0.f;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 발동 대기중인 스킬 수행
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AGamePlayer::_ProcessReadySkill( float InDeltaTime )
+{
+	// 타임아웃 초기화
+	if( ReadySkillResetTime <= 0 )
+	{
+		_ResetReadySkill();
+		return;
+	}
+	else
+	{
+		ReadySkillResetTime -= InDeltaTime;
+
+		// 대기중인 스킬 발동
+		if( ReadySkillFunc )
+			ReadySkillFunc();
+	}
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 락온 기능 수행
@@ -487,4 +485,27 @@ void AGamePlayer::_ProcessLockOn()
 	FRotator rotator = UKismetMathLibrary::FindLookAtRotation( GetActorLocation(), LockOnTarget->GetActorLocation() );
 	rotator.Pitch = GetControlRotation().Pitch;
 	GetController()->SetControlRotation( rotator );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 회전 비율 값을 셋팅한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AGamePlayer::_ProcessRotationRate()
+{
+	UMyAnimInstance* animInstance = Cast< UMyAnimInstance >( GetMesh()->GetAnimInstance() );
+	if( !animInstance )
+		return;
+
+	if( animInstance->IsFly )
+	{
+		GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::FLY_ROTATION_RATE, 0.0f );
+		return;
+	} 
+	else if( ReadySkillResetTime > 0 )
+	{
+		GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::READY_SKILL_ROTATION_RATE, 0.0f );
+		return;
+	}
+
+	GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f );
 }
