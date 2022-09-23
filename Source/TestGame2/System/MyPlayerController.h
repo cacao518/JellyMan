@@ -31,11 +31,4 @@ public:
 	void MoveRight( float Value );
 	void TurnAtRate( float Rate );
 	void LookUpAtRate( float Rate );
-
-	///////////////////////////////////////////////////////////////////////
-	// Update
-	///////////////////////////////////////////////////////////////////////
-
-	// 카메라 관련 로직을 수행한다.
-	void _ProcessCameraUpdate( float InDeltaTime );
 };

@@ -3,6 +3,7 @@
 
 #include "AnimNotify_CameraShake.h"
 #include "../Component/GameObject.h"
+#include "../Manager/CameraManager.h"
 
 FString UAnimNotify_CameraShake::GetNotifyName_Implementation() const
 {
@@ -11,11 +12,5 @@ FString UAnimNotify_CameraShake::GetNotifyName_Implementation() const
 
 void UAnimNotify_CameraShake::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
 {
-	if( !MeshComp || !( MeshComp->GetOwner() ) )
-		return;
-
-	UGameObject* obj = Cast<UGameObject>( MeshComp->GetOwner()->FindComponentByClass<UGameObject>() );
-	if( !obj ) return;
-
-	obj->CameraShake( Scale, ShakeByWeight );
+	GetCameraManager().CameraShake( Scale, ShakeByWeight );
 }

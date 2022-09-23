@@ -4,10 +4,10 @@
 #include "MaterialProperty.h"
 #include "WeaponChange.h"
 #include "../ETC/SDB.h"
-#include "../ETC/CameraShakeEffect.h"
 #include "../Character/GamePlayer.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
+#include "../Manager/CameraManager.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
@@ -131,28 +131,6 @@ bool UGameObject::SkillPlay( int InSkillNum, float InScale )
 	}
 
 	return false;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 카메라 쉐이크를 실행한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameObject::CameraShake( float InScale, bool InShakeByWeight )
-{
-	if( InShakeByWeight )
-	{
-		auto moveComponent = OwningCharacter->GetCharacterMovement();
-		if( moveComponent )
-		{
-			if( !moveComponent->IsFalling() && Stat.JumpPower <= 0.5f )
-			{
-				GetWorld()->GetFirstPlayerController()->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
-			}
-		}
-	}
-	else
-	{
-		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -475,7 +453,7 @@ void UGameObject::_ProcessHit( AActor* InOtherActor )
 	if( GEngine )
 		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
 
-	CameraShake();
+	GetCameraManager().CameraShake();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -529,7 +507,7 @@ void UGameObject::_ProcessLand()
 		else if( LandOnce )
 		{
 			MontagePlay( LandAnim );
-			CameraShake( 1.f, true );
+			GetCameraManager().CameraShake( 1.f, true );
 			LandOnce = false;
 		}
 	}

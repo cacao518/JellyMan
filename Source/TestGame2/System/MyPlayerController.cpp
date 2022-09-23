@@ -53,8 +53,6 @@ void AMyPlayerController::Tick( float InDeltaTime )
 
 	if( MyPlayer && IsInputKeyDown( EKeys::LeftMouseButton ) && IsInputKeyDown( EKeys::RightMouseButton ) )
 		MyPlayer->ProcessBothMouse();
-
-	_ProcessCameraUpdate( InDeltaTime );
 }
 
 void AMyPlayerController::MoveForward( float Value )
@@ -103,27 +101,4 @@ void AMyPlayerController::LookUpAtRate( float Rate )
 {
 	if( MyPlayer )
 		MyPlayer->AddControllerPitchInput( Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds() );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 카메라 관련 로직을 수행한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void AMyPlayerController::_ProcessCameraUpdate( float InDeltaTime )
-{
-	UMyAnimInstance* animInstance = Cast< UMyAnimInstance >( MyPlayer->GetMesh()->GetAnimInstance() );
-	if( !animInstance )
-		return;
-
-	USpringArmComponent* cameraBoom = MyPlayer->CameraBoom;
-	if( !cameraBoom )
-		return;
-
-	if( animInstance->IsFly )
-	{
-		cameraBoom->TargetArmLength = FMath::Lerp( cameraBoom->TargetArmLength, Const::FLY_TARGET_ARM_LENGTH, InDeltaTime * 10.f );
-	}
-	else
-	{
-		cameraBoom->TargetArmLength = FMath::Lerp( cameraBoom->TargetArmLength, Const::DEFAULT_TARGET_ARM_LENGTH, InDeltaTime * 5.f );
-	}
 }

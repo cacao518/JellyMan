@@ -76,9 +76,6 @@ public:
 	// 대상을 바라본다.
 	void LookAt( ACharacter* InTarget );
 
-	// 카메라 쉐이크를 실행한다.
-	void CameraShake( float InScale = 1.f, bool InShakeByWeight = false );
-
 	// 공격 성공 처리를 한다.
 	void OnAttackSuccess();
 

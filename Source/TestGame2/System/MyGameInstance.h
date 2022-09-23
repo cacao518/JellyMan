@@ -8,6 +8,9 @@
 #include "MyGameInstance.generated.h"
 
 
+class AGamePlayer;
+
+
 UCLASS()
 class TESTGAME2_API UMyGameInstance : public UGameInstance
 {
@@ -21,6 +24,13 @@ public:
 	virtual void Shutdown() override;
 	void Tick( float DeltaTime );
 
+	// 자신의 플레이어를 반환한다.
+	AGamePlayer* GetMyPlayer();
+
+	// 자신의 컨트롤러를 반환한다.
+	APlayerController* GetMyController();
+
+	// 인스턴스를 반환한다.
 	static UMyGameInstance* GetInstance();
 };
 

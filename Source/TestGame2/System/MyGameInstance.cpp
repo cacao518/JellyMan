@@ -4,6 +4,8 @@
 #include "MyGameInstance.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
+#include "../Manager/CameraManager.h"
+#include "../Character/GamePlayer.h"
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +33,7 @@ void UMyGameInstance::Init()
 
 	ObjectManager::CreateInstance();
 	DataInfoManager::CreateInstance();
+	CameraManager::CreateInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,15 +45,59 @@ void UMyGameInstance::Shutdown()
 
 	ObjectManager::DestroyInstance();
 	DataInfoManager::DestroyInstance();
+	CameraManager::DestroyInstance();
 
 	GEngine->Exec( GWorld, TEXT( "Slate.SkipSecondPrepass 0" ) );
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 틱 함수
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMyGameInstance::Tick( float InDeltaTime )
 {
 	GetObjectManager().Tick( InDeltaTime );
+	GetCameraManager().Tick( InDeltaTime );
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 자신의 플레이어를 반환한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+AGamePlayer* UMyGameInstance::GetMyPlayer()
+{
+	UWorld* world = GetWorld();
+	if( !world )
+		return nullptr;
+
+	APlayerController* controller = world->GetFirstPlayerController();
+	if( !controller )
+		return nullptr;
+
+	AGamePlayer* player = Cast<AGamePlayer>( controller->GetPawn() );
+	if( !player )
+		return nullptr;
+
+	return player;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 자신의 컨트롤러를 반환한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+APlayerController* UMyGameInstance::GetMyController()
+{
+	UWorld* world = GetWorld();
+	if( !world )
+		return nullptr;
+
+	APlayerController* controller = world->GetFirstPlayerController();
+	if( !controller )
+		return nullptr;
+
+	return controller;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 인스턴스를 반환한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 UMyGameInstance* UMyGameInstance::GetInstance()
 {
 	if( !GEngine ) 
