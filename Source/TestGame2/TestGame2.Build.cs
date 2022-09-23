@@ -8,6 +8,6 @@ public class TestGame2 : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "Landscape", "UMG", "AIModule", "GameplayTasks", "NavigationSystem" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "Landscape", "UMG", "AIModule", "GameplayTasks", "NavigationSystem", "Niagara" });
 	}
 }

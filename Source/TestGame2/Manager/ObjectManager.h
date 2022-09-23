@@ -11,6 +11,7 @@
 
 
 class AActorSpawner;
+class UNiagaraSystem;
 
 
 using ActorMap         = unordered_map< int, AActor* >;
@@ -45,6 +46,9 @@ public:
 	
 	// 액터 생성
 	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, AActorSpawner* InSpawner = nullptr );
+	
+	// 파티클 생성
+	void SpawnParticle( UNiagaraSystem* InNiagara, const FVector& InLocation, const FRotator& InRotator );
 
 	// 액터 제거
 	void DestroyActor( AActor* InActor );

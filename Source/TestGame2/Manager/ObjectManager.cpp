@@ -3,6 +3,9 @@
 #include "Engine/World.h"
 #include "../System/MyGameInstance.h"
 #include "../Component/GameObject.h"
+#include "NiagaraSystem.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "GameFramework/Actor.h"
 
 
@@ -61,6 +64,14 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		ObjectId++;
 		return actor;
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 파티클 생성
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void ObjectManager::SpawnParticle( UNiagaraSystem* InNiagara, const FVector& InLocation, const FRotator& InRotator )
+{
+	UNiagaraFunctionLibrary::SpawnSystemAttached(InNiagara, nullptr, NAME_None, InLocation, InRotator, EAttachLocation::KeepRelativeOffset, true, true, ENCPoolMethod::None );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
