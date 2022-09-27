@@ -9,6 +9,7 @@
 #include "Materials/MaterialInterface.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "WaterBodyComponent.h"
 #include "LandscapeComponent.h"
 #include "LandscapeProxy.h"
 #include "../Character/GamePlayer.h"
@@ -19,6 +20,10 @@ UMaterialProperty::UMaterialProperty()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	OwningCharacter = nullptr;
+
+	ConstructorHelpers::FObjectFinder<UMaterialInterface> materialAsset( TEXT( "/Water/Materials/WaterSurface/Water_FarMesh.Water_FarMesh" ) );
+	if( materialAsset.Succeeded() )
+		WaterMaterial = materialAsset.Object;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,10 +133,13 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 			matInterface = staticMesh->GetMaterial( 0 );
 			if( !matInterface )
 				return;
+		}
 
-			FString str = OwningCharacter->GetName()+TEXT( ": Material Change -> " )+ matInterface->GetName();
-			if( GEngine )
-				GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
+		// 워터 바디
+		auto waterBody = Cast<UWaterBodyComponent>( OtherActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
+		if( waterBody )
+		{
+			matInterface = WaterMaterial;
 		}
 
 		// 랜드스케이프
@@ -149,12 +157,12 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 			matInterface = proxy->GetLandscapeMaterial( 0 );
 			if( !matInterface )
 				return;
-
-			FString str = OwningCharacter->GetName()+TEXT( ": Material Change -> " )+ matInterface->GetName();
-			if( GEngine )
-				GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
 		}
 	}
+
+	FString str = OwningCharacter->GetName() + TEXT( ": Material Change -> " )+ matInterface->GetName();
+	if( GEngine )
+		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
 
 	SetMatState( matInterface );
 }

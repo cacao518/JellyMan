@@ -25,6 +25,7 @@ public:
 
 private:
 	ACharacter*         OwningCharacter;          // 부모 캐릭터 클래스
+	UMaterialInterface* WaterMaterial;            // 워터 머터리얼
 
 	float               JellyEnergy;              // 젤리 에너지
 	float               JellyEnergyMax;           // 젤리 에너지 최대

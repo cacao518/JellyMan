@@ -12,6 +12,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "WaterBodyComponent.h"
 #include "LandscapeComponent.h"
 #include "LandscapeProxy.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -406,7 +407,7 @@ void UGameObject::_FallingWater( float InDeltaTime )
 	{
 		FallWaterTimeAmount += InDeltaTime;
 		FVector originPos = OwningCharacter->GetMesh()->GetRelativeLocation();
-		OwningCharacter->GetMesh()->SetRelativeLocation( FVector( originPos.X, originPos.Y, originPos.Z - 1.3f ) );
+		OwningCharacter->GetMesh()->SetRelativeLocation( FVector( originPos.X, originPos.Y, originPos.Z - 1.7f ) );
 	}
 	else
 	{
@@ -461,21 +462,9 @@ void UGameObject::_ProcessHit( AActor* InOtherActor )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 {
-	// 랜드스케이프 물에 빠졌을 때
-	auto landScape = Cast<ULandscapeComponent>( InOtherActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
-	if( !landScape )
-		return;
-
-	auto proxy = landScape->GetLandscapeProxy();
-	if( !proxy )
-		return;
-
-	UMaterialInterface* matInterface = proxy->GetLandscapeMaterial( 0 );
-	if( !matInterface )
-		return;
-
-	const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::WATER );
-	if( !waterMatInfo )
+	// 물에 빠졌을 때
+	auto waterBody = Cast<UWaterBodyComponent>( InOtherActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
+	if( !waterBody )
 		return;
 
 	/// 풀과 물은 물에 빠지지 않는다.
@@ -486,10 +475,7 @@ void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 			return;
 	}
 
-	if( waterMatInfo->AssetPath == matInterface->GetPathName() )
-	{
-		IsFallWater = true;
-	}
+	IsFallWater = true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
