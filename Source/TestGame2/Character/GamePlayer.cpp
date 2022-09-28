@@ -79,7 +79,6 @@ AGamePlayer::AGamePlayer()
 
 	InputTypeAndFuncMap[ EInputKeyType::LEFT_MOUSE  ] = bind( &AGamePlayer::ProcessLeftMouse,  this );
 	InputTypeAndFuncMap[ EInputKeyType::RIGHT_MOUSE ] = bind( &AGamePlayer::ProcessRightMouse, this );
-	InputTypeAndFuncMap[ EInputKeyType::BOTH_MOUSE ]  = bind( &AGamePlayer::ProcessBothMouse, this );
 	InputTypeAndFuncMap[ EInputKeyType::SPACE       ] = bind( &AGamePlayer::ProcessSpace,      this );
 
 	_ResetReadySkill();
@@ -176,7 +175,7 @@ void AGamePlayer::ProcessRightMouse()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 마우스 양쪽 클릭 실행
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void AGamePlayer::ProcessBothMouse()
+void AGamePlayer::ProcessBothMouseDown()
 {
 	if( !MatProperty )
 		return;
@@ -190,6 +189,26 @@ void AGamePlayer::ProcessBothMouse()
 				animInstance->IsFly = true;
 		}
 		break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 마우스 양쪽 클릭 취소 실행
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AGamePlayer::ProcessBothMouseUp()
+{
+	if( !MatProperty )
+		return;
+
+	switch( MatProperty->GetMatState() )
+	{
+	case EMaterialState::GRASS:
+	{
+		UMyAnimInstance* animInstance = Cast< UMyAnimInstance >( GetMesh()->GetAnimInstance() );
+		if( animInstance && animInstance->IsJump )
+			animInstance->IsFly = false;
+	}
+	break;
 	}
 }
 

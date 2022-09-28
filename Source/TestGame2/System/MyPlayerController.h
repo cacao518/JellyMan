@@ -19,6 +19,7 @@ private:
 
 	float BaseTurnRate;
 	float BaseLookUpRate;
+	bool  IsDownBothMoustButton;
 
 public:
 	AMyPlayerController();

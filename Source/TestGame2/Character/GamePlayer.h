@@ -65,7 +65,8 @@ public:
 
 	void ProcessLeftMouse();
 	void ProcessRightMouse();
-	void ProcessBothMouse();
+	void ProcessBothMouseDown();
+	void ProcessBothMouseUp();
 	void ProcessWheel();
 	void ProcessSpace();
 	void ProcessF();

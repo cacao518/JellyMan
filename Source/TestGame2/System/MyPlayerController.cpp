@@ -51,8 +51,19 @@ void AMyPlayerController::Tick( float InDeltaTime )
 {
 	Super::Tick( InDeltaTime );
 
-	if( MyPlayer && IsInputKeyDown( EKeys::LeftMouseButton ) && IsInputKeyDown( EKeys::RightMouseButton ) )
-		MyPlayer->ProcessBothMouse();
+	if( !MyPlayer )
+		return;
+
+	if( !IsDownBothMoustButton && IsInputKeyDown( EKeys::LeftMouseButton ) && IsInputKeyDown( EKeys::RightMouseButton ) )
+	{
+		IsDownBothMoustButton = true;
+		MyPlayer->ProcessBothMouseDown();
+	}
+	else if( IsDownBothMoustButton && !IsInputKeyDown( EKeys::LeftMouseButton ) && !IsInputKeyDown( EKeys::RightMouseButton ) )
+	{
+		IsDownBothMoustButton = false;
+		MyPlayer->ProcessBothMouseUp();
+	}
 }
 
 void AMyPlayerController::MoveForward( float Value )
