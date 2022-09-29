@@ -30,9 +30,7 @@ EBTNodeResult::Type UBTT_Attack::ExecuteTask( UBehaviorTreeComponent& OwnerComp,
 
 	gameObject->LookAt( target );
 
-	bool result = gameObject->SkillPlay( 
-		OwnerComp.GetBlackboardComponent()->GetValueAsInt( AMonsterAIController::CurSkillNumKey ), 
-		gameObject->GetStat().AttackSpeed );
+	bool result = gameObject->SkillPlay( OwnerComp.GetBlackboardComponent()->GetValueAsInt( AMonsterAIController::CurSkillNumKey ) );
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, 0 );
 

@@ -65,6 +65,17 @@ enum class EInputKeyType : uint8
 	MAX,
 };
 
+// 스킬 플레이 재생속도 종류
+UENUM( BlueprintType )
+enum class ESkillPlaySpeedType : uint8
+{
+	DEFAULT              UMETA( DisplayName = "Default" ),
+	ATTACK_SPEED         UMETA( DisplayName = "AttackSpeed" ),
+	MOVE_SPEED           UMETA( DisplayName = "MoveSpeed" ),
+
+	MAX,
+};
+
 // 충돌체 정보
 USTRUCT( Atomic, BlueprintType )
 struct FCollisionInfo
@@ -108,19 +119,34 @@ struct FSkillInfo
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	UAnimMontage* Anim;
+	UAnimMontage* Anim;                     // 몽타주
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int Num;
+	int Num;                                // 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float CoolTime;
+	float CoolTime;                         // 쿨타임
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float ActivateRangeMin;
+	ESkillPlaySpeedType PlaySpeedType;      // 스킬 재생속도 타입
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float ActivateRangeMax;
+	TArray<EAnimState> PlayEnableState;     // 스킬 사용 가능한 상태
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	TArray<FString> PlayEnableMontage;      // 스킬 사용 가능한 몽타주
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	bool DerivedSkill;                      // 파생 스킬인지 여부 
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	bool LockOnLookAt;                      // 락온 상태에서 스킬 시전 시 바라볼 것인지 여부 
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float ActivateRangeMin;                 // 스킬 발동 범위 최소 (몬스터 전용)
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float ActivateRangeMax;                 // 스킬 발동 범위 최대 (몬스터 전용)
 };
 
 // 스텟 정보

@@ -78,6 +78,9 @@ public:
 	bool SwordLeftStart();
 	bool SwordRightStart();
 
+	// 락온 된 대상을 반환한다.
+	ACharacter* GetLockOnTarget() { return LockOnTarget; };
+
 private:
 	// 발동 대기중 스킬 초기화
 	void _ResetReadySkill();

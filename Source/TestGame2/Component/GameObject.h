@@ -71,7 +71,7 @@ public:
 	void MontagePlay( UAnimMontage* InMontage, float InScale = 1.f );
 
 	// 스킬을 플레이한다.
-	bool SkillPlay( int InSkillNum, float InScale = 1.f );
+	bool SkillPlay( int InSkillNum );
 
 	// 대상을 바라본다.
 	void LookAt( ACharacter* InTarget );

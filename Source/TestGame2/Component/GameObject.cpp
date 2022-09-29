@@ -115,7 +115,7 @@ void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 스킬을 플레이한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-bool UGameObject::SkillPlay( int InSkillNum, float InScale )
+bool UGameObject::SkillPlay( int InSkillNum )
 {
 	for( auto& skillInfo : SkillInfos )
 	{
@@ -124,8 +124,40 @@ bool UGameObject::SkillPlay( int InSkillNum, float InScale )
 
 		if( IsCoolingSkill( skillInfo.Num ) )
 			continue;
+
+		if( skillInfo.DerivedSkill && !IsEnableDerivedKey )
+			continue;
 			
-		MontagePlay( skillInfo.Anim, InScale );
+		bool isEmptyEnableState   = skillInfo.PlayEnableState.IsEmpty();
+		bool isEmptyEnableMontage = skillInfo.PlayEnableMontage.IsEmpty();
+		bool isFindEnableState    = skillInfo.PlayEnableState.Find( AnimState ) != INDEX_NONE;
+		bool isFindEnableMontage  = skillInfo.PlayEnableMontage.Find( GetCurMontageName() ) != INDEX_NONE;
+
+		if( !isEmptyEnableState && !isEmptyEnableMontage )
+		{
+			if( !isFindEnableState && !isFindEnableMontage )
+				continue;
+		}
+		else
+		{
+			if( !isEmptyEnableState && !isFindEnableState )
+				continue;
+			if( !isEmptyEnableMontage && !isFindEnableMontage )
+				continue;
+		}
+
+		if( skillInfo.LockOnLookAt )
+		{
+			AGamePlayer* player = Cast<AGamePlayer>( OwningCharacter );
+			if( player )
+				LookAt( player->GetLockOnTarget() );
+		}
+
+		if( skillInfo.PlaySpeedType == ESkillPlaySpeedType::DEFAULT )
+			MontagePlay( skillInfo.Anim );
+		else
+			MontagePlay( skillInfo.Anim, skillInfo.PlaySpeedType == ESkillPlaySpeedType::ATTACK_SPEED ? Stat.AttackSpeed : Stat.MoveSpeed );
+
 		_RegisterCoolTime( skillInfo );
 
 		return true;

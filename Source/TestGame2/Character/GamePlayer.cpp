@@ -202,13 +202,13 @@ void AGamePlayer::ProcessBothMouseUp()
 
 	switch( MatProperty->GetMatState() )
 	{
-	case EMaterialState::GRASS:
-	{
-		UMyAnimInstance* animInstance = Cast< UMyAnimInstance >( GetMesh()->GetAnimInstance() );
-		if( animInstance && animInstance->IsJump )
-			animInstance->IsFly = false;
-	}
-	break;
+		case EMaterialState::GRASS:
+		{
+			UMyAnimInstance* animInstance = Cast< UMyAnimInstance >( GetMesh()->GetAnimInstance() );
+			if( animInstance && animInstance->IsJump )
+				animInstance->IsFly = false;
+		}
+		break;
 	}
 }
 
@@ -233,11 +233,8 @@ void AGamePlayer::ProcessSpace()
 {
 	bool result = false;
 
-	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
-	{
-		GameObject->SkillPlay( 1, GameObject->GetStat().MoveSpeed );
-		result = true;
-	}
+	if( GameObject )
+		result = GameObject->SkillPlay( 1 );
 	
 	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::SPACE );
 }
@@ -247,10 +244,8 @@ void AGamePlayer::ProcessSpace()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGamePlayer::ProcessF()
 {
-	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
-	{
+	if( GameObject )
 		GameObject->SkillPlay( 4 );
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -258,16 +253,13 @@ void AGamePlayer::ProcessF()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGamePlayer::ProcessR()
 {
-	if( !MatProperty )
+	if( !MatProperty || !GameObject )
 		return;
 
-	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	if( MatProperty->GetMatState() != EMaterialState::JELLY )
 	{
-		if( MatProperty->GetMatState() != EMaterialState::JELLY )
-		{
-			GameObject->SkillPlay( 10 );
-			MatProperty->SetMatState();
-		}
+		GameObject->SkillPlay( 10 );
+		MatProperty->SetMatState();
 	}
 }
 
@@ -282,7 +274,7 @@ void AGamePlayer::Process1()
 	if( !( WeaponChange->CanWeaponChange( EWeaponState::SWORD ) ) )
 		return;
 
-	GameObject->SkillPlay( 5, GameObject->GetStat().AttackSpeed );
+	GameObject->SkillPlay( 5 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -290,24 +282,14 @@ void AGamePlayer::Process1()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AGamePlayer::PunchLeftStart()
 {
-	if( !GameObject )
-		return false;
+	bool result = false;
 
-	if( LockOnTarget )
-		GameObject->LookAt( LockOnTarget );
+	if( GameObject && GameObject->GetIsEnableDerivedKey() )
+		result = GameObject->SkillPlay( 9 );
+	else
+		result = GameObject->SkillPlay( 2 );
 
-	if( GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) && GameObject->GetIsEnableDerivedKey() )
-	{
-		GameObject->SkillPlay( 9, GameObject->GetStat().AttackSpeed );
-		return true;
-	}
-	else if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
-	{
-		GameObject->SkillPlay( 2, GameObject->GetStat().AttackSpeed );
-		return true;
-	}
-
-	return false;
+	return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,21 +297,12 @@ bool AGamePlayer::PunchLeftStart()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AGamePlayer::PunchRightStart()
 {
-	if( !GameObject )
-		return false;
+	bool result = false;
 
-	if( LockOnTarget )
-		GameObject->LookAt( LockOnTarget );
+	if( GameObject )
+		result = GameObject->SkillPlay( 3 );
 
-	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN ||
-		GameObject->GetCurMontageName().Equals( "MTG_Punch1" ) ||
-		GameObject->GetCurMontageName().Equals( "MTG_Punch3" ) )
-	{
-		GameObject->SkillPlay( 3, GameObject->GetStat().AttackSpeed );
-		return true;
-	}
-
-	return false;
+	return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -337,24 +310,14 @@ bool AGamePlayer::PunchRightStart()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AGamePlayer::SwordLeftStart()
 {
-	if( !GameObject )
-		return false;
+	bool result = false;
 
-	if( LockOnTarget )
-		GameObject->LookAt( LockOnTarget );
+	if( GameObject && GameObject->GetIsEnableDerivedKey() )
+		result = GameObject->SkillPlay( 7 );
+	else
+		result = GameObject->SkillPlay( 6 );
 
-	if( GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" ) && GameObject->GetIsEnableDerivedKey() )
-	{
-		GameObject->SkillPlay( 7, GameObject->GetStat().AttackSpeed );
-		return true;
-	}
-	else if( GameObject->GetAnimState() == EAnimState::IDLE_RUN )
-	{
-		GameObject->SkillPlay( 6, GameObject->GetStat().AttackSpeed );
-		return true;
-	}
-
-	return false;
+	return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -362,21 +325,12 @@ bool AGamePlayer::SwordLeftStart()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AGamePlayer::SwordRightStart()
 {
-	if( !GameObject )
-		return false;
+	bool result = false;
 
-	if( LockOnTarget )
-		GameObject->LookAt( LockOnTarget );
+	if( GameObject )
+		result = GameObject->SkillPlay( 8 );
 
-	if( GameObject->GetAnimState() == EAnimState::IDLE_RUN
-		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack1" )
-		|| GameObject->GetCurMontageName().Equals( "MTG_SwordAttack2" ) )
-	{
-		GameObject->SkillPlay( 8, GameObject->GetStat().AttackSpeed );
-		return true;
-	}
-
-	return false;
+	return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
