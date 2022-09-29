@@ -82,11 +82,12 @@ void CameraManager::_ProcessCameraArm( float InDeltaTime )
 		return;
 
 	if( animInstance->IsFly )
-	{
 		cameraBoom->TargetArmLength = FMath::Lerp( cameraBoom->TargetArmLength, Const::FLY_TARGET_ARM_LENGTH, InDeltaTime * 10.f );
-	}
 	else
-	{
 		cameraBoom->TargetArmLength = FMath::Lerp( cameraBoom->TargetArmLength, Const::DEFAULT_TARGET_ARM_LENGTH, InDeltaTime * 5.f );
-	}
+
+	if( player->GetLockOnTarget() )
+		cameraBoom->CameraRotationLagSpeed = Const::LOCKON_CAMERA_ROTAION_LAG_SPEED;
+	else
+		cameraBoom->CameraRotationLagSpeed = 0.f;
 }

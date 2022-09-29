@@ -401,7 +401,6 @@ void AGamePlayer::_LockOnStart()
 				userWidget->SetVisibility( ESlateVisibility::SelfHitTestInvisible );
 
 				LockOnTarget = character;
-				CameraBoom->CameraRotationLagSpeed = Const::LOCKON_CAMERA_ROTAION_LAG_SPEED;
 				return;
 			}
 		}
@@ -422,7 +421,6 @@ void AGamePlayer::_LockOnRelease()
 	}
 
 	LockOnTarget = nullptr;
-	CameraBoom->CameraRotationLagSpeed = 0.f;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
