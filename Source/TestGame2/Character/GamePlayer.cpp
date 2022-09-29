@@ -381,6 +381,11 @@ void AGamePlayer::_LockOnStart()
 	if( !bResult )
 		return;
 
+	// 제일 가까운 적이 락온 되도록 정렬
+	overlapResults.Sort( [ this ]( const auto& A, const auto& B ){
+		return A.GetActor()->GetDistanceTo( this ) < B.GetActor()->GetDistanceTo( this );
+		} );
+
 	for( FOverlapResult overlapResult : overlapResults )
 	{
 		ACharacter* character = Cast<ACharacter>( overlapResult.GetActor() );
