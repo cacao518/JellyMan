@@ -162,6 +162,7 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 	if( GEngine )
 		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
 
+	SetIsEnabledTileColl( false );
 	SetMatState( matInterface );
 	_PlayChangeEffect();
 }
