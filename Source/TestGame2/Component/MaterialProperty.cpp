@@ -12,18 +12,16 @@
 #include "WaterBodyComponent.h"
 #include "LandscapeComponent.h"
 #include "LandscapeProxy.h"
+#include "NiagaraSystem.h"
 #include "../Character/GamePlayer.h"
 #include "../Manager/DataInfoManager.h"
+#include "../Manager/ObjectManager.h"
 #include "../System/MyAnimInstance.h"
 
 UMaterialProperty::UMaterialProperty()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	OwningCharacter = nullptr;
-
-	ConstructorHelpers::FObjectFinder<UMaterialInterface> materialAsset( TEXT( "/Water/Materials/WaterSurface/Water_FarMesh.Water_FarMesh" ) );
-	if( materialAsset.Succeeded() )
-		WaterMaterial = materialAsset.Object;
+	OwningCharacter = nullptr;	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,6 +163,7 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
 
 	SetMatState( matInterface );
+	_PlayChangeEffect();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,12 +178,16 @@ void UMaterialProperty::_Init()
 	MatEnergy = 0.f;
 	MatEnergyMax = 0.f;
 
-	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::JELLY );
-	if( matInfo )
+	const auto& jellyMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::JELLY );
+	if( jellyMatInfo )
 	{
-		JellyEnergy    = matInfo->MatEnergyMax;
-		JellyEnergyMax = matInfo->MatEnergyMax;
+		JellyEnergy    = jellyMatInfo->MatEnergyMax;
+		JellyEnergyMax = jellyMatInfo->MatEnergyMax;
 	}
+
+	const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::WATER );
+	if( waterMatInfo )
+		WaterMaterial = LoadObject<UMaterialInterface>( NULL, *( waterMatInfo->AssetPath ), NULL, LOAD_None, NULL );
 	
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 
@@ -239,6 +242,21 @@ EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface
 	}
 
 	return EMaterialState::MAX;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 물질 변경 이펙트를 실행한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UMaterialProperty::_PlayChangeEffect()
+{
+	switch( MatState )
+	{
+		case EMaterialState::GRASS:
+		{
+			GetObjectManager().SpawnParticle( TEXT( "GrassChange" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
+		}
+		break;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

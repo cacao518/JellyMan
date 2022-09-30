@@ -84,6 +84,9 @@ private:
 	// 머터리얼 애셋 주소를 EMaterialState로 바꿔준다.
 	EMaterialState _ConvertMatAssetToMatState( UMaterialInterface* InMaterial );
 
+	// 물질 변경 이펙트를 실행한다.
+	void _PlayChangeEffect();
+
 	// 게이지 관련 로직을 실행한다.
 	void _ProcessGauge( float InDeltaTime );
 

@@ -69,9 +69,14 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 파티클 생성
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void ObjectManager::SpawnParticle( UNiagaraSystem* InNiagara, const FVector& InLocation, const FRotator& InRotator )
+void ObjectManager::SpawnParticle( const FString& InEffectName, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator )
 {
-	UNiagaraFunctionLibrary::SpawnSystemAttached(InNiagara, nullptr, NAME_None, InLocation, InRotator, EAttachLocation::KeepRelativeOffset, true, true, ENCPoolMethod::None );
+	FString path = FString( TEXT( "/Game/Particle/" ) ) + InEffectName;
+	UNiagaraSystem* effect = LoadObject<UNiagaraSystem>( NULL, *path, NULL, LOAD_None, NULL);
+	if( !effect )
+		return;
+
+	UNiagaraFunctionLibrary::SpawnSystemAttached( effect, InUseActor->GetRootComponent(), NAME_None, InLocation, InRotator, EAttachLocation::KeepWorldPosition, true, true, ENCPoolMethod::None );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -258,8 +258,8 @@ void AGamePlayer::ProcessR()
 
 	if( MatProperty->GetMatState() != EMaterialState::JELLY )
 	{
-		GameObject->SkillPlay( 10 );
-		MatProperty->SetMatState();
+		if( GameObject->SkillPlay( 10 ) )
+			MatProperty->SetMatState();
 	}
 }
 
