@@ -29,7 +29,6 @@ AMonster::AMonster()
 	MatProperty = CreateDefaultSubobject<UMaterialProperty>( TEXT( "MatProperty" ) );
 
 	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f );
 
 	// Box Component
