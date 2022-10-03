@@ -17,16 +17,6 @@ public:
 	static Type& GetInstance(){ return *Instance; }
 	static Type* CreateInstance() { return !Instance ? Instance = new Type() : Instance; }
 	static void DestroyInstance() { if( !Instance ) delete Instance; Instance = nullptr; }
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	/// @brief  LoadClass
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	template< typename T >
-	UClass* LoadClass( const FString& InPath )
-	{
-		FString copiedPath = InPath;
-		return ConstructorHelpersInternal::FindOrLoadClass( copiedPath, T::StaticClass() );
-	}
 };
 
 template< typename Type >
