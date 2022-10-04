@@ -125,27 +125,31 @@ bool UGameObject::SkillPlay( int InSkillNum )
 		if( IsCoolingSkill( skillInfo.Num ) )
 			continue;
 
+		// 파생스킬의 경우 파생키가 입력되었는지 확인
 		if( skillInfo.DerivedSkill && !IsEnableDerivedKey )
 			continue;
-			
+		
+		// 현재 스킬 사용 가능한 AnimState / Montage 인지 확인
 		bool isEmptyEnableState   = skillInfo.PlayEnableState.IsEmpty();
 		bool isEmptyEnableMontage = skillInfo.PlayEnableMontage.IsEmpty();
 		bool isFindEnableState    = skillInfo.PlayEnableState.Find( AnimState ) != INDEX_NONE;
 		bool isFindEnableMontage  = skillInfo.PlayEnableMontage.Find( GetCurMontageName() ) != INDEX_NONE;
 
+		// 사용가능한 AnimState / Montage 가 둘 다 설정 되어 있을 경우 둘 중 하나만 만족하면 된다.
 		if( !isEmptyEnableState && !isEmptyEnableMontage )
 		{
 			if( !isFindEnableState && !isFindEnableMontage )
 				continue;
 		}
 		else
-		{
+		{   // 사용가능한 AnimState / Montage 둘 중 하나만 설정 되어 있을 경우 설정 되어 있는 것만 만족하면 된다.
 			if( !isEmptyEnableState && !isFindEnableState )
 				continue;
 			if( !isEmptyEnableMontage && !isFindEnableMontage )
 				continue;
 		}
 
+		// 락온 상태에서 스킬 사용 시 적을 바라보게 할 것 인지 확인
 		if( skillInfo.LockOnLookAt )
 		{
 			AGamePlayer* player = Cast<AGamePlayer>( OwningCharacter );
