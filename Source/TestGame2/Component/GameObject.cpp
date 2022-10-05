@@ -117,18 +117,20 @@ void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UGameObject::SkillPlay( int InSkillNum )
 {
+	int derivedSkillNum = 0;
+
 	for( auto& skillInfo : SkillInfos )
 	{
 		if( InSkillNum != skillInfo.Num )
 			continue;
 
+		// 파생스킬 식별자 저장
+		derivedSkillNum = skillInfo.DerivedSkillNum;
+
+		// 쿨타임 확인
 		if( IsCoolingSkill( skillInfo.Num ) )
 			continue;
 
-		// 파생스킬의 경우 파생키가 입력되었는지 확인
-		if( skillInfo.DerivedSkill && !IsEnableDerivedKey )
-			continue;
-		
 		// 현재 스킬 사용 가능한 AnimState / Montage 인지 확인
 		bool isEmptyEnableState   = skillInfo.PlayEnableState.IsEmpty();
 		bool isEmptyEnableMontage = skillInfo.PlayEnableMontage.IsEmpty();
@@ -166,6 +168,10 @@ bool UGameObject::SkillPlay( int InSkillNum )
 
 		return true;
 	}
+
+	// 파생스킬을 발동 시킬 것인지 확인
+	if( derivedSkillNum != 0 && IsEnableDerivedKey )
+		return SkillPlay( derivedSkillNum );
 
 	return false;
 }

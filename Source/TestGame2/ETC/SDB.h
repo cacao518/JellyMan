@@ -137,7 +137,7 @@ public:
 	TArray<FString> PlayEnableMontage;      // 스킬 사용 가능한 몽타주
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	bool DerivedSkill;                      // 파생 스킬인지 여부 
+	int DerivedSkillNum;                    // 파생 스킬 식별자 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	bool LockOnLookAt;                      // 락온 상태에서 스킬 시전 시 바라볼 것인지 여부 

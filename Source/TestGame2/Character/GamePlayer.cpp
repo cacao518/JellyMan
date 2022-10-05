@@ -284,9 +284,7 @@ bool AGamePlayer::PunchLeftStart()
 {
 	bool result = false;
 
-	if( GameObject && GameObject->GetIsEnableDerivedKey() )
-		result = GameObject->SkillPlay( 9 );
-	else
+	if( GameObject )
 		result = GameObject->SkillPlay( 2 );
 
 	return result;
@@ -312,9 +310,7 @@ bool AGamePlayer::SwordLeftStart()
 {
 	bool result = false;
 
-	if( GameObject && GameObject->GetIsEnableDerivedKey() )
-		result = GameObject->SkillPlay( 7 );
-	else
+	if( GameObject )
 		result = GameObject->SkillPlay( 6 );
 
 	return result;
