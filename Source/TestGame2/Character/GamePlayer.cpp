@@ -132,12 +132,12 @@ void AGamePlayer::ProcessLeftMouse()
 	{
 		case EWeaponState::MAX:
 		{
-			result = PunchLeftStart();
+			result = GameObject->SkillPlay( 2 );
 			break;
 		}
 		case EWeaponState::SWORD:
 		{
-			result = SwordLeftStart();
+			result = GameObject->SkillPlay( 6 );
 			break;
 		}
 	}
@@ -159,12 +159,12 @@ void AGamePlayer::ProcessRightMouse()
 	{
 		case EWeaponState::MAX:
 		{
-			result = PunchRightStart();
+			result = GameObject->SkillPlay( 3 );
 			break;
 		}
 		case EWeaponState::SWORD:
 		{
-			result = SwordRightStart();
+			result = GameObject->SkillPlay( 8 );
 			break;
 		}
 	}
@@ -275,58 +275,6 @@ void AGamePlayer::Process1()
 		return;
 
 	GameObject->SkillPlay( 5 );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 펀치 약공격 시작
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-bool AGamePlayer::PunchLeftStart()
-{
-	bool result = false;
-
-	if( GameObject )
-		result = GameObject->SkillPlay( 2 );
-
-	return result;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 펀치 강공격 시작
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-bool AGamePlayer::PunchRightStart()
-{
-	bool result = false;
-
-	if( GameObject )
-		result = GameObject->SkillPlay( 3 );
-
-	return result;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 검 약공격 시작
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-bool AGamePlayer::SwordLeftStart()
-{
-	bool result = false;
-
-	if( GameObject )
-		result = GameObject->SkillPlay( 6 );
-
-	return result;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 검 강공격 시작
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-bool AGamePlayer::SwordRightStart()
-{
-	bool result = false;
-
-	if( GameObject )
-		result = GameObject->SkillPlay( 8 );
-
-	return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

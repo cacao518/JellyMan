@@ -73,11 +73,6 @@ public:
 	void ProcessR();
 	void Process1();
 
-	bool PunchLeftStart();
-	bool PunchRightStart();
-	bool SwordLeftStart();
-	bool SwordRightStart();
-
 	// 락온 된 대상을 반환한다.
 	ACharacter* GetLockOnTarget() { return LockOnTarget; };
 
