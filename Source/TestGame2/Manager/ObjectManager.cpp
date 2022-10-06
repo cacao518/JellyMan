@@ -54,7 +54,7 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		if( !actor )
 			return nullptr;
 
-		auto gameObject = actor ? Cast<UGameObject>( actor->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+		auto gameObject = actor ? Cast<UGameObject>( actor->FindComponentByClass<UGameObject>() ) : nullptr;
 		if( gameObject )
 			gameObject->SetId( ObjectId );
 
@@ -84,7 +84,7 @@ void ObjectManager::SpawnParticle( const FString& InEffectName, const AActor* In
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void ObjectManager::DestroyActor( AActor* InActor )
 {
-	auto gameObject = InActor ? Cast<UGameObject>( InActor->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+	auto gameObject = InActor ? Cast<UGameObject>( InActor->FindComponentByClass<UGameObject>() ) : nullptr;
 	if( !gameObject )
 		return;
 
