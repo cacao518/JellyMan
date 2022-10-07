@@ -21,7 +21,7 @@ void UBTS_CheckState::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 	if( !controllingPawn )
 		return;
 
-	auto gameObject = controllingPawn ? Cast<UGameObject>( controllingPawn->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+	auto gameObject = controllingPawn ? Cast<UGameObject>( controllingPawn->FindComponentByClass<UGameObject>() ) : nullptr;
 	if( !gameObject )
 		return;
 

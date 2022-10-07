@@ -18,7 +18,7 @@ bool UBTD_IsCommonAction::CalculateRawConditionValue(UBehaviorTreeComponent& Own
 	if( !controllingPawn )
 		return false;
 
-	auto gameObject = controllingPawn ? Cast<UGameObject>( controllingPawn->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+	auto gameObject = controllingPawn ? Cast<UGameObject>( controllingPawn->FindComponentByClass<UGameObject>() ) : nullptr;
 	if( !gameObject )
 		return false;
 
