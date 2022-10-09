@@ -12,7 +12,7 @@ class UAnimMontage;
 
 
 UCLASS()
-class TESTGAME2_API AMonster : public ACharacter
+class TESTGAME2_API AMonster final : public ACharacter
 {
 	GENERATED_BODY()
 

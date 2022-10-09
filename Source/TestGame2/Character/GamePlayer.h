@@ -18,7 +18,7 @@ using InputMap = map<EInputKeyType, function<void()> >;
 
 
 UCLASS(config=Game)
-class AGamePlayer : public ACharacter
+class AGamePlayer final : public ACharacter
 {
 	GENERATED_BODY()
 
