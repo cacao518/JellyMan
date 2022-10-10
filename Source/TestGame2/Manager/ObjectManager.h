@@ -19,7 +19,7 @@ using SpawnerMap       = unordered_map< int, AActorSpawner* >;
 using ActorSpawnerList = list< AActorSpawner* >;
 
 
-class ObjectManager : public SingletonBase< ObjectManager>
+class ObjectManager final : public SingletonBase< ObjectManager>
 {
 private:
 	UPROPERTY()

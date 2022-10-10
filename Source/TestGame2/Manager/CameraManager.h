@@ -9,7 +9,7 @@
 #include <list>
 
 
-class CameraManager : public SingletonBase< CameraManager>
+class CameraManager final : public SingletonBase< CameraManager>
 {
 
 public:

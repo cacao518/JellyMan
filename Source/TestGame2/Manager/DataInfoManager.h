@@ -11,7 +11,7 @@ using MaterialInfoMap = TMap< EMaterialState, MaterialInfo >;
 using WeaponInfoMap   = TMap< EWeaponState, WeaponInfo >;
 
 
-class DataInfoManager : public SingletonBase< DataInfoManager >
+class DataInfoManager final : public SingletonBase< DataInfoManager >
 {
 private:
 	MaterialInfoMap MaterialInfos;  // 물질 정보
