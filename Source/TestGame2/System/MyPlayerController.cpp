@@ -71,7 +71,7 @@ void AMyPlayerController::MoveForward( float Value )
 	if( !MyPlayer )
 		return;
 
-	auto gameObject = MyPlayer ? Cast<UGameObject>( MyPlayer->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+	auto gameObject = MyPlayer ? Cast<UGameObject>( MyPlayer->FindComponentByClass<UGameObject>() ) : nullptr;
 	if( !gameObject )
 		return;
 
@@ -89,7 +89,7 @@ void AMyPlayerController::MoveRight( float Value )
 	if( !MyPlayer )
 		return;
 
-	auto gameObject = MyPlayer ? Cast<UGameObject>( MyPlayer->GetDefaultSubobjectByName( TEXT( "GameObject" ) ) ) : nullptr;
+	auto gameObject = MyPlayer ? Cast<UGameObject>( MyPlayer->FindComponentByClass<UGameObject>() ) : nullptr;
 	if( !gameObject )
 		return;
 
