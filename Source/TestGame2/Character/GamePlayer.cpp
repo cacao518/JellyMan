@@ -396,7 +396,11 @@ void AGamePlayer::_ProcessLockOn()
 	if( !LockOnTarget )
 		return;
 
-	if( !GetValid( LockOnTarget ) || LockOnTarget->GetDistanceTo( this ) > Const::LOCKON_RANGE )
+	auto otherGameObject = Cast<UGameObject>( LockOnTarget->FindComponentByClass<UGameObject>() );
+	if( !otherGameObject )
+		return;
+
+	if( !GetValid( LockOnTarget ) || otherGameObject->GetAnimState() == EAnimState::DIE || LockOnTarget->GetDistanceTo( this ) > Const::LOCKON_RANGE )
 	{
 		_LockOnRelease();
 		return;
