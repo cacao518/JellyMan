@@ -398,7 +398,10 @@ void UGameObject::_CheckDie()
 
 	if( AnimState == EAnimState::DIE )
 	{
-		GetObjectManager().DestroyActor( OwningCharacter );
+		//GetObjectManager().DestroyActor( OwningCharacter );
+		OwningCharacter->GetMesh()->SetSimulatePhysics( true );
+		OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
+		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( TEXT( "NoCollision" ) );
 	}
 }
 
