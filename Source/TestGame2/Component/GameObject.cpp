@@ -8,6 +8,7 @@
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
+#include "../System/MonsterAIController.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
@@ -399,6 +400,10 @@ void UGameObject::_CheckDie()
 	if( AnimState == EAnimState::DIE )
 	{
 		//GetObjectManager().DestroyActor( OwningCharacter );
+		AMonsterAIController* monsterController = Cast< AMonsterAIController >( OwningCharacter->GetController() );
+		if( monsterController )
+			monsterController->StopAI();
+
 		OwningCharacter->GetMesh()->SetSimulatePhysics( true );
 		OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( TEXT( "NoCollision" ) );
