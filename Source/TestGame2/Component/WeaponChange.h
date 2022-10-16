@@ -12,7 +12,7 @@ using WeaponMeshMap = TMap< EWeaponState, UStaticMeshComponent* >;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TESTGAME2_API UWeaponChange : public UActorComponent
+class TESTGAME2_API UWeaponChange final : public UActorComponent
 {
 	GENERATED_BODY()
 

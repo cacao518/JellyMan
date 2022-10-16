@@ -12,7 +12,7 @@ class UMaterialInterface;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TESTGAME2_API UMaterialProperty : public UActorComponent
+class TESTGAME2_API UMaterialProperty final : public UActorComponent
 {
 	GENERATED_BODY()
 
