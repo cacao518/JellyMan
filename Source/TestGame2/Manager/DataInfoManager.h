@@ -7,8 +7,8 @@
 #include <list>
 
 
-using MaterialInfoMap = TMap< EMaterialState, MaterialInfo >;
-using WeaponInfoMap   = TMap< EWeaponState, WeaponInfo >;
+using MaterialInfoMap = TMap< EMaterialState, FMaterialInfo >;
+using WeaponInfoMap   = TMap< EWeaponState, FWeaponInfo >;
 
 
 class DataInfoManager final : public SingletonBase< DataInfoManager >
@@ -31,5 +31,19 @@ public:
 	const MaterialInfoMap& GetMaterialInfos() { return MaterialInfos; };
 	const WeaponInfoMap& GetWeaponInfos() { return WeaponInfos; };
 
+private:
+	//  데이터 테이블을 인포 맵에 불러온다.
+	template<typename T1, typename T2>
+	void _LoadDataTable( T2& InInfoMap, FString InPath )
+	{
+		if( UDataTable* dt = LoadObject<UDataTable>( NULL, *InPath, NULL, LOAD_None, NULL ) )
+		{
+			for( auto& [_, value] : dt->GetRowMap() )
+			{
+				T1* row = (T1*)value;
+				InInfoMap.Add( row->State, *row );
+			}
+		}
+	}
 };
 inline DataInfoManager& GetDataInfoManager() { return DataInfoManager::GetInstance(); };

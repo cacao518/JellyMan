@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/DataTable.h"
 #include "SDB.generated.h"
 
 
@@ -192,22 +193,54 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 물질 정보
-struct MaterialInfo
+USTRUCT( Atomic, BlueprintType )
+struct FMaterialInfo : public FTableRowBase
 {
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	EMaterialState State;    // 물질 상태
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float MoveSpeed;         // 이동속도 증가율
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float AttackSpeed;       // 공격속도 증가율
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float JumpPower;         // 점프력
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float Mass;              // 강도(공격력,방어력 증가율)
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float MatEnergyMax;      // 최대 물질 에너지
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FName CollisonName;      // 물질 변경 시 콜리전이름
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FString AssetPath;       // 애셋 경로
 };
 
 // 무기 정보
-struct WeaponInfo
+USTRUCT( Atomic, BlueprintType )
+struct FWeaponInfo : public FTableRowBase
 {
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	EWeaponState State;         // 무기 종류
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	int   DurabilityMax;        // 무기 내구도 최대
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float RequireJellyAmount;   // 무기를 생성하는데 필요한 젤리 양
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FName ComponentName;        // 스테틱 메쉬 컴포넌트 이름
 };
 
