@@ -111,60 +111,7 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 	if( Cast<ACharacter>( OtherActor ) == OwningCharacter )
 		return;
 
-	UMaterialInterface* matInterface = nullptr;
-
-	// 몬스터나 플레이어
-	if( Cast<ACharacter>( OtherActor ) )
-	{ 
-		/*auto meshOnTile = Cast<ACharacter>( OtherActor )->GetMesh();
-		if( !meshOnTile )
-			return;
-
-		MatStateOnTile = _ConvertMatAssetToMatState( meshOnTile->GetMaterial( 0 ) );*/
-	}
-	else
-	{
-		// 스테틱 매쉬
-		auto staticMesh = Cast<UStaticMeshComponent>( OtherActor->GetComponentByClass( UStaticMeshComponent::StaticClass() ) );
-		if( staticMesh )
-		{
-			matInterface = staticMesh->GetMaterial( 0 );
-			if( !matInterface )
-				return;
-		}
-
-		// 워터 바디
-		auto waterBody = Cast<UWaterBodyComponent>( OtherActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
-		if( waterBody )
-		{
-			matInterface = WaterMaterial;
-		}
-
-		// 랜드스케이프
-		auto landScape = Cast<ULandscapeComponent>( OtherActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
-		if( landScape )
-		{
-			auto proxy = landScape->GetLandscapeProxy();
-			if( !proxy )
-			{
-				if( GEngine )
-					GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, "proxy is null" );
-				return;
-			}
-
-			matInterface = proxy->GetLandscapeMaterial( 0 );
-			if( !matInterface )
-				return;
-		}
-	}
-
-	FString str = OwningCharacter->GetName() + TEXT( ": Material Change -> " )+ matInterface->GetName();
-	if( GEngine )
-		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
-
-	SetIsEnabledTileColl( false );
-	SetMatState( matInterface );
-	_PlayChangeEffect();
+	_ProcessCollision( OtherActor );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,6 +190,67 @@ EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface
 	}
 
 	return EMaterialState::MAX;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 충돌 처리를 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UMaterialProperty::_ProcessCollision( AActor* InOtherActor )
+{
+	UMaterialInterface* matInterface = nullptr;
+
+	// 몬스터나 플레이어
+	if( Cast<ACharacter>( InOtherActor ) )
+	{
+		/*auto meshOnTile = Cast<ACharacter>( OtherActor )->GetMesh();
+		if( !meshOnTile )
+			return;
+
+		MatStateOnTile = _ConvertMatAssetToMatState( meshOnTile->GetMaterial( 0 ) );*/
+	}
+	else
+	{
+		// 스테틱 매쉬
+		auto staticMesh = Cast<UStaticMeshComponent>( InOtherActor->GetComponentByClass( UStaticMeshComponent::StaticClass() ) );
+		if( staticMesh )
+		{
+			matInterface = staticMesh->GetMaterial( 0 );
+			if( !matInterface )
+				return;
+		}
+
+		// 워터 바디
+		auto waterBody = Cast<UWaterBodyComponent>( InOtherActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
+		if( waterBody )
+		{
+			matInterface = WaterMaterial;
+		}
+
+		// 랜드스케이프
+		auto landScape = Cast<ULandscapeComponent>( InOtherActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
+		if( landScape )
+		{
+			auto proxy = landScape->GetLandscapeProxy();
+			if( !proxy )
+			{
+				if( GEngine )
+					GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, "proxy is null" );
+				return;
+			}
+
+			matInterface = proxy->GetLandscapeMaterial( 0 );
+			if( !matInterface )
+				return;
+		}
+	}
+
+	FString str = OwningCharacter->GetName() + TEXT( ": Material Change -> " ) + matInterface->GetName();
+	if( GEngine )
+		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
+
+	SetIsEnabledTileColl( false );
+	SetMatState( matInterface );
+	_PlayChangeEffect();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -84,6 +84,9 @@ private:
 	// 머터리얼 애셋 주소를 EMaterialState로 바꿔준다.
 	EMaterialState _ConvertMatAssetToMatState( UMaterialInterface* InMaterial );
 
+	// 충돌 처리를 한다.
+	void _ProcessCollision( AActor* InOtherActor );
+
 	// 물질 변경 이펙트를 실행한다.
 	void _PlayChangeEffect();
 
