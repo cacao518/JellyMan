@@ -344,15 +344,13 @@ void UGameObject::_AnimStateChange()
 	if( !OwningCharacter->GetMesh()->GetAnimInstance() )
 		return;
 
-	auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
-	if( curMontage )
+	if( auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage(); curMontage )
 	{
 		AnimState = EAnimState::COMMON_ACTION;
 	}
 	else
 	{
-		auto moveComponent = OwningCharacter->GetMovementComponent();
-		if( moveComponent )
+		if( auto moveComponent = OwningCharacter->GetMovementComponent(); moveComponent )
 			moveComponent->IsFalling() ? AnimState = EAnimState::JUMP : AnimState = EAnimState::IDLE_RUN;
 	}
 }
