@@ -398,6 +398,9 @@ void UGameObject::_CheckDie()
 	if( AnimState == EAnimState::DIE )
 	{
 		//GetObjectManager().DestroyActor( OwningCharacter );
+
+		IsDie = true;
+
 		AMonsterAIController* monsterController = Cast< AMonsterAIController >( OwningCharacter->GetController() );
 		if( monsterController )
 			monsterController->StopAI();
