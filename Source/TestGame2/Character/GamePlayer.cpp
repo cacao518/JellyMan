@@ -189,6 +189,11 @@ void AGamePlayer::ProcessBothMouseDown()
 				animInstance->IsFly = true;
 		}
 		break;
+		case EMaterialState::ROCK:
+		{
+			GameObject->SkillPlay( 11 );
+		}
+		break;
 	}
 }
 
