@@ -5,6 +5,7 @@
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
+#include "../Manager/LockOnManager.h"
 #include "../Character/GamePlayer.h"
 
 
@@ -34,6 +35,7 @@ void UMyGameInstance::Init()
 	ObjectManager::CreateInstance();
 	DataInfoManager::CreateInstance();
 	CameraManager::CreateInstance();
+	LockOnManager::CreateInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,6 +48,7 @@ void UMyGameInstance::Shutdown()
 	ObjectManager::DestroyInstance();
 	DataInfoManager::DestroyInstance();
 	CameraManager::DestroyInstance();
+	LockOnManager::DestroyInstance();
 
 	GEngine->Exec( GWorld, TEXT( "Slate.SkipSecondPrepass 0" ) );
 }
@@ -57,6 +60,7 @@ void UMyGameInstance::Tick( float InDeltaTime )
 {
 	GetObjectManager().Tick( InDeltaTime );
 	GetCameraManager().Tick( InDeltaTime );
+	GetLockOnManager().Tick( InDeltaTime );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
