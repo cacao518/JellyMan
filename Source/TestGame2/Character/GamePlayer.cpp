@@ -7,6 +7,7 @@
 #include "../Component/MaterialProperty.h"
 #include "../Component/WeaponChange.h"
 #include "../Manager/DataInfoManager.h"
+#include "../Manager/LockOnManager.h"
 #include "Animation/AnimInstance.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Blueprint/UserWidget.h"
@@ -103,7 +104,6 @@ void AGamePlayer::Tick( float InDeltaTime )
 
 	_ProcessRotationRate();
 	_ProcessReadySkill( InDeltaTime );
-	_ProcessLockOn();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,13 +222,13 @@ void AGamePlayer::ProcessBothMouseUp()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGamePlayer::ProcessWheel()
 {
-	if( LockOnTarget )
+	if( GetLockOnManager().GetLockOnTarget() )
 	{
-		_LockOnRelease();
+		GetLockOnManager().LockOnRelease();
 		return;
 	}
 
-	_LockOnStart();
+	GetLockOnManager().LockOnStart();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -306,73 +306,6 @@ void AGamePlayer::_SetReadySkill( EInputKeyType InReadyInputKey )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 락온 시작
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void AGamePlayer::_LockOnStart()
-{
-	UWorld* world = GetWorld();
-	if( !world )
-		return;
-
-	FVector center = GetActorLocation();
-
-	TArray<FOverlapResult> overlapResults;
-	FCollisionQueryParams collisionQueryParam( NAME_None, false, this );
-	bool bResult = world->OverlapMultiByChannel(
-		overlapResults,
-		center,
-		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel4,
-		FCollisionShape::MakeSphere( Const::LOCKON_RANGE ),
-		collisionQueryParam
-	);
-
-	if( !bResult )
-		return;
-
-	// 제일 가까운 적이 락온 되도록 정렬
-	overlapResults.Sort( [ this ]( const auto& A, const auto& B ){
-		return A.GetActor()->GetDistanceTo( this ) < B.GetActor()->GetDistanceTo( this );
-		} );
-
-	for( FOverlapResult overlapResult : overlapResults )
-	{
-		ACharacter* character = Cast<ACharacter>( overlapResult.GetActor() );
-		if( !character )
-			continue;
-
-		if( auto widgetComp = Cast<UWidgetComponent>( character->GetDefaultSubobjectByName( TEXT( "LockOnMark" ) ) ) )
-		{
-			if( auto userWidget = Cast<UUserWidget>( widgetComp->GetUserWidgetObject() ) )
-			{
-				FOutputDeviceNull ar;
-				userWidget->CallFunctionByNameWithArguments( TEXT( "AnimStart" ), ar, NULL, true );
-				userWidget->SetVisibility( ESlateVisibility::SelfHitTestInvisible );
-
-				LockOnTarget = character;
-				return;
-			}
-		}
-	}
-
-	LockOnTarget = nullptr;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 락온 해제
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void AGamePlayer::_LockOnRelease()
-{
-	if( auto widgetComp = Cast<UWidgetComponent>( LockOnTarget->GetDefaultSubobjectByName( TEXT( "LockOnMark" ) ) ) )
-	{
-		if( auto userWidget = Cast<UUserWidget>( widgetComp->GetUserWidgetObject() ) )
-			userWidget->SetVisibility( ESlateVisibility::Collapsed );
-	}
-
-	LockOnTarget = nullptr;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 발동 대기중인 스킬 수행
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGamePlayer::_ProcessReadySkill( float InDeltaTime )
@@ -391,29 +324,6 @@ void AGamePlayer::_ProcessReadySkill( float InDeltaTime )
 		if( ReadySkillFunc )
 			ReadySkillFunc();
 	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 락온 기능 수행
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void AGamePlayer::_ProcessLockOn()
-{
-	if( !LockOnTarget )
-		return;
-
-	auto otherGameObject = Cast<UGameObject>( LockOnTarget->FindComponentByClass<UGameObject>() );
-	if( !otherGameObject )
-		return;
-
-	if( !GetValid( LockOnTarget ) || otherGameObject->GetAnimState() == EAnimState::DIE || LockOnTarget->GetDistanceTo( this ) > Const::LOCKON_RANGE )
-	{
-		_LockOnRelease();
-		return;
-	}
-
-	FRotator rotator = UKismetMathLibrary::FindLookAtRotation( GetActorLocation(), LockOnTarget->GetActorLocation() );
-	rotator.Pitch = GetControlRotation().Pitch;
-	GetController()->SetControlRotation( rotator );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

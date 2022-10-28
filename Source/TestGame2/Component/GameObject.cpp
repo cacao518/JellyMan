@@ -8,7 +8,9 @@
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
+#include "../Manager/LockOnManager.h"
 #include "../System/MonsterAIController.h"
+#include "../System/MyGameInstance.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
@@ -155,9 +157,9 @@ bool UGameObject::SkillPlay( int InSkillNum )
 		// 락온 상태에서 스킬 사용 시 적을 바라보게 할 것 인지 확인
 		if( skillInfo.LockOnLookAt )
 		{
-			AGamePlayer* player = Cast<AGamePlayer>( OwningCharacter );
-			if( player )
-				LookAt( player->GetLockOnTarget() );
+			AGamePlayer* myPlayer = GetMyGameInstance().GetMyPlayer();
+			if( myPlayer && myPlayer == OwningCharacter )
+				LookAt( GetLockOnManager().GetLockOnTarget() );
 		}
 
 		if( skillInfo.PlaySpeedType == ESkillPlaySpeedType::DEFAULT )

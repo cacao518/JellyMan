@@ -6,6 +6,7 @@
 #include "../System/MyAnimInstance.h"
 #include "../System/MyGameInstance.h"
 #include "../System/TestGame2GameMode.h"
+#include "../Manager/LockOnManager.h"
 #include "../ETC/CameraShakeEffect.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -86,7 +87,7 @@ void CameraManager::_ProcessCameraArm( float InDeltaTime )
 	else
 		cameraBoom->TargetArmLength = FMath::Lerp( cameraBoom->TargetArmLength, Const::DEFAULT_TARGET_ARM_LENGTH, InDeltaTime * 5.f );
 
-	if( player->GetLockOnTarget() )
+	if( GetLockOnManager().GetLockOnTarget() )
 		cameraBoom->CameraRotationLagSpeed = Const::LOCKON_CAMERA_ROTAION_LAG_SPEED;
 	else
 		cameraBoom->CameraRotationLagSpeed = 0.f;
