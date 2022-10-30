@@ -49,8 +49,6 @@ void UMyGameInstance::Shutdown()
 	DataInfoManager::DestroyInstance();
 	CameraManager::DestroyInstance();
 	LockOnManager::DestroyInstance();
-
-	GEngine->Exec( GWorld, TEXT( "Slate.SkipSecondPrepass 0" ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

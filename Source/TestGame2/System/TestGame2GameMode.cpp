@@ -31,6 +31,8 @@ void ATestGame2GameMode::BeginDestroy()
 
 void ATestGame2GameMode::Tick( float InDeltaTime )
 {
+	Super::Tick( InDeltaTime );
+
 	UMyGameInstance* gameInstance = Cast<UMyGameInstance>( GetGameInstance() );
 	if( !gameInstance )
 		return;

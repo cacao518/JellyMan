@@ -154,7 +154,7 @@ bool UGameObject::SkillPlay( int InSkillNum )
 				continue;
 		}
 
-		// 락온 상태에서 스킬 사용 시 적을 바라보게 할 것 인지 확인
+		// 락온 상태에서 스킬 사용 시 내 캐릭터가 적을 바라보게 할 것 인지 확인
 		if( skillInfo.LockOnLookAt )
 		{
 			AGamePlayer* myPlayer = GetMyGameInstance().GetMyPlayer();

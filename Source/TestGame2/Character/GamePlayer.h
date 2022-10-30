@@ -3,8 +3,6 @@
 #pragma once
 
 #include "../ETC/SDB.h"
-#include <functional>
-#include <map>
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GamePlayer.generated.h"
@@ -12,9 +10,6 @@
 
 class UAnimMontage;
 class USkeletalMeshComponent;
-
-
-using InputMap = map<EInputKeyType, function<void()> >;
 
 
 UCLASS(config=Game)
@@ -47,12 +42,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
-private:
-	InputMap              InputTypeAndFuncMap;  // Key:입력키종류, Value:입력키 함수
-	float                 ReadySkillResetTime;  // 발동 대기중인 스킬 초기화 시간
-	function<void()>      ReadySkillFunc;       // 발동 대기중인 마지막으로 입력한 스킬 함수
-	EInputKeyType         ReadySkillInputKey;   // 발동 대기중인 마지막으로 입력한 키 종류
-
 public:
 	AGamePlayer();
 
@@ -61,31 +50,4 @@ public:
 	virtual void Tick(float InDeltaTime) override;
 
 	virtual void Jump() override;
-
-	void ProcessLeftMouse();
-	void ProcessRightMouse();
-	void ProcessBothMouseDown();
-	void ProcessBothMouseUp();
-	void ProcessWheel();
-	void ProcessSpace();
-	void ProcessF();
-	void ProcessR();
-	void Process1();
-
-private:
-	// 발동 대기중 스킬 초기화
-	void _ResetReadySkill();
-
-	// 발동 대기중 스킬 설정
-	void _SetReadySkill( EInputKeyType InReadyInputKey );
-
-	///////////////////////////////////////////////////////////////////////
-	// Update
-	///////////////////////////////////////////////////////////////////////
-
-	// 발동 대기중인 스킬 수행
-	void _ProcessReadySkill( float InDeltaTime );
-
-	// 회전 비율 값을 셋팅한다.
-	void _ProcessRotationRate();
 };
