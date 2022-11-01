@@ -25,9 +25,6 @@ AMonster::AMonster()
 	// GameObject
 	GameObject = CreateDefaultSubobject<UGameObject>( TEXT( "GameObject" ) );
 
-	// Create a MaterialProperty Component
-	MatProperty = CreateDefaultSubobject<UMaterialProperty>( TEXT( "MatProperty" ) );
-
 	// Configure character movement
 	GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f );
 
