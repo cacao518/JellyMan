@@ -22,16 +22,20 @@
 
 
 UGameObject::UGameObject()
+:
+OwningCharacter     ( nullptr ),
+IsForceMove         ( false   ),
+IsEnabledAttackColl ( false   ),
+IsDie               ( false   ),
+IsFallWater         ( false   ),
+LandOnce            ( false   ),
+CanFallWater        ( true    ),
+CanMove             ( true    ),
+FallWaterTimeAmount ( 0       ),
+Type                ( EObjectType::MAX     ),
+AnimState           ( EAnimState::IDLE_RUN )
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	OwningCharacter = nullptr;
-	IsForceMove = false;
-	IsEnabledAttackColl = false;
-	IsDie = false;
-	IsFallWater = false;
-	LandOnce = false;
-	FallWaterTimeAmount = 0;
-	AnimState = EAnimState::IDLE_RUN;
 }
 
 UGameObject::~UGameObject()
@@ -377,7 +381,7 @@ void UGameObject::_Move()
 	}
 	else
 	{
-		if( IsForceMove )
+		if( IsForceMove && CanMove )
 		{
 			float dest_X = FMath::Lerp( characterMovement->GetActorLocation().X, MovePos.X, GetWorld()->GetDeltaSeconds() * Const::ANIM_LERP_MULITPLIER );
 			float dest_Y = FMath::Lerp( characterMovement->GetActorLocation().Y, MovePos.Y, GetWorld()->GetDeltaSeconds() * Const::ANIM_LERP_MULITPLIER );
@@ -525,7 +529,9 @@ void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 	auto charMatProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->FindComponentByClass<UMaterialProperty>() ) : nullptr;
 	if( charMatProperty )
 	{
-		if( charMatProperty->GetMatState() == EMaterialState::GRASS || charMatProperty->GetMatState() == EMaterialState::WATER )
+		if( !CanFallWater ||
+			charMatProperty->GetMatState() == EMaterialState::GRASS || 
+			charMatProperty->GetMatState() == EMaterialState::WATER )
 			return;
 	}
 

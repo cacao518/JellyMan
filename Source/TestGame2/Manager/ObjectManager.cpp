@@ -1,6 +1,8 @@
 
 #include "ObjectManager.h"
 #include "Engine/World.h"
+#include "../Character/GamePlayer.h"
+#include "../Character/Monster.h"
 #include "../System/MyGameInstance.h"
 #include "../Component/GameObject.h"
 #include "NiagaraSystem.h"
@@ -54,7 +56,10 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 
 		auto gameObject = newActor ? Cast<UGameObject>( newActor->FindComponentByClass<UGameObject>() ) : nullptr;
 		if( gameObject )
-			gameObject->SetId( ObjectId );
+		{
+			gameObject->SetId  ( ObjectId );
+			gameObject->SetType( _GetObjectType( newActor ) );
+		}
 
 		Objects.Add( ObjectId, newActor );
 		SpawnerMap.Add( ObjectId, InSpawner );
@@ -144,4 +149,20 @@ void ObjectManager::SpawnActorInSpawner( float InDeltaTime )
 			spawner->ResetSpawnIntervalCount();
 		}
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 오브젝트 타입을 알아낸다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+EObjectType ObjectManager::_GetObjectType( AActor* InActor )
+{
+	if( !InActor )
+		return EObjectType::MAX;
+
+	if( auto gamePlayer = Cast<AGamePlayer>( InActor ) )
+		return EObjectType::PC;
+	else if( auto monster = Cast<AMonster>( InActor ) )
+		return EObjectType::NPC;
+
+	return EObjectType::MAX;
 }

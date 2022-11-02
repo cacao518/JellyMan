@@ -21,6 +21,12 @@ class TESTGAME2_API UGameObject final : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay )
+	int                Id;                      // 오브젝트 아이디 값
+
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay )
+	EObjectType        Type;                    // 오브젝트 타입
+
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	FStatusInfo        Stat;                    // 능력치
 
@@ -33,8 +39,13 @@ public:
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	UAnimMontage*      LandAnim;                // 착지 애니메이션
 
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
+	bool               CanFallWater;            // 물에 빠질 수 있는지 여부
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
+	bool               CanMove;                 // 이동할 수 있는지 여부
+
 private:
-	int                Id;                      // 오브젝트 아이디 값
 	ACharacter*        OwningCharacter;         // 부모 캐릭터 클래스
 	EAnimState         AnimState;       	    // 애니메이션 상태
 	FCollisionInfo     AttackCollInfo;          // 공격 콜리전 정보
@@ -85,6 +96,9 @@ public:
 
 	// 오브젝트 아이디를 셋팅한다.
 	void SetId( int InId ){ Id = InId; };
+
+	// 오브젝트 타입을 셋팅한다.
+	void SetType( EObjectType InType ){ Type = InType; };
 
 	// 공격 콜리전 정보를 셋팅한다.
 	void SetAttackCollInfo( const FCollisionInfo& InAttackCollInfo );
