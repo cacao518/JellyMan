@@ -41,7 +41,7 @@ private:
 			for( auto& [_, value] : dt->GetRowMap() )
 			{
 				T1* row = (T1*)value;
-				InInfoMap.Add( row->State, *row );
+				InInfoMap.Add( row->GetKey(), *row );
 			}
 		}
 	}

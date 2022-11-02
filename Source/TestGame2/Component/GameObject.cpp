@@ -23,17 +23,17 @@
 
 UGameObject::UGameObject()
 :
-OwningCharacter     ( nullptr ),
-IsForceMove         ( false   ),
-IsEnabledAttackColl ( false   ),
-IsDie               ( false   ),
-IsFallWater         ( false   ),
-LandOnce            ( false   ),
+Type                ( EObjectType::MAX ),
 CanFallWater        ( true    ),
 CanMove             ( true    ),
-FallWaterTimeAmount ( 0       ),
-Type                ( EObjectType::MAX     ),
-AnimState           ( EAnimState::IDLE_RUN )
+OwningCharacter     ( nullptr ),
+AnimState           ( EAnimState::IDLE_RUN ),
+IsDie               ( false   ),
+IsFallWater         ( false   ),
+IsForceMove         ( false   ),
+IsEnabledAttackColl ( false   ),
+LandOnce            ( false   ),
+FallWaterTimeAmount ( 0       )
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }

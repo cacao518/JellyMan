@@ -222,6 +222,9 @@ public:
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FString AssetPath;       // 애셋 경로
+
+	/// 맵 키를 반환한다.
+	EMaterialState GetKey(){ return State; };
 };
 
 // 무기 정보
@@ -242,6 +245,9 @@ public:
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FName ComponentName;        // 스테틱 메쉬 컴포넌트 이름
+
+	/// 맵 키를 반환한다.
+	EWeaponState GetKey(){ return State; };
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
