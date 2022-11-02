@@ -14,9 +14,9 @@ class AActorSpawner;
 class UNiagaraSystem;
 
 
-using ActorMap         = unordered_map< int, AActor* >;
-using SpawnerMap       = unordered_map< int, AActorSpawner* >;
-using ActorSpawnerList = list< AActorSpawner* >;
+using ActorMap         = TMap< int, AActor* >;
+using SpawnerMap       = TMap< int, AActorSpawner* >;
+using ActorSpawnerList = TArray< AActorSpawner* >;
 
 
 class ObjectManager final : public SingletonBase< ObjectManager>

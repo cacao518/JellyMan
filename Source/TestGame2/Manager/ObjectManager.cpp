@@ -32,11 +32,9 @@ void ObjectManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, AActorSpawner* InSpawner )
 {
-	if( Objects.find( ObjectId ) != Objects.end() )
+	if( AActor* actor = Objects.FindRef( ObjectId ) )
 	{
-		AActor* actor = Objects.find( ObjectId )->second;
 		actor->SetActorLocationAndRotation( InLocation, InRotator );
-
 		return actor;
 	}
 	else
@@ -50,19 +48,19 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		if( !World )
 			return nullptr;
 
-		AActor* actor = World->SpawnActor< AActor >( InClass, InLocation, InRotator );
-		if( !actor )
+		AActor* newActor = World->SpawnActor< AActor >( InClass, InLocation, InRotator );
+		if( !newActor )
 			return nullptr;
 
-		auto gameObject = actor ? Cast<UGameObject>( actor->FindComponentByClass<UGameObject>() ) : nullptr;
+		auto gameObject = newActor ? Cast<UGameObject>( newActor->FindComponentByClass<UGameObject>() ) : nullptr;
 		if( gameObject )
 			gameObject->SetId( ObjectId );
 
-		Objects[ ObjectId ] = actor;
-		SpawnerMap[ ObjectId ] = InSpawner;
+		Objects.Add( ObjectId, newActor );
+		SpawnerMap.Add( ObjectId, InSpawner );
 
 		ObjectId++;
-		return actor;
+		return newActor;
 	}
 }
 
@@ -88,12 +86,12 @@ void ObjectManager::DestroyActor( AActor* InActor )
 	if( !gameObject )
 		return;
 
-	if( Objects.find( gameObject->GetId() ) != Objects.end() )
+	if( Objects.Find( gameObject->GetId() ) )
 	{
 		InActor->Destroy();
-		Objects.erase( gameObject->GetId() );
+		Objects.Remove( gameObject->GetId() );
 
-		if( AActorSpawner* spawner = SpawnerMap[ gameObject->GetId() ] )
+		if( AActorSpawner* spawner = SpawnerMap.FindRef( gameObject->GetId() ) )
 		{
 			spawner->SubSpawnCountInWorld();
 			spawner->ResetSpawnIntervalCount();
@@ -112,9 +110,9 @@ void ObjectManager::DestroyActor( AActor* InActor )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void ObjectManager::Clear()
 {
-	Objects.clear();
-	SpawnerList.clear();
-	SpawnerMap.clear();
+	Objects.Empty();
+	SpawnerList.Empty();
+	SpawnerMap.Empty();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +123,7 @@ void ObjectManager::RegisterSpawner( AActorSpawner* InSpawner )
 	if( !InSpawner )
 		return;
 
-	SpawnerList.push_back( InSpawner );
+	SpawnerList.Add( InSpawner );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
