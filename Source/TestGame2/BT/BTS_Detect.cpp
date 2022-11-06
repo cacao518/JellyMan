@@ -55,9 +55,9 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, character );
 
 				// µð¹ö±ë ¿ë.
-				DrawDebugSphere( world, center, DetectRadius, 16, FColor::Green, false, 0.2f );
-				DrawDebugPoint( world, character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f );
-				DrawDebugLine( world, controllingPawn->GetActorLocation(), character->GetActorLocation(), FColor::Blue, false, 0.2f );
+				//DrawDebugSphere( world, center, DetectRadius, 16, FColor::Green, false, 0.2f );
+				//DrawDebugPoint( world, character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f );
+				//DrawDebugLine( world, controllingPawn->GetActorLocation(), character->GetActorLocation(), FColor::Blue, false, 0.2f );
 				return;
 			}
 		}
@@ -69,5 +69,5 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, nullptr );
 	}
 
-	DrawDebugSphere( world, center, DetectRadius, 16, FColor::Red, false, 0.2f );
+	/*DrawDebugSphere( world, center, DetectRadius, 16, FColor::Red, false, 0.2f );*/
 }
