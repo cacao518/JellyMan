@@ -78,8 +78,7 @@ void UGameObject::ResetInfo( bool InForceReset )
 {
 	if( InForceReset ||
 		AnimState == EAnimState::IDLE_RUN ||
-		AnimState == EAnimState::JUMP ||
-		AnimState == EAnimState::DIE )
+		AnimState == EAnimState::JUMP )
 	{
 		SetIsEnabledAttackColl( false );
 		SetAttackCollInfo( FCollisionInfo() );
@@ -374,10 +373,6 @@ void UGameObject::_Move()
 	if( AnimState == EAnimState::IDLE_RUN || AnimState == EAnimState::JUMP )
 	{
 		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * Const::DEFAULT_MOVE_SPEED;
-	}
-	else if( AnimState == EAnimState::DIE )
-	{
-		characterMovement->MaxWalkSpeed = 0;
 	}
 	else
 	{
