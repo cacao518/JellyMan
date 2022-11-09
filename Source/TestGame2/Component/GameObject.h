@@ -39,12 +39,6 @@ public:
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	UAnimMontage*      LandAnim;                // 착지 애니메이션
 
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	bool               CanFallWater;            // 물에 빠질 수 있는지 여부
-
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	bool               CanMove;                 // 이동할 수 있는지 여부
-
 private:
 	ACharacter*        OwningCharacter;         // 부모 캐릭터 클래스
 	EAnimState         AnimState;       	    // 애니메이션 상태

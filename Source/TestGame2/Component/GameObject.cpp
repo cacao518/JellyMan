@@ -24,8 +24,6 @@
 UGameObject::UGameObject()
 :
 Type                ( EObjectType::MAX ),
-CanFallWater        ( true    ),
-CanMove             ( true    ),
 OwningCharacter     ( nullptr ),
 AnimState           ( EAnimState::IDLE_RUN ),
 IsDie               ( false   ),
@@ -376,7 +374,7 @@ void UGameObject::_Move()
 	}
 	else
 	{
-		if( IsForceMove && CanMove )
+		if( IsForceMove )
 		{
 			float dest_X = FMath::Lerp( characterMovement->GetActorLocation().X, MovePos.X, GetWorld()->GetDeltaSeconds() * Const::ANIM_LERP_MULITPLIER );
 			float dest_Y = FMath::Lerp( characterMovement->GetActorLocation().Y, MovePos.Y, GetWorld()->GetDeltaSeconds() * Const::ANIM_LERP_MULITPLIER );
@@ -524,8 +522,7 @@ void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 	auto charMatProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->FindComponentByClass<UMaterialProperty>() ) : nullptr;
 	if( charMatProperty )
 	{
-		if( !CanFallWater ||
-			charMatProperty->GetMatState() == EMaterialState::GRASS || 
+		if( charMatProperty->GetMatState() == EMaterialState::GRASS || 
 			charMatProperty->GetMatState() == EMaterialState::WATER )
 			return;
 	}
