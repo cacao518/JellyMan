@@ -115,6 +115,9 @@ public:
 	// 방어력을 설정한다.
 	void SetDefensePower( float InDefensePower ){ Stat.DefensePower = InDefensePower; };
 
+	// 강인함을 설정한다.
+	void SetStrength( float InStrength ){ Stat.Strength = InStrength; };
+
 	// 강제 이동 여부를 셋팅한다.
 	void SetIsForceMove( bool InIsForceMove ){ IsForceMove = InIsForceMove; };
 

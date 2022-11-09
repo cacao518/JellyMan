@@ -487,7 +487,7 @@ void UGameObject::_ProcessHit( AActor* InOtherActor )
 	Stat.Hp = decrease > 0 ? decrease : 0;
 
 	// °æÁ÷
-	if( Stat.Hpm * ( 0.1f + ( Stat.Strength * 0.005f ) ) < totalDamage )
+	if( Stat.Hpm * ( 0.1f + ( Stat.Strength * 0.01f ) ) < totalDamage )
 	{
 		MontagePlay( HitAnim, 1.0f + ( Stat.Strength * 0.01f ) );
 		LookAt( Cast<ACharacter>( InOtherActor ) );

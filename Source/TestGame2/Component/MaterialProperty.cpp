@@ -169,6 +169,7 @@ void UMaterialProperty::_InitStatus()
 		gameObject->SetJumpPower   ( matInfo->JumpPower	  * gameObject->GetInitStat().JumpPower );
 		gameObject->SetAttackPower ( matInfo->Mass		  * gameObject->GetInitStat().AttackPower );
 		gameObject->SetDefensePower( matInfo->Mass		  * gameObject->GetInitStat().DefensePower );
+		gameObject->SetStrength    ( matInfo->Mass        * gameObject->GetInitStat().Strength  );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( matInfo->CollisonName );
 
 		MatEnergy    = matInfo->MatEnergyMax;
