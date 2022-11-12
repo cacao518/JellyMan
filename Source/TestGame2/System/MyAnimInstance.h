@@ -23,4 +23,7 @@ public:
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	bool         IsFly;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
+	bool         IsDie;
 };

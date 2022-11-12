@@ -11,6 +11,7 @@
 #include "../Manager/LockOnManager.h"
 #include "../System/MonsterAIController.h"
 #include "../System/MyGameInstance.h"
+#include "../System/MyAnimInstance.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
@@ -394,19 +395,25 @@ void UGameObject::_CheckDie()
 	if( !OwningCharacter )
 		return;
 
-	if( AnimState == EAnimState::DIE )
+	if( !IsDie && AnimState == EAnimState::DIE )
 	{
-		//GetObjectManager().DestroyActor( OwningCharacter );
-
 		IsDie = true;
 
 		AMonsterAIController* monsterController = Cast< AMonsterAIController >( OwningCharacter->GetController() );
 		if( monsterController )
 			monsterController->StopAI();
 
-		OwningCharacter->GetMesh()->SetSimulatePhysics( true );
 		OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( TEXT( "NoCollision" ) );
+
+		if( UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
+		{
+			auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
+			animInstance->Montage_Stop( 0.f, curMontage );
+			animInstance->IsDie = true;
+		}
+
+		//GetObjectManager().DestroyActor( OwningCharacter );
 	}
 }
 
