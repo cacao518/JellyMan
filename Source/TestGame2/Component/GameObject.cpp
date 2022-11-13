@@ -5,6 +5,7 @@
 #include "WeaponChange.h"
 #include "../ETC/SDB.h"
 #include "../Character/GamePlayer.h"
+#include "../Character/Monster.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
@@ -24,7 +25,6 @@
 
 UGameObject::UGameObject()
 :
-Type                ( EObjectType::MAX ),
 OwningCharacter     ( nullptr ),
 AnimState           ( EAnimState::IDLE_RUN ),
 IsDie               ( false   ),
@@ -278,6 +278,22 @@ FString UGameObject::GetCurMontageName()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 오브젝트 타입을 알아낸다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+EObjectType UGameObject::GetObjectType()
+{
+	if( !OwningCharacter )
+		return EObjectType::MAX;
+
+	if( auto gamePlayer = Cast< AGamePlayer >( OwningCharacter ) )
+		return EObjectType::PC;
+	else if( auto monster = Cast< AMonster >( OwningCharacter ) )
+		return EObjectType::NPC;
+
+	return EObjectType::MAX;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 해당 스킬이 쿨타임이 돌고 있는지 여부를 반환한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UGameObject::IsCoolingSkill( int InSkillNum )
@@ -399,7 +415,7 @@ void UGameObject::_CheckDie()
 	if( !IsDie && AnimState == EAnimState::DIE )
 	{
 		IsDie = true;
-		if( Type == EObjectType::NPC )
+		if( GetObjectType() == EObjectType::NPC )
 		{
 			AMonsterAIController* monsterController = Cast< AMonsterAIController >( OwningCharacter->GetController() );
 			if( monsterController )
@@ -408,7 +424,7 @@ void UGameObject::_CheckDie()
 			OwningCharacter->GetMesh()->SetSimulatePhysics( true );
 			GetObjectManager().SpawnParticle( TEXT( "Smoke" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
 		}
-		else
+		else if( GetObjectType() == EObjectType::PC )
 		{
 			if( UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
 			{

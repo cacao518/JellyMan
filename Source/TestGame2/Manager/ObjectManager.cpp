@@ -58,7 +58,6 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		if( gameObject )
 		{
 			gameObject->SetId  ( ObjectId );
-			gameObject->SetType( _GetObjectType( newActor ) );
 		}
 
 		Objects.Add( ObjectId, newActor );
@@ -149,20 +148,4 @@ void ObjectManager::SpawnActorInSpawner( float InDeltaTime )
 			spawner->ResetSpawnIntervalCount();
 		}
 	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 오브젝트 타입을 알아낸다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-EObjectType ObjectManager::_GetObjectType( AActor* InActor )
-{
-	if( !InActor )
-		return EObjectType::MAX;
-
-	if( auto gamePlayer = Cast<AGamePlayer>( InActor ) )
-		return EObjectType::PC;
-	else if( auto monster = Cast<AMonster>( InActor ) )
-		return EObjectType::NPC;
-
-	return EObjectType::MAX;
 }

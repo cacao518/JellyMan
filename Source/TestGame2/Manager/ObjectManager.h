@@ -66,9 +66,5 @@ public:
 	// 스포너에서 스폰한다.
 	void SpawnActorInSpawner( float InDeltaTime );
 
-private:
-	/// 오브젝트 타입을 알아낸다.
-	EObjectType _GetObjectType( AActor* InActor );
-
 };
 inline ObjectManager& GetObjectManager() { return ObjectManager::GetInstance(); };

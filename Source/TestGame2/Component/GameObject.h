@@ -24,9 +24,6 @@ public:
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay )
 	int                Id;                      // 오브젝트 아이디 값
 
-	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay )
-	EObjectType        Type;                    // 오브젝트 타입
-
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	FStatusInfo        Stat;                    // 능력치
 
@@ -91,9 +88,6 @@ public:
 	// 오브젝트 아이디를 셋팅한다.
 	void SetId( int InId ){ Id = InId; };
 
-	// 오브젝트 타입을 셋팅한다.
-	void SetType( EObjectType InType ){ Type = InType; };
-
 	// 공격 콜리전 정보를 셋팅한다.
 	void SetAttackCollInfo( const FCollisionInfo& InAttackCollInfo );
 
@@ -136,6 +130,9 @@ public:
 	
 	// 현재 몽타주 이름을 반환한다.
 	FString GetCurMontageName();
+
+    // 오브젝트 타입을 알아낸다.
+	EObjectType GetObjectType();
 
 	// 공격 콜리전 정보를 반환한다.
 	const FCollisionInfo& GetAttackCollInfo() { return AttackCollInfo; };
