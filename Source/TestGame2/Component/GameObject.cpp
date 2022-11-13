@@ -77,7 +77,8 @@ void UGameObject::ResetInfo( bool InForceReset )
 {
 	if( InForceReset ||
 		AnimState == EAnimState::IDLE_RUN ||
-		AnimState == EAnimState::JUMP )
+		AnimState == EAnimState::JUMP ||
+		AnimState == EAnimState::DIE )
 	{
 		SetIsEnabledAttackColl( false );
 		SetAttackCollInfo( FCollisionInfo() );
@@ -398,22 +399,27 @@ void UGameObject::_CheckDie()
 	if( !IsDie && AnimState == EAnimState::DIE )
 	{
 		IsDie = true;
+		if( Type == EObjectType::NPC )
+		{
+			AMonsterAIController* monsterController = Cast< AMonsterAIController >( OwningCharacter->GetController() );
+			if( monsterController )
+				monsterController->StopAI();
 
-		AMonsterAIController* monsterController = Cast< AMonsterAIController >( OwningCharacter->GetController() );
-		if( monsterController )
-			monsterController->StopAI();
+			OwningCharacter->GetMesh()->SetSimulatePhysics( true );
+			GetObjectManager().SpawnParticle( TEXT( "Smoke" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
+		}
+		else
+		{
+			if( UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
+			{
+				auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
+				animInstance->Montage_Stop( 0.f, curMontage );
+				animInstance->IsDie = true;
+			}
+		}
 
 		OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( TEXT( "NoCollision" ) );
-
-		if( UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
-		{
-			auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
-			animInstance->Montage_Stop( 0.f, curMontage );
-			animInstance->IsDie = true;
-		}
-
-		//GetObjectManager().DestroyActor( OwningCharacter );
 	}
 }
 
