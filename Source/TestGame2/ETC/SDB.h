@@ -12,10 +12,10 @@ using namespace std;
 UENUM( BlueprintType )
 enum class EObjectType : uint8
 {
-	PC         UMETA( DisplayName = "PC" ),
-	NPC        UMETA( DisplayName = "NPC" ),
-	PROJECTILE UMETA( DisplayName = "PROJECTILE" ),
-	OBJECT     UMETA( DisplayName = "OBJECT" ),
+	PC				  UMETA( DisplayName = "PC" ),
+	NPC				  UMETA( DisplayName = "NPC" ),
+	PROJECTILE        UMETA( DisplayName = "PROJECTILE" ),
+	GROUND_OBJECT     UMETA( DisplayName = "GROUND_OBJECT" ),
 	MAX,
 };
 
