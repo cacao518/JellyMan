@@ -6,6 +6,7 @@
 #include "../ETC/SDB.h"
 #include "../Character/GamePlayer.h"
 #include "../Character/Monster.h"
+#include "../Character/GroundObject.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
@@ -289,6 +290,8 @@ EObjectType UGameObject::GetObjectType()
 		return EObjectType::PC;
 	else if( auto monster = Cast< AMonster >( OwningCharacter ) )
 		return EObjectType::NPC;
+	else if( auto groundObject = Cast< AGroundObject >( OwningCharacter ) )
+		return EObjectType::GROUND_OBJECT;
 
 	return EObjectType::MAX;
 }
@@ -415,7 +418,7 @@ void UGameObject::_CheckDie()
 	if( !IsDie && AnimState == EAnimState::DIE )
 	{
 		IsDie = true;
-		if( GetObjectType() == EObjectType::NPC )
+		if( GetObjectType() == EObjectType::NPC || GetObjectType() == EObjectType::GROUND_OBJECT )
 		{
 			AMonsterAIController* monsterController = Cast< AMonsterAIController >( OwningCharacter->GetController() );
 			if( monsterController )
