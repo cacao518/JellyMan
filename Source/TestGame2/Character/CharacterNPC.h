@@ -5,14 +5,14 @@
 #include "../ETC/SDB.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Monster.generated.h"
+#include "CharacterNPC.generated.h"
 
 
 class UAnimMontage;
 
 
 UCLASS()
-class TESTGAME2_API AMonster final : public ACharacter
+class TESTGAME2_API ACharacterNPC final : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -34,7 +34,7 @@ public:
 
 public:
 	// Sets default values for this character's properties
-	AMonster();
+	ACharacterNPC();
 
 protected:
 	// Called when the game starts or when spawned

@@ -3,7 +3,7 @@
 
 #include "BTT_FindPatrolPos.h"
 #include "../System/MonsterAIController.h"
-#include "../Character/Monster.h"
+#include "../Character/CharacterNPC.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationSystem.h"
 
@@ -22,12 +22,12 @@ EBTNodeResult::Type UBTT_FindPatrolPos::ExecuteTask( UBehaviorTreeComponent& Own
 	if( !navSystem )
 		return EBTNodeResult::Failed;
 
-	AMonster* controllingMonster = Cast< AMonster >( OwnerComp.GetAIOwner()->GetPawn() );
-	if( !controllingMonster )
+	ACharacterNPC* controllingCharacterNPC = Cast< ACharacterNPC >( OwnerComp.GetAIOwner()->GetPawn() );
+	if( !controllingCharacterNPC )
 		return EBTNodeResult::Failed;
 
-	PatrolRadius = controllingMonster->PatrolRange;
-	FVector origin = controllingMonster->GetActorLocation();
+	PatrolRadius = controllingCharacterNPC->PatrolRange;
+	FVector origin = controllingCharacterNPC->GetActorLocation();
 	FNavLocation nextPatrol;
 	if( navSystem->GetRandomPointInNavigableRadius( origin, PatrolRadius, nextPatrol ) )
 	{

@@ -2,7 +2,7 @@
 #include "LockOnManager.h"
 #include "Engine/World.h"
 #include "../Component/GameObject.h"
-#include "../Character/GamePlayer.h"
+#include "../Character/CharacterPC.h"
 #include "../System/MyAnimInstance.h"
 #include "../System/MyGameInstance.h"
 #include "../System/TestGame2GameMode.h"
@@ -42,7 +42,7 @@ void LockOnManager::LockOnStart()
 	if( !world )
 		return;
 
-	AGamePlayer* myPlayer = GetMyGameInstance().GetMyPlayer();
+	ACharacterPC* myPlayer = GetMyGameInstance().GetMyPlayer();
 	if( !myPlayer )
 		return;
 
@@ -112,7 +112,7 @@ void LockOnManager::_ProcessLockOn()
 	if( !LockOnTarget )
 		return;
 
-	AGamePlayer* myPlayer = GetMyGameInstance().GetMyPlayer();
+	ACharacterPC* myPlayer = GetMyGameInstance().GetMyPlayer();
 	if( !myPlayer )
 		return;
 

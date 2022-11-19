@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "GamePlayer.h"
+#include "CharacterPC.h"
 #include "../System/MyPlayerController.h"
 #include "../System/MyAnimInstance.h"
 #include "../Component/GameObject.h"
@@ -23,7 +23,7 @@
 using namespace Const;
 
 
-AGamePlayer::AGamePlayer()
+ACharacterPC::ACharacterPC()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -78,7 +78,7 @@ AGamePlayer::AGamePlayer()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief BeginPlay
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void AGamePlayer::BeginPlay()
+void ACharacterPC::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -88,7 +88,7 @@ void AGamePlayer::BeginPlay()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief Tick
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void AGamePlayer::Tick( float InDeltaTime )
+void ACharacterPC::Tick( float InDeltaTime )
 {
 	Super::Tick(InDeltaTime);
 }
@@ -96,7 +96,7 @@ void AGamePlayer::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief มกวม 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void AGamePlayer::Jump()
+void ACharacterPC::Jump()
 {
 	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
 		Super::Jump();

@@ -5,7 +5,7 @@
 #include "../Component/MaterialProperty.h"
 #include "../Component/WeaponChange.h"
 #include "../Manager/LockOnManager.h"
-#include "../Character/GamePlayer.h"
+#include "../Character/CharacterPC.h"
 #include "../System/MyAnimInstance.h"
 #include "../System/MyGameInstance.h"
 #include "../ETC/SDB.h"
@@ -27,7 +27,7 @@ void AMyPlayerController::BeginPlay()
 
 	PrimaryActorTick.bCanEverTick = true;
 
-	MyPlayer = Cast<AGamePlayer>( GetPawn() );
+	MyPlayer = Cast<ACharacterPC>( GetPawn() );
 	if( !MyPlayer )
 		return;
 

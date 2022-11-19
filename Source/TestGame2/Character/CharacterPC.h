@@ -5,7 +5,7 @@
 #include "../ETC/SDB.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "GamePlayer.generated.h"
+#include "CharacterPC.generated.h"
 
 
 class UAnimMontage;
@@ -13,7 +13,7 @@ class USkeletalMeshComponent;
 
 
 UCLASS(config=Game)
-class AGamePlayer final : public ACharacter
+class ACharacterPC final : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -43,7 +43,7 @@ public:
 	class UCameraComponent* FollowCamera;
 
 public:
-	AGamePlayer();
+	ACharacterPC();
 
 	virtual void BeginPlay() override;
 

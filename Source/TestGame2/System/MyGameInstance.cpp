@@ -6,7 +6,7 @@
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
 #include "../Manager/LockOnManager.h"
-#include "../Character/GamePlayer.h"
+#include "../Character/CharacterPC.h"
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ void UMyGameInstance::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 자신의 플레이어를 반환한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-AGamePlayer* UMyGameInstance::GetMyPlayer()
+ACharacterPC* UMyGameInstance::GetMyPlayer()
 {
 	UWorld* world = GetWorld();
 	if( !world )
@@ -74,7 +74,7 @@ AGamePlayer* UMyGameInstance::GetMyPlayer()
 	if( !controller )
 		return nullptr;
 
-	AGamePlayer* player = Cast<AGamePlayer>( controller->GetPawn() );
+	ACharacterPC* player = Cast<ACharacterPC>( controller->GetPawn() );
 	if( !player )
 		return nullptr;
 

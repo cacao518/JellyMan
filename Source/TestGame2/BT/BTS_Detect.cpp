@@ -4,7 +4,7 @@
 #include "BTS_Detect.h"
 #include "GameFramework/Character.h"
 #include "../System/MonsterAIController.h"
-#include "../Character/Monster.h"
+#include "../Character/CharacterNPC.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 
@@ -26,8 +26,8 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 	if( !world )
 		return;
 
-	if( AMonster* controllingMonster = Cast< AMonster >( OwnerComp.GetAIOwner()->GetPawn() ) )
-		DetectRadius = controllingMonster->DetectRange;
+	if( ACharacterNPC* controllingCharacterNPC = Cast< ACharacterNPC >( OwnerComp.GetAIOwner()->GetPawn() ) )
+		DetectRadius = controllingCharacterNPC->DetectRange;
 
 	FVector center = controllingPawn->GetActorLocation();
 

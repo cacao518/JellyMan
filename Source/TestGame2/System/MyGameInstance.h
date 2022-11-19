@@ -8,7 +8,7 @@
 #include "MyGameInstance.generated.h"
 
 
-class AGamePlayer;
+class ACharacterPC;
 
 
 UCLASS()
@@ -25,7 +25,7 @@ public:
 	void Tick( float DeltaTime );
 
 	// 자신의 플레이어를 반환한다.
-	AGamePlayer* GetMyPlayer();
+	ACharacterPC* GetMyPlayer();
 
 	// 자신의 컨트롤러를 반환한다.
 	APlayerController* GetMyController();

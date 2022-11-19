@@ -13,7 +13,7 @@
 #include "LandscapeComponent.h"
 #include "LandscapeProxy.h"
 #include "NiagaraSystem.h"
-#include "../Character/GamePlayer.h"
+#include "../Character/CharacterPC.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/ObjectManager.h"
 #include "../System/MyAnimInstance.h"

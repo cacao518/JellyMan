@@ -10,7 +10,7 @@
 #include "MyPlayerController.generated.h"
 
 
-class AGamePlayer;
+class ACharacterPC;
 class UGameObject;
 class UMaterialProperty;
 class UWeaponChange;
@@ -25,7 +25,7 @@ class TESTGAME2_API AMyPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 private:
-	AGamePlayer*             MyPlayer;
+	ACharacterPC*             MyPlayer;
 	UGameObject*             GameObject;
 	UMaterialProperty*       MatProperty;
 	UWeaponChange*           WeaponChange;

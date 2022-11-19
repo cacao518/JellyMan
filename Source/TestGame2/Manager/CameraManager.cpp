@@ -2,7 +2,7 @@
 #include "CameraManager.h"
 #include "Engine/World.h"
 #include "../Component/GameObject.h"
-#include "../Character/GamePlayer.h"
+#include "../Character/CharacterPC.h"
 #include "../System/MyAnimInstance.h"
 #include "../System/MyGameInstance.h"
 #include "../System/TestGame2GameMode.h"
@@ -36,7 +36,7 @@ void CameraManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void CameraManager::CameraShake( float InScale, bool InShakeByWeight )
 {
-	AGamePlayer* player = GetMyGameInstance().GetMyPlayer();
+	ACharacterPC* player = GetMyGameInstance().GetMyPlayer();
 	if( !player )
 		return;
 	
@@ -70,7 +70,7 @@ void CameraManager::CameraShake( float InScale, bool InShakeByWeight )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void CameraManager::_ProcessCameraArm( float InDeltaTime )
 {
-	AGamePlayer* player = GetMyGameInstance().GetMyPlayer();
+	ACharacterPC* player = GetMyGameInstance().GetMyPlayer();
 	if( !player )
 		return;
 

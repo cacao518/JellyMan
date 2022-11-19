@@ -3,7 +3,7 @@
 #include "TestGame2GameMode.h"
 #include "MyPlayerController.h"
 #include "MyGameInstance.h"
-#include "../Character/GamePlayer.h"
+#include "../Character/CharacterPC.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 

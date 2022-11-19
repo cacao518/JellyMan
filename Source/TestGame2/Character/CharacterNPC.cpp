@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Monster.h"
+#include "CharacterNPC.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Component/GameObject.h"
 #include "../Component/MaterialProperty.h"
@@ -9,7 +9,7 @@
 #include "Components/BoxComponent.h"
 
 // Sets default values
-AMonster::AMonster()
+ACharacterNPC::ACharacterNPC()
 {
 	AIControllerClass = AMonsterAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
@@ -40,7 +40,7 @@ AMonster::AMonster()
 }
 
 // Called when the game starts or when spawned
-void AMonster::BeginPlay()
+void ACharacterNPC::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -48,7 +48,7 @@ void AMonster::BeginPlay()
 }
 
 // Called every frame
-void AMonster::Tick(float DeltaTime)
+void ACharacterNPC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }

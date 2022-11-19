@@ -1,8 +1,8 @@
 
 #include "ObjectManager.h"
 #include "Engine/World.h"
-#include "../Character/GamePlayer.h"
-#include "../Character/Monster.h"
+#include "../Character/CharacterPC.h"
+#include "../Character/CharacterNPC.h"
 #include "../System/MyGameInstance.h"
 #include "../Component/GameObject.h"
 #include "NiagaraSystem.h"
@@ -41,7 +41,7 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 	}
 	else
 	{
-		//FString path = TEXT( "/Game/Monster/" );
+		//FString path = TEXT( "/Game/CharacterNPC/" );
 		//UClass* pClass = LoadClass< AActor >( path );
 		//if( !pClass )
 		//	return nullptr;

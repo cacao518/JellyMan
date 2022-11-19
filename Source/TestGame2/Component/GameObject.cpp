@@ -4,8 +4,8 @@
 #include "MaterialProperty.h"
 #include "WeaponChange.h"
 #include "../ETC/SDB.h"
-#include "../Character/GamePlayer.h"
-#include "../Character/Monster.h"
+#include "../Character/CharacterPC.h"
+#include "../Character/CharacterNPC.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
@@ -160,7 +160,7 @@ bool UGameObject::SkillPlay( int InSkillNum )
 		// 락온 상태에서 스킬 사용 시 내 캐릭터가 적을 바라보게 할 것 인지 확인
 		if( skillInfo.LockOnLookAt )
 		{
-			AGamePlayer* myPlayer = GetMyGameInstance().GetMyPlayer();
+			ACharacterPC* myPlayer = GetMyGameInstance().GetMyPlayer();
 			if( myPlayer && myPlayer == OwningCharacter )
 				LookAt( GetLockOnManager().GetLockOnTarget() );
 		}
@@ -285,9 +285,9 @@ EObjectType UGameObject::GetObjectType()
 	if( !OwningCharacter )
 		return EObjectType::MAX;
 
-	if( auto gamePlayer = Cast< AGamePlayer >( OwningCharacter ) )
+	if( auto characterPC = Cast< ACharacterPC >( OwningCharacter ) )
 		return EObjectType::PC;
-	else if( auto monster = Cast< AMonster >( OwningCharacter ) )
+	else if( auto characterNPC = Cast< ACharacterNPC >( OwningCharacter ) )
 		return EObjectType::NPC;
 
 	return EObjectType::MAX;
@@ -417,9 +417,9 @@ void UGameObject::_CheckDie()
 		IsDie = true;
 		if( GetObjectType() == EObjectType::NPC )
 		{
-			AMonsterAIController* monsterController = Cast< AMonsterAIController >( OwningCharacter->GetController() );
-			if( monsterController )
-				monsterController->StopAI();
+			AMonsterAIController* characterNPCController = Cast< AMonsterAIController >( OwningCharacter->GetController() );
+			if( characterNPCController )
+				characterNPCController->StopAI();
 
 			OwningCharacter->GetMesh()->SetSimulatePhysics( true );
 			GetObjectManager().SpawnParticle( TEXT( "Smoke" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
