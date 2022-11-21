@@ -86,12 +86,17 @@ void AMyPlayerController::MoveForward( float Value )
 	if( !gameObject )
 		return;
 
-	if( ( Value != 0.0f ) && ( gameObject->GetAnimState() == EAnimState::IDLE_RUN || gameObject->GetAnimState() == EAnimState::JUMP ) )
+	if( Value != 0.0f )
 	{
-		const FRotator Rotation = GetControlRotation();
-		const FRotator YawRotation( 0, Rotation.Yaw, 0 );
-		const FVector Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
-		MyPlayer->AddMovementInput( Direction, Value );
+		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN || 
+			gameObject->GetAnimState() == EAnimState::JUMP ||
+			gameObject->GetAnimState() == EAnimState::UPPER_LOWER_BLEND )
+		{
+			const FRotator Rotation = GetControlRotation();
+			const FRotator YawRotation( 0, Rotation.Yaw, 0 );
+			const FVector Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::X );
+			MyPlayer->AddMovementInput( Direction, Value );
+		}
 	}
 }
 
@@ -107,12 +112,17 @@ void AMyPlayerController::MoveRight( float Value )
 	if( !gameObject )
 		return;
 
-	if( ( Value!=0.0f ) && ( gameObject->GetAnimState() == EAnimState::IDLE_RUN || gameObject->GetAnimState() == EAnimState::JUMP ) )
+	if( Value != 0.0f )
 	{
-		const FRotator Rotation = GetControlRotation();
-		const FRotator YawRotation( 0, Rotation.Yaw, 0 );
-		const FVector Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::Y );
-		MyPlayer->AddMovementInput( Direction, Value );
+		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN ||
+			gameObject->GetAnimState() == EAnimState::JUMP ||
+			gameObject->GetAnimState() == EAnimState::UPPER_LOWER_BLEND )
+		{
+			const FRotator Rotation = GetControlRotation();
+			const FRotator YawRotation( 0, Rotation.Yaw, 0 );
+			const FVector Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::Y );
+			MyPlayer->AddMovementInput( Direction, Value );
+		}
 	}
 }
 

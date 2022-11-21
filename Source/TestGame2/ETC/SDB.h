@@ -23,10 +23,11 @@ enum class EObjectType : uint8
 UENUM( BlueprintType )
 enum class EAnimState : uint8
 {
-	IDLE_RUN        UMETA( DisplayName = "Idle_Run" ),
-	JUMP            UMETA( DisplayName = "Jump" ),
-	DIE             UMETA( DisplayName = "Die" ),
-	COMMON_ACTION   UMETA( DisplayName = "Common_Action" ),
+	IDLE_RUN            UMETA( DisplayName = "Idle_Run" ),
+	JUMP                UMETA( DisplayName = "Jump" ),
+	DIE                 UMETA( DisplayName = "Die" ),
+	COMMON_ACTION       UMETA( DisplayName = "Common_Action" ),
+	UPPER_LOWER_BLEND   UMETA( DisplayName = "Upper_Lower_Body_Blend" ),
 
 	MAX,             
 };

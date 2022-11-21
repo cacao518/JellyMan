@@ -361,22 +361,28 @@ void UGameObject::_AnimStateChange()
 		AnimState = EAnimState::DIE;
 		return;
 	}
-
+	
 	if( !OwningCharacter )
 		return;
 
-	if( !OwningCharacter->GetMesh()->GetAnimInstance() )
+	UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() );
+	if( !animInstance )
 		return;
 
-	if( auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage(); curMontage )
+	if( auto curMontage = animInstance->GetCurrentActiveMontage() )
 	{
-		AnimState = EAnimState::COMMON_ACTION;
+		if( curMontage->GetName() == "MTG_SwordDraw" )
+			AnimState = EAnimState::UPPER_LOWER_BLEND;
+		else
+			AnimState = EAnimState::COMMON_ACTION;
 	}
 	else
 	{
 		if( auto moveComponent = OwningCharacter->GetMovementComponent(); moveComponent )
 			moveComponent->IsFalling() ? AnimState = EAnimState::JUMP : AnimState = EAnimState::IDLE_RUN;
 	}
+
+	animInstance->AnimState = AnimState;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

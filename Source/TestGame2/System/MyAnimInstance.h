@@ -26,4 +26,8 @@ public:
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	bool         IsDie;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
+	EAnimState   AnimState;
+
 };
