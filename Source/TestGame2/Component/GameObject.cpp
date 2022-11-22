@@ -86,9 +86,7 @@ void UGameObject::ResetInfo( bool InForceReset )
 		SetAttackCollInfo( FCollisionInfo() );
 		IsEnableDerivedKey = false;
 		IsForceMove = false;
-
-		if( !InForceReset )
-			CurSkillInfo = nullptr;
+		CurSkillInfo = nullptr;
 	}
 }
 
@@ -142,23 +140,23 @@ bool UGameObject::SkillPlay( int InSkillNum )
 		if( IsCoolingSkill( skillInfo.Num ) )
 			continue;
 
-		// 현재 스킬 사용 가능한 AnimState / Montage 인지 확인
+		// 현재 스킬 사용 가능한 AnimState / SkillNum 인지 확인
 		bool isEmptyEnableState   = skillInfo.PlayEnableState.IsEmpty();
-		bool isEmptyEnableMontage = skillInfo.PlayEnableMontage.IsEmpty();
+		bool isEmptyEnableSkillNum = skillInfo.PlayEnableSkillNum.IsEmpty();
 		bool isFindEnableState    = skillInfo.PlayEnableState.Find( AnimState ) != INDEX_NONE;
-		bool isFindEnableMontage  = skillInfo.PlayEnableMontage.Find( GetCurMontageName() ) != INDEX_NONE;
+		bool isFindEnableSkillNum = skillInfo.PlayEnableSkillNum.Find( CurSkillInfo ? CurSkillInfo->Num : 0 ) != INDEX_NONE;
 
-		// 사용가능한 AnimState / Montage 가 둘 다 설정 되어 있을 경우 둘 중 하나만 만족하면 된다.
-		if( !isEmptyEnableState && !isEmptyEnableMontage )
+		// 사용가능한 AnimState / SkillNum 이 둘 다 설정 되어 있을 경우 둘 중 하나만 만족하면 된다.
+		if( !isEmptyEnableState && !isEmptyEnableSkillNum )
 		{
-			if( !isFindEnableState && !isFindEnableMontage )
+			if( !isFindEnableState && !isFindEnableSkillNum )
 				continue;
 		}
 		else
-		{   // 사용가능한 AnimState / Montage 둘 중 하나만 설정 되어 있을 경우 설정 되어 있는 것만 만족하면 된다.
+		{   // 사용가능한 AnimState / SkillNum 둘 중 하나만 설정 되어 있을 경우 설정 되어 있는 것만 만족하면 된다.
 			if( !isEmptyEnableState && !isFindEnableState )
 				continue;
-			if( !isEmptyEnableMontage && !isFindEnableMontage )
+			if( !isEmptyEnableSkillNum && !isFindEnableSkillNum )
 				continue;
 		}
 

@@ -136,7 +136,7 @@ public:
 	TArray<EAnimState> PlayEnableState;        // 스킬 사용 가능한 상태
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TArray<FString> PlayEnableMontage;         // 스킬 사용 가능한 몽타주
+	TArray<int> PlayEnableSkillNum;            // 스킬 사용 가능한 스킬아이디
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	int DerivedSkillNum;                       // 파생 스킬 식별자 
