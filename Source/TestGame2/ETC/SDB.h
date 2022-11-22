@@ -121,34 +121,37 @@ struct FSkillInfo
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	UAnimMontage* Anim;                     // 몽타주
+	UAnimMontage* Anim;                        // 몽타주
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int Num;                                // 식별자
+	int Num;                                   // 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float CoolTime;                         // 쿨타임
+	float CoolTime;                            // 쿨타임
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	ESkillPlaySpeedType PlaySpeedType;      // 스킬 재생속도 타입
+	ESkillPlaySpeedType PlaySpeedType;         // 스킬 재생속도 타입
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TArray<EAnimState> PlayEnableState;     // 스킬 사용 가능한 상태
+	TArray<EAnimState> PlayEnableState;        // 스킬 사용 가능한 상태
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TArray<FString> PlayEnableMontage;      // 스킬 사용 가능한 몽타주
+	TArray<FString> PlayEnableMontage;         // 스킬 사용 가능한 몽타주
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int DerivedSkillNum;                    // 파생 스킬 식별자 
+	int DerivedSkillNum;                       // 파생 스킬 식별자 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	bool LockOnLookAt;                      // 락온 상태에서 스킬 시전 시 바라볼 것인지 여부 
+	bool UpperLowerBlend;                      // 상체/하체 블렌딩 시킬 것인지 여부
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float ActivateRangeMin;                 // 스킬 발동 범위 최소 (몬스터 전용)
+	bool LockOnLookAt;                         // 락온 상태에서 스킬 시전 시 바라볼 것인지 여부 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float ActivateRangeMax;                 // 스킬 발동 범위 최대 (몬스터 전용)
+	float ActivateRangeMin;                    // 스킬 발동 범위 최소 (몬스터 전용)
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float ActivateRangeMax;                    // 스킬 발동 범위 최대 (몬스터 전용)
 };
 
 // 스텟 정보

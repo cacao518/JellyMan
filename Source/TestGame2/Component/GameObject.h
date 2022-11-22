@@ -42,7 +42,8 @@ private:
 	FCollisionInfo     AttackCollInfo;          // 공격 콜리전 정보
 	FVector            MovePos;                 // 이동할 위치
 	FStatusInfo        InitStat;                // 초기기본 능력치
-	CooltimeMap        CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보			       
+	CooltimeMap        CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보		
+	FSkillInfo*        CurSkillInfo;            // 현재 스킬 정보     
 
 	bool               IsDie;                   // 사망 여부
 	bool               IsFallWater;             // 물에 빠졌는지 여부

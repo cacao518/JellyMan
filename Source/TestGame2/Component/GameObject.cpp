@@ -28,6 +28,7 @@ UGameObject::UGameObject()
 :
 OwningCharacter     ( nullptr ),
 AnimState           ( EAnimState::IDLE_RUN ),
+CurSkillInfo        ( nullptr ),
 IsDie               ( false   ),
 IsFallWater         ( false   ),
 IsForceMove         ( false   ),
@@ -85,6 +86,9 @@ void UGameObject::ResetInfo( bool InForceReset )
 		SetAttackCollInfo( FCollisionInfo() );
 		IsEnableDerivedKey = false;
 		IsForceMove = false;
+
+		if( !InForceReset )
+			CurSkillInfo = nullptr;
 	}
 }
 
@@ -172,6 +176,8 @@ bool UGameObject::SkillPlay( int InSkillNum )
 			MontagePlay( skillInfo.Anim, skillInfo.PlaySpeedType == ESkillPlaySpeedType::ATTACK_SPEED ? Stat.AttackSpeed : Stat.MoveSpeed );
 
 		_RegisterCoolTime( skillInfo );
+
+		CurSkillInfo = &skillInfo;
 
 		return true;
 	}
@@ -371,7 +377,7 @@ void UGameObject::_AnimStateChange()
 
 	if( auto curMontage = animInstance->GetCurrentActiveMontage() )
 	{
-		if( curMontage->GetName() == "MTG_SwordDraw" )
+		if( CurSkillInfo && CurSkillInfo->UpperLowerBlend )
 			AnimState = EAnimState::UPPER_LOWER_BLEND;
 		else
 			AnimState = EAnimState::COMMON_ACTION;
