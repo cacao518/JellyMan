@@ -153,6 +153,9 @@ public:
 	// 공격 콜리전 활성화 여부를 반환한다.
 	bool GetIsEnabledAttackColl() { return IsEnabledAttackColl; };
 
+	// 사망 여부를 반환한다.
+	bool GetIsDie(){ return IsDie; };
+
 	// 강제 이동 여부를 반환한다.
 	bool GetIsForceMove() { return IsForceMove; };
 

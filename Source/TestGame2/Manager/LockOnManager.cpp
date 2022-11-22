@@ -116,11 +116,19 @@ void LockOnManager::_ProcessLockOn()
 	if( !myPlayer )
 		return;
 
+	auto ownerGameObject = Cast<UGameObject>( myPlayer->FindComponentByClass<UGameObject>() );
+	if( !ownerGameObject )
+		return;
+
 	auto otherGameObject = Cast<UGameObject>( LockOnTarget->FindComponentByClass<UGameObject>() );
 	if( !otherGameObject )
 		return;
 
-	if( !GetValid( LockOnTarget ) || otherGameObject->GetAnimState() == EAnimState::DIE || LockOnTarget->GetDistanceTo( myPlayer ) > Const::LOCKON_RANGE )
+	bool targetDie = !GetValid( LockOnTarget ) || otherGameObject->GetIsDie();
+	bool targetAway = LockOnTarget->GetDistanceTo( myPlayer ) > Const::LOCKON_RANGE;
+	bool ownerDie = !GetValid( myPlayer ) || ownerGameObject->GetIsDie();
+
+	if( targetDie || targetAway || ownerDie )
 	{
 		LockOnRelease();
 		return;
