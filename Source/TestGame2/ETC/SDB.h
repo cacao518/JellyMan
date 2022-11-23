@@ -27,10 +27,19 @@ enum class EAnimState : uint8
 	JUMP                UMETA( DisplayName = "Jump" ),
 	DIE                 UMETA( DisplayName = "Die" ),
 	COMMON_ACTION       UMETA( DisplayName = "Common_Action" ),
+
+	MAX,             
+};
+
+// 애니메이션 보조 상태
+UENUM( BlueprintType )
+enum class EAnimSubState : uint8
+{
+	NONE                UMETA( DisplayName = "None" ),
 	MOVABLE             UMETA( DisplayName = "Movable" ),
 	UPPER_LOWER_BLEND   UMETA( DisplayName = "Upper_Lower_Blend" ),
 
-	MAX,             
+	MAX,
 };
 
 // 물질 상태
@@ -131,10 +140,10 @@ public:
 	float CoolTime;                                    // 쿨타임
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	EAnimState AnimState = EAnimState::COMMON_ACTION;  // 변경 될 애니메이션 상태
+	ESkillPlaySpeedType PlaySpeedType;                 // 스킬 재생속도 타입
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	ESkillPlaySpeedType PlaySpeedType;                 // 스킬 재생속도 타입
+	EAnimSubState AnimSubState;                        // 애니메이션 보조 상태
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	TArray<EAnimState> PlayEnableState;                // 스킬 사용 가능한 상태

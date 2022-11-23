@@ -375,10 +375,7 @@ void UGameObject::_AnimStateChange()
 
 	if( auto curMontage = animInstance->GetCurrentActiveMontage() )
 	{
-		if( CurSkillInfo )
-			AnimState = CurSkillInfo->AnimState;
-		else
-			AnimState = EAnimState::COMMON_ACTION;
+		AnimState = EAnimState::COMMON_ACTION;
 	}
 	else
 	{
@@ -387,6 +384,7 @@ void UGameObject::_AnimStateChange()
 	}
 
 	animInstance->AnimState = AnimState;
+	animInstance->AnimSubState = CurSkillInfo ? CurSkillInfo->AnimSubState : EAnimSubState::NONE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

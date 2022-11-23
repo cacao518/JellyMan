@@ -30,4 +30,7 @@ public:
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	EAnimState   AnimState;             // 애니메이션 상태
 
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
+	EAnimSubState   AnimSubState;       // 애니메이션 보조 상태
+
 };

@@ -82,16 +82,16 @@ void AMyPlayerController::MoveForward( float Value )
 	if( !MyPlayer )
 		return;
 
-	auto gameObject = MyPlayer ? Cast<UGameObject>( MyPlayer->FindComponentByClass<UGameObject>() ) : nullptr;
-	if( !gameObject )
+	UMyAnimInstance* animInstance = MyPlayer ? Cast<UMyAnimInstance>( MyPlayer->GetMesh()->GetAnimInstance() ) : nullptr;
+	if( !animInstance )
 		return;
 
 	if( Value != 0.0f )
 	{
-		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN || 
-			gameObject->GetAnimState() == EAnimState::JUMP ||
-			gameObject->GetAnimState() == EAnimState::MOVABLE ||
-			gameObject->GetAnimState() == EAnimState::UPPER_LOWER_BLEND )
+		if( animInstance->AnimState    == EAnimState   ::IDLE_RUN ||
+			animInstance->AnimState    == EAnimState   ::JUMP     ||
+			animInstance->AnimSubState == EAnimSubState::MOVABLE  ||
+			animInstance->AnimSubState == EAnimSubState::UPPER_LOWER_BLEND )
 		{
 			const FRotator Rotation = GetControlRotation();
 			const FRotator YawRotation( 0, Rotation.Yaw, 0 );
@@ -109,16 +109,16 @@ void AMyPlayerController::MoveRight( float Value )
 	if( !MyPlayer )
 		return;
 
-	auto gameObject = MyPlayer ? Cast<UGameObject>( MyPlayer->FindComponentByClass<UGameObject>() ) : nullptr;
-	if( !gameObject )
+	UMyAnimInstance* animInstance = MyPlayer ? Cast<UMyAnimInstance>( MyPlayer->GetMesh()->GetAnimInstance() ) : nullptr;
+	if( !animInstance )
 		return;
 
 	if( Value != 0.0f )
 	{
-		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN ||
-			gameObject->GetAnimState() == EAnimState::JUMP ||
-			gameObject->GetAnimState() == EAnimState::MOVABLE ||
-			gameObject->GetAnimState() == EAnimState::UPPER_LOWER_BLEND )
+		if( animInstance->AnimState    == EAnimState   ::IDLE_RUN ||
+			animInstance->AnimState    == EAnimState   ::JUMP     || 
+			animInstance->AnimSubState == EAnimSubState::MOVABLE  ||
+			animInstance->AnimSubState == EAnimSubState::UPPER_LOWER_BLEND )
 		{
 			const FRotator Rotation = GetControlRotation();
 			const FRotator YawRotation( 0, Rotation.Yaw, 0 );
