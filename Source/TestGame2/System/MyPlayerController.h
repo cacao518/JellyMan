@@ -25,7 +25,7 @@ class TESTGAME2_API AMyPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 private:
-	ACharacterPC*             MyPlayer;
+	ACharacterPC*            MyPlayer;
 	UGameObject*             GameObject;
 	UMaterialProperty*       MatProperty;
 	UWeaponChange*           WeaponChange;

@@ -90,6 +90,7 @@ void AMyPlayerController::MoveForward( float Value )
 	{
 		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN || 
 			gameObject->GetAnimState() == EAnimState::JUMP ||
+			gameObject->GetAnimState() == EAnimState::MOVABLE ||
 			gameObject->GetAnimState() == EAnimState::UPPER_LOWER_BLEND )
 		{
 			const FRotator Rotation = GetControlRotation();
@@ -116,6 +117,7 @@ void AMyPlayerController::MoveRight( float Value )
 	{
 		if( gameObject->GetAnimState() == EAnimState::IDLE_RUN ||
 			gameObject->GetAnimState() == EAnimState::JUMP ||
+			gameObject->GetAnimState() == EAnimState::MOVABLE ||
 			gameObject->GetAnimState() == EAnimState::UPPER_LOWER_BLEND )
 		{
 			const FRotator Rotation = GetControlRotation();

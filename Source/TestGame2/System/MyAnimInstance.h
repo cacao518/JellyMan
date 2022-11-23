@@ -16,18 +16,18 @@ class TESTGAME2_API UMyAnimInstance : public UAnimInstance
 	
 public:
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	float        Speed;                   
+	float        Speed;                 // 이동속도   
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	bool         IsJump;
+	bool         IsJump;                // 점프 중 여부
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	bool         IsFly;
+	bool         IsFly;                 // 날기 중 여부
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	bool         IsDie;
+	bool         IsDie;                 // 사망 여부
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	EAnimState   AnimState;
+	EAnimState   AnimState;             // 애니메이션 상태
 
 };

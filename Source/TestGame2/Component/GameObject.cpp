@@ -365,7 +365,7 @@ void UGameObject::_AnimStateChange()
 		AnimState = EAnimState::DIE;
 		return;
 	}
-	
+
 	if( !OwningCharacter )
 		return;
 
@@ -375,8 +375,8 @@ void UGameObject::_AnimStateChange()
 
 	if( auto curMontage = animInstance->GetCurrentActiveMontage() )
 	{
-		if( CurSkillInfo && CurSkillInfo->UpperLowerBlend )
-			AnimState = EAnimState::UPPER_LOWER_BLEND;
+		if( CurSkillInfo )
+			AnimState = CurSkillInfo->AnimState;
 		else
 			AnimState = EAnimState::COMMON_ACTION;
 	}
