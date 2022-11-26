@@ -137,6 +137,9 @@ void ObjectManager::SpawnActorInSpawner( float InDeltaTime )
 {
 	for( AActorSpawner* spawner : SpawnerList )
 	{
+		if( !spawner )
+			continue;
+
 		spawner->AddSpawnIntervalCount( InDeltaTime );
 
 		if( spawner->CanSpawn() )
