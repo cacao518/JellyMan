@@ -5,6 +5,7 @@
 #include "../Character/CharacterNPC.h"
 #include "../System/MyGameInstance.h"
 #include "../Component/GameObject.h"
+#include "Engine/BlueprintGeneratedClass.h"
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
@@ -66,6 +67,19 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		ObjectId++;
 		return newActor;
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 그라운드 오브젝트 생성
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+AActor* ObjectManager::SpawnGroundObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator )
+{
+	FString path = FString( TEXT( "/Game/GroundObject/" ) ) + InName;
+	UClass* groundObject = LoadObject<UClass>( NULL, *path, NULL, LOAD_None, NULL );
+	if( !groundObject )
+		return nullptr;
+
+	return SpawnActor( groundObject, InLocation, InRotator, nullptr );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

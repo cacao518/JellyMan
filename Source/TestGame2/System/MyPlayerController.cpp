@@ -5,6 +5,7 @@
 #include "../Component/MaterialProperty.h"
 #include "../Component/WeaponChange.h"
 #include "../Manager/LockOnManager.h"
+#include "../Manager/ObjectManager.h"
 #include "../Character/CharacterPC.h"
 #include "../System/MyAnimInstance.h"
 #include "../System/MyGameInstance.h"
@@ -220,6 +221,7 @@ void AMyPlayerController::ProcessBothMouseDown()
 		case EMaterialState::ROCK:
 		{
 			GameObject->SkillPlay( 11 );
+			//GetObjectManager().SpawnGroundObject( TEXT( "BP_Rock" ), MyPlayer->GetActorLocation(), MyPlayer->GetActorRotation() );
 		}
 		break;
 	}
