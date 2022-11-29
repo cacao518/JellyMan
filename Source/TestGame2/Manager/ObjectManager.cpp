@@ -3,9 +3,11 @@
 #include "Engine/World.h"
 #include "../Character/CharacterPC.h"
 #include "../Character/CharacterNPC.h"
+#include "../Character/GroundObject.h"
 #include "../System/MyGameInstance.h"
 #include "../Component/GameObject.h"
 #include "Engine/BlueprintGeneratedClass.h"
+#include "UObject/ConstructorHelpers.h"
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
@@ -75,7 +77,7 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 AActor* ObjectManager::SpawnGroundObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator )
 {
 	FString path = FString( TEXT( "/Game/GroundObject/" ) ) + InName;
-	UClass* groundObject = LoadObject<UClass>( NULL, *path, NULL, LOAD_None, NULL );
+	UClass* groundObject = ConstructorHelpersInternal::FindOrLoadClass( path, AGroundObject::StaticClass() );
 	if( !groundObject )
 		return nullptr;
 

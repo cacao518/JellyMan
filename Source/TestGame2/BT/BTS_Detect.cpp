@@ -49,8 +49,11 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		for( FOverlapResult overlapResult : overlapResults )
 		{
 			ACharacter* character = Cast<ACharacter>( overlapResult.GetActor() );
-			if( character&&character->GetController()->IsPlayerController() )
+			if( character && character->GetController() )
 			{
+				if( !character->GetController()->IsPlayerController() )
+					continue;
+
 				// Character면, 블랙보드에 저장한다.
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, character );
 

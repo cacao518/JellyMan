@@ -221,7 +221,6 @@ void AMyPlayerController::ProcessBothMouseDown()
 		case EMaterialState::ROCK:
 		{
 			GameObject->SkillPlay( 11 );
-			//GetObjectManager().SpawnGroundObject( TEXT( "BP_Rock" ), MyPlayer->GetActorLocation(), MyPlayer->GetActorRotation() );
 		}
 		break;
 	}
