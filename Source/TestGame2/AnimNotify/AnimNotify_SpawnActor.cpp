@@ -13,25 +13,6 @@ void UAnimNotify_SpawnActor::Notify( USkeletalMeshComponent* MeshComp, UAnimSequ
 	if( !MeshComp || !( MeshComp->GetOwner() ) )
 		return;
 
-	switch( Type )
-	{
-		case EObjectType::PC :
-		{
-			break;
-		}
-		case EObjectType::NPC : 
-		{
-			break;
-		}
-		case EObjectType::PROJECTILE :
-		{
-			break;
-		}
-		case EObjectType::GROUND_OBJECT :
-		{
-			break;
-		}
-	}
-
-	GetObjectManager().SpawnActor( Actor, MeshComp->GetOwner()->GetActorLocation(), MeshComp->GetOwner()->GetActorRotation() );
+	if( ObjectManager::IsVaild() )
+		GetObjectManager().SpawnActor( Actor, MeshComp->GetOwner()->GetActorLocation(), MeshComp->GetOwner()->GetActorRotation() + Rotate );
 }

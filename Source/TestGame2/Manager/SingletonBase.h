@@ -17,6 +17,7 @@ public:
 	static Type& GetInstance(){ return *Instance; }
 	static Type* CreateInstance() { return !Instance ? Instance = new Type() : Instance; }
 	static void DestroyInstance() { if( !Instance ) delete Instance; Instance = nullptr; }
+	static bool IsVaild(){ return Instance != nullptr; }
 };
 
 template< typename Type >

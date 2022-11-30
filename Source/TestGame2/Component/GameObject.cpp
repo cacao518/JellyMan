@@ -350,6 +350,8 @@ void UGameObject::_Init()
 
 	SetMoveSpeed( Stat.MoveSpeed );
 	SetJumpPower( Stat.JumpPower );
+	
+	ResetInfo( true );
 
 	for( const auto& skill : SkillInfos )
 		CoolingSkills.Add( skill.Num, 0 );
