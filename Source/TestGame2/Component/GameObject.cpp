@@ -428,26 +428,37 @@ void UGameObject::_CheckDie()
 	if( !IsDie && AnimState == EAnimState::DIE )
 	{
 		IsDie = true;
-		if( GetObjectType() == EObjectType::NPC || GetObjectType() == EObjectType::GROUND_OBJECT )
-		{
-			AMonsterAIController* characterNPCController = Cast< AMonsterAIController >( OwningCharacter->GetController() );
-			if( characterNPCController )
-				characterNPCController->StopAI();
 
-			OwningCharacter->GetMesh()->SetSimulatePhysics( true );
-			GetObjectManager().SpawnParticle( TEXT( "Smoke" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
-		}
-		else if( GetObjectType() == EObjectType::PC )
+		switch( GetObjectType() )
 		{
-			if( UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
+			case  EObjectType::NPC:
 			{
-				auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
-				animInstance->Montage_Stop( 0.f, curMontage );
-				animInstance->IsDie = true;
+				AMonsterAIController* characterNPCController = Cast< AMonsterAIController >( OwningCharacter->GetController() );
+				if( characterNPCController )
+					characterNPCController->StopAI();
+
+				OwningCharacter->GetMesh()->SetSimulatePhysics( true );
+				OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
+				GetObjectManager().SpawnParticle( TEXT( "Smoke" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
 			}
+			break;
+			case  EObjectType::PC:
+			{
+				if( UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
+				{
+					auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
+					animInstance->Montage_Stop( 0.f, curMontage );
+					animInstance->IsDie = true;
+				}
+			}
+			break;
+			case  EObjectType::GROUND_OBJECT:
+			{
+				GetObjectManager().DestroyActor( OwningCharacter );
+			}
+			break;
 		}
 
-		OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( TEXT( "NoCollision" ) );
 	}
 }
