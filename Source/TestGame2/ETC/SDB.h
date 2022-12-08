@@ -199,7 +199,7 @@ public:
 	float Strength;   	// 강인함 MAX:100( 경직시간, 넉백거리 관련 ) 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Weight;   	// 무게 MAX:100 ( 점프, 에어본 관련 )
+	float Weight;   	// 무게
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -217,16 +217,10 @@ public:
 	EMaterialState State;    // 물질 상태
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float MoveSpeed;         // 이동속도 증가율
+	float Mass;              // 질량(공격속도,이동속도,점프력 비율)
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float AttackSpeed;       // 공격속도 증가율
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float JumpPower;         // 점프력
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Mass;              // 강도(공격력,방어력 증가율)
+	float Intensity;         // 강도(공격력,방어력,강인함 비율, 공격모션)
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float MatEnergyMax;      // 최대 물질 에너지
@@ -287,4 +281,7 @@ namespace Const
 
 	constexpr float LOCKON_RANGE = 800.f;                  // 락온 범위
 	constexpr float LOCKON_CAMERA_ROTAION_LAG_SPEED = 5.f; // 락온 카메라 회전 딜레이 속도
+
+	constexpr float MAX_MASS                  = 2.f;       // 최대 질량
+	constexpr float MAX_INTENSITY             = 2.f;       // 최대 강도
 };

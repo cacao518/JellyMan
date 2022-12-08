@@ -53,7 +53,7 @@ void CameraManager::CameraShake( float InScale, bool InShakeByWeight )
 		auto moveComponent = player->GetCharacterMovement();
 		if( moveComponent )
 		{
-			if( !moveComponent->IsFalling() && gameObject->GetStat().JumpPower <= 0.5f )
+			if( !moveComponent->IsFalling() && gameObject->GetStat().Weight >= 1.5f )
 			{
 				controller->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
 			}

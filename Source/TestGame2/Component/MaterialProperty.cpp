@@ -164,12 +164,13 @@ void UMaterialProperty::_InitStatus()
 	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( MatState );
 	if( matInfo )
 	{
-		gameObject->SetMoveSpeed   ( matInfo->MoveSpeed   * gameObject->GetInitStat().MoveSpeed );
-		gameObject->SetAttackSpeed ( matInfo->AttackSpeed * gameObject->GetInitStat().AttackSpeed );
-		gameObject->SetJumpPower   ( matInfo->JumpPower	  * gameObject->GetInitStat().JumpPower );
-		gameObject->SetAttackPower ( matInfo->Mass		  * gameObject->GetInitStat().AttackPower );
-		gameObject->SetDefensePower( matInfo->Mass		  * gameObject->GetInitStat().DefensePower );
-		gameObject->SetStrength    ( matInfo->Mass        * gameObject->GetInitStat().Strength  );
+		gameObject->SetMoveSpeed   ( ( Const::MAX_MASS - matInfo->Mass ) * gameObject->GetInitStat().MoveSpeed );
+		gameObject->SetAttackSpeed ( ( Const::MAX_MASS - matInfo->Mass ) * gameObject->GetInitStat().AttackSpeed );
+		gameObject->SetJumpPower   ( ( Const::MAX_MASS - matInfo->Mass ) * gameObject->GetInitStat().JumpPower );
+		gameObject->SetAttackPower ( matInfo->Intensity              * gameObject->GetInitStat().AttackPower );
+		gameObject->SetDefensePower( matInfo->Intensity              * gameObject->GetInitStat().DefensePower );
+		gameObject->SetStrength    ( matInfo->Intensity              * gameObject->GetInitStat().Strength  );
+		gameObject->SetWeight      ( matInfo->Mass                   * gameObject->GetInitStat().Weight );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( matInfo->CollisonName );
 
 		MatEnergy    = matInfo->MatEnergyMax;

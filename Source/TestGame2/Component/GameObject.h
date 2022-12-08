@@ -113,6 +113,9 @@ public:
 	// 강인함을 설정한다.
 	void SetStrength( float InStrength ){ Stat.Strength = InStrength; };
 
+	// 무게를 설정한다.
+	void SetWeight( float InWeight ){ Stat.Weight = InWeight; };
+
 	// 강제 이동 여부를 셋팅한다.
 	void SetIsForceMove( bool InIsForceMove ){ IsForceMove = InIsForceMove; };
 
