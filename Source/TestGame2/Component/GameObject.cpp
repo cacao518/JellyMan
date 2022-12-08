@@ -125,15 +125,14 @@ void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UGameObject::SkillPlay( int InSkillNum )
 {
-	int derivedSkillNum = 0;
-
 	for( auto& skillInfo : SkillInfos )
 	{
 		if( InSkillNum != skillInfo.Num )
 			continue;
 
-		// 파생스킬 식별자 저장
-		derivedSkillNum = skillInfo.DerivedSkillNum;
+		// 파생스킬을 발동 시킬 것인지 확인
+		if( skillInfo.DerivedSkillNum != 0 && IsEnableDerivedKey )
+			return SkillPlay( skillInfo.DerivedSkillNum );
 
 		// 쿨타임 확인
 		if( IsCoolingSkill( skillInfo.Num ) )
@@ -178,10 +177,6 @@ bool UGameObject::SkillPlay( int InSkillNum )
 
 		return true;
 	}
-
-	// 파생스킬을 발동 시킬 것인지 확인
-	if( derivedSkillNum != 0 && IsEnableDerivedKey )
-		return SkillPlay( derivedSkillNum );
 
 	return false;
 }
