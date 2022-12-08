@@ -284,4 +284,7 @@ namespace Const
 
 	constexpr float MAX_MASS                  = 2.f;       // 최대 질량
 	constexpr float MAX_INTENSITY             = 2.f;       // 최대 강도
+
+	constexpr float MIDDLE_RATE              = 1.2f;      // 중간 강도/질량 기준
+	constexpr float HARD_RATE                = 1.5f;      // 고 강도/질량 기준
 };

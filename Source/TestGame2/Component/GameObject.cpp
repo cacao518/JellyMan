@@ -120,7 +120,6 @@ void UGameObject::MontagePlay( UAnimMontage* InMontage, float InScale )
 	animInstance->Montage_Play( InMontage, InScale );
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 스킬을 플레이한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,26 +137,26 @@ bool UGameObject::SkillPlay( int InSkillNum )
 
 		// 쿨타임 확인
 		if( IsCoolingSkill( skillInfo.Num ) )
-			continue;
+			break;
 
 		// 현재 스킬 사용 가능한 AnimState / SkillNum 인지 확인
-		bool isEmptyEnableState   = skillInfo.PlayEnableState.IsEmpty();
+		bool isEmptyEnableState    = skillInfo.PlayEnableState.IsEmpty();
 		bool isEmptyEnableSkillNum = skillInfo.PlayEnableSkillNum.IsEmpty();
-		bool isFindEnableState    = skillInfo.PlayEnableState.Find( AnimState ) != INDEX_NONE;
-		bool isFindEnableSkillNum = skillInfo.PlayEnableSkillNum.Find( CurSkillInfo ? CurSkillInfo->Num : 0 ) != INDEX_NONE;
+		bool isFindEnableState     = skillInfo.PlayEnableState.Find( AnimState ) != INDEX_NONE;
+		bool isFindEnableSkillNum  = skillInfo.PlayEnableSkillNum.Find( CurSkillInfo ? CurSkillInfo->Num : 0 ) != INDEX_NONE;
 
 		// 사용가능한 AnimState / SkillNum 이 둘 다 설정 되어 있을 경우 둘 중 하나만 만족하면 된다.
 		if( !isEmptyEnableState && !isEmptyEnableSkillNum )
 		{
 			if( !isFindEnableState && !isFindEnableSkillNum )
-				continue;
+				break;
 		}
 		else
 		{   // 사용가능한 AnimState / SkillNum 둘 중 하나만 설정 되어 있을 경우 설정 되어 있는 것만 만족하면 된다.
 			if( !isEmptyEnableState && !isFindEnableState )
-				continue;
+				break;
 			if( !isEmptyEnableSkillNum && !isFindEnableSkillNum )
-				continue;
+				break;
 		}
 
 		// 락온 상태에서 스킬 사용 시 내 캐릭터가 적을 바라보게 할 것 인지 확인

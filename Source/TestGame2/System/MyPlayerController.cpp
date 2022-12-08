@@ -154,23 +154,20 @@ void AMyPlayerController::ProcessLeftMouse()
 {
 	bool result = false;
 
-	if( !GameObject )
-		return;
-
 	switch( WeaponChange->GetWeaponState() )
 	{
 		case EWeaponState::MAX:
 		{
-			result = GameObject->SkillPlay( 2 );
+			result = _SkillPlay( 2 );
 			break;
 		}
 		case EWeaponState::SWORD:
 		{
-			result = GameObject->SkillPlay( 6 );
+			result = _SkillPlay( 6, 12, 12 );
 			break;
 		}
 	}
-
+	
 	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
 }
 
@@ -181,19 +178,16 @@ void AMyPlayerController::ProcessRightMouse()
 {
 	bool result = false;
 
-	if( !GameObject )
-		return;
-
 	switch( WeaponChange->GetWeaponState() )
 	{
 		case EWeaponState::MAX:
 		{
-			result = GameObject->SkillPlay( 3 );
+			result = _SkillPlay( 3 );
 			break;
 		}
 		case EWeaponState::SWORD:
 		{
-			result = GameObject->SkillPlay( 8 );
+			result = _SkillPlay( 8 );
 			break;
 		}
 	}
@@ -220,7 +214,7 @@ void AMyPlayerController::ProcessBothMouseDown()
 		break;
 		case EMaterialState::ROCK:
 		{
-			GameObject->SkillPlay( 11 );
+			_SkillPlay( 11 );
 		}
 		break;
 	}
@@ -265,12 +259,7 @@ void AMyPlayerController::ProcessWheel()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessSpace()
 {
-	bool result = false;
-
-	if( GameObject )
-		result = GameObject->SkillPlay( 1 );
-
-	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::SPACE );
+	_SkillPlay( 1 ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::SPACE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -278,8 +267,7 @@ void AMyPlayerController::ProcessSpace()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessF()
 {
-	if( GameObject )
-		GameObject->SkillPlay( 4 );
+	_SkillPlay( 4 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -287,12 +275,9 @@ void AMyPlayerController::ProcessF()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessR()
 {
-	if( !MatProperty || !GameObject )
-		return;
-
-	if( MatProperty->GetMatState() != EMaterialState::JELLY )
+	if( MatProperty && MatProperty->GetMatState() != EMaterialState::JELLY )
 	{
-		if( GameObject->SkillPlay( 10 ) )
+		if( _SkillPlay( 10 ) )
 			MatProperty->SetMatState();
 	}
 }
@@ -308,7 +293,26 @@ void AMyPlayerController::Process1()
 	if( !( WeaponChange->CanWeaponChange( EWeaponState::SWORD ) ) )
 		return;
 
-	GameObject->SkillPlay( 5 );
+	_SkillPlay( 5 );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 스킬을 재생한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AMyPlayerController::_SkillPlay( int InBasicSkillNum, int InMiddleSkillNum, int InHardSkillNum )
+{
+	if( !GameObject )
+		return false;
+
+	if( MatProperty && InMiddleSkillNum != 0 && InHardSkillNum != 0 )
+	{
+		if( MatProperty->IsHardIntensity() )
+			return GameObject->SkillPlay( InHardSkillNum );
+		else if( MatProperty->IsMiddleIntensity() )
+			return GameObject->SkillPlay( InMiddleSkillNum );
+	}
+
+	return GameObject->SkillPlay( InBasicSkillNum );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

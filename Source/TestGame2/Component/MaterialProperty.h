@@ -66,6 +66,15 @@ public:
 	// 현재 젤리 에너지를 반환한다.
 	float GetJellyEnergy() { return JellyEnergy; };
 
+	// 중간 강도 인지 여부를 반환한다.
+	bool IsMiddleIntensity();
+
+	// 고 강도 인지 여부를 반환한다.
+	bool IsHardIntensity();
+
+	// 고 중량 인지 여부를 반환한다.
+	bool IsHeavyMass();
+
 	///////////////////////////////////////////////////////////////////////
 	// Delegate Function
 	///////////////////////////////////////////////////////////////////////

@@ -2,11 +2,13 @@
 #include "CameraManager.h"
 #include "Engine/World.h"
 #include "../Component/GameObject.h"
+#include "../Component/MaterialProperty.h"
 #include "../Character/CharacterPC.h"
 #include "../System/MyAnimInstance.h"
 #include "../System/MyGameInstance.h"
 #include "../System/TestGame2GameMode.h"
 #include "../Manager/LockOnManager.h"
+#include "../Manager/DataInfoManager.h"
 #include "../ETC/CameraShakeEffect.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -34,7 +36,7 @@ void CameraManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 카메라 쉐이크를 실행한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void CameraManager::CameraShake( float InScale, bool InShakeByWeight )
+void CameraManager::CameraShake( float InScale, bool InShakeByWeight, bool InShakeByIntensity )
 {
 	if( !GetMyGameInstance().IsValidLowLevel() )
 		return;
@@ -47,20 +49,27 @@ void CameraManager::CameraShake( float InScale, bool InShakeByWeight )
 	if( !controller )
 		return;
 
-	auto gameObject = player ? Cast<UGameObject>( player->FindComponentByClass<UGameObject>() ) : nullptr;
-	if( !gameObject )
+	auto moveComponent = player->GetCharacterMovement();
+	if( !moveComponent )
 		return;
 
 	if( InShakeByWeight )
 	{
-		auto moveComponent = player->GetCharacterMovement();
-		if( moveComponent )
-		{
-			if( !moveComponent->IsFalling() && gameObject->GetStat().Weight >= 1.5f )
-			{
-				controller->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
-			}
-		}
+		auto gameObject = player ? Cast<UGameObject>( player->FindComponentByClass<UGameObject>() ) : nullptr;
+		if( !gameObject )
+			return;
+
+		if( !moveComponent->IsFalling() && gameObject->GetStat().Weight >= Const::HARD_RATE )
+			controller->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
+	}
+	else if( InShakeByIntensity )
+	{
+		auto matProperty = player ? Cast<UMaterialProperty>( player->FindComponentByClass<UMaterialProperty>() ) : nullptr;
+		if( !matProperty )
+			return;
+
+		if( matProperty->IsHardIntensity() )
+			controller->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
 	}
 	else
 	{

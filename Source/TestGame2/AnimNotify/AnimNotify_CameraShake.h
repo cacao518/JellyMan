@@ -21,6 +21,9 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
 	bool ShakeByWeight = false;
 
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	bool ShakeByIntensity = false;
+
 public:
 	virtual FString GetNotifyName_Implementation() const override;
 
