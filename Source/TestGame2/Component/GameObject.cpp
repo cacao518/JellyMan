@@ -439,7 +439,7 @@ void UGameObject::_CheckDie()
 
 				OwningCharacter->GetMesh()->SetSimulatePhysics( true );
 				OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
-				GetObjectManager().SpawnParticle( TEXT( "Smoke" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
+				GetObjectManager().SpawnParticle( TEXT( "Die" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
 			}
 			break;
 			case  EObjectType::PC:

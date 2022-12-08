@@ -267,6 +267,16 @@ void UMaterialProperty::_PlayChangeEffect()
 			GetObjectManager().SpawnParticle( TEXT( "GrassChange" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
 		}
 		break;
+		case EMaterialState::ROCK:
+		{
+			GetObjectManager().SpawnParticle( TEXT( "RockChange" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
+		}
+		break;
+		case EMaterialState::GRAVEL:
+		{
+			GetObjectManager().SpawnParticle( TEXT( "GravelChange" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
+		}
+		break;
 	}
 }
 

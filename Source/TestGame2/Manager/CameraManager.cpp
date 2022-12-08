@@ -36,6 +36,9 @@ void CameraManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void CameraManager::CameraShake( float InScale, bool InShakeByWeight )
 {
+	if( !GetMyGameInstance().IsValidLowLevel() )
+		return;
+
 	ACharacterPC* player = GetMyGameInstance().GetMyPlayer();
 	if( !player )
 		return;
