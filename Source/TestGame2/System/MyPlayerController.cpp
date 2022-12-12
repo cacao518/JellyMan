@@ -152,6 +152,9 @@ void AMyPlayerController::LookUpAtRate( float Rate )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessLeftMouse()
 {
+	if( !WeaponChange )
+		return;
+
 	bool result = false;
 
 	switch( WeaponChange->GetWeaponState() )
@@ -176,6 +179,9 @@ void AMyPlayerController::ProcessLeftMouse()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessRightMouse()
 {
+	if( !WeaponChange )
+		return;
+
 	bool result = false;
 
 	switch( WeaponChange->GetWeaponState() )
