@@ -351,7 +351,12 @@ void UMaterialProperty::_ProcessGrass( float InDeltaTime )
 		return;
 
 	if( animInstance->IsFly )
+	{
+		if( charMovement->Velocity.Z > 0 )
+			charMovement->Velocity.Z = 0;
+
 		charMovement->GravityScale = Const::FLY_GRAVITY_SCALE;
+	}
 	else
 		charMovement->GravityScale = Const::DEFAULT_GRAVITY_SCALE;
 }
