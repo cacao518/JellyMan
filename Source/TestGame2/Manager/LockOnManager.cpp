@@ -137,4 +137,11 @@ void LockOnManager::_ProcessLockOn()
 	FRotator rotator = UKismetMathLibrary::FindLookAtRotation( myPlayer->GetActorLocation(), LockOnTarget->GetActorLocation() );
 	rotator.Pitch = myPlayer->GetControlRotation().Pitch;
 	myPlayer->GetController()->SetControlRotation( rotator );
+
+	// 락온 상태에서 스킬 사용 시 내 캐릭터가 적을 바라보게 할 것 인지 확인
+	auto skillInfo = ownerGameObject->GetCurSkillInfo();
+	if( skillInfo && skillInfo->LockOnLookAt )
+	{
+		ownerGameObject->LookAt( GetLockOnManager().GetLockOnTarget() );
+	}
 }

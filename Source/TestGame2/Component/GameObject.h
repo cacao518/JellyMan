@@ -171,6 +171,9 @@ public:
 	// 스킬 정보를 반환한다.
 	const TArray<FSkillInfo>& GetSkillInfos() { return SkillInfos; };
 
+	// 현재 발동 중 스킬 정보를 반환한다.
+	const FSkillInfo* GetCurSkillInfo() { return CurSkillInfo; };
+
 	// 해당 스킬이 쿨타임이 돌고 있는지 여부를 반환한다.
 	bool IsCoolingSkill( int InSkillNum );
 
