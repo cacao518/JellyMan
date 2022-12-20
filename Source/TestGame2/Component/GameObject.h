@@ -166,9 +166,6 @@ public:
 	// 추가 키 입력 가능한지 여부를 반환한다.
 	bool GetIsEnableDerivedKey() { return IsEnableDerivedKey; };
 
-	// 몽타주 재생시간을 반환한다.
-	float GetMontagePlayTime() { return MontagePlayTime; }
-
 	// 애니메이션 상태를 반환한다.
 	const EAnimState& GetAnimState() { return AnimState; };
 
@@ -180,6 +177,9 @@ public:
 
 	// 해당 스킬이 쿨타임이 돌고 있는지 여부를 반환한다.
 	bool IsCoolingSkill( int InSkillNum );
+
+	// 몽타주 재생 초기시간인지 여부를 반환한다.
+	bool IsMontageInitialTime();
 
 	///////////////////////////////////////////////////////////////////////
 	// Delegate Function
