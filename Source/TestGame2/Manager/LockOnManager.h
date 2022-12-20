@@ -13,7 +13,7 @@ class LockOnManager final : public SingletonBase< LockOnManager>
 {
 
 private:
-	ACharacter* LockOnTarget;         // 락온 된 대상
+	ACharacter* LockOnTarget;         // 락온 된 대상 
 
 public:
 	LockOnManager();

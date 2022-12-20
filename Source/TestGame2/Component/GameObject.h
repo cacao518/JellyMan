@@ -51,7 +51,8 @@ private:
 	bool               IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
 	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
 	bool               LandOnce;                // 착지 체크 변수
-	float              FallWaterTimeAmount;     // 물에 빠져있는 시간
+	float              FallWaterTime;           // 물에 빠져있는 시간 누적
+	float              MontagePlayTime;         // 몽타주 재생시간 누적
 
 public:	
 
@@ -165,6 +166,9 @@ public:
 	// 추가 키 입력 가능한지 여부를 반환한다.
 	bool GetIsEnableDerivedKey() { return IsEnableDerivedKey; };
 
+	// 몽타주 재생시간을 반환한다.
+	float GetMontagePlayTime() { return MontagePlayTime; }
+
 	// 애니메이션 상태를 반환한다.
 	const EAnimState& GetAnimState() { return AnimState; };
 
@@ -215,4 +219,7 @@ private:
 
 	// 착지 로직을 실행한다.
 	void _ProcessLand();
+
+	// 몽타주 관련 로직 처리를 한다.
+	void _ProcessMontage( float InDeltaTime );
 };

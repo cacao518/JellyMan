@@ -26,15 +26,16 @@
 
 UGameObject::UGameObject()
 :
-OwningCharacter     ( nullptr ),
-AnimState           ( EAnimState::IDLE_RUN ),
-CurSkillInfo        ( nullptr ),
-IsDie               ( false   ),
-IsFallWater         ( false   ),
-IsForceMove         ( false   ),
-IsEnabledAttackColl ( false   ),
-LandOnce            ( false   ),
-FallWaterTimeAmount ( 0       )
+OwningCharacter       ( nullptr ),
+AnimState             ( EAnimState::IDLE_RUN ),
+CurSkillInfo          ( nullptr ),
+IsDie                 ( false   ),
+IsFallWater           ( false   ),
+IsForceMove           ( false   ),
+IsEnabledAttackColl   ( false   ),
+LandOnce              ( false   ),
+FallWaterTime         ( 0       ),
+MontagePlayTime       ( 0       )
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
@@ -67,6 +68,7 @@ void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	_Move();
 	_CoolingSkills( DeltaTime );
 	_FallingWater( DeltaTime );
+	_ProcessMontage( DeltaTime );
 	_ProcessLand();
 
 	ResetInfo();
@@ -87,6 +89,7 @@ void UGameObject::ResetInfo( bool InForceReset )
 		IsEnableDerivedKey = false;
 		IsForceMove = false;
 		CurSkillInfo = nullptr;
+		MontagePlayTime = 0;
 	}
 }
 
@@ -493,9 +496,9 @@ void UGameObject::_FallingWater( float InDeltaTime )
 	if( !curMontage || isNotHitAnim )
 		MontagePlay( HitAnim, 0.3f );
 
-	if( FallWaterTimeAmount <= 3.f )
+	if( FallWaterTime <= 3.f )
 	{
-		FallWaterTimeAmount += InDeltaTime;
+		FallWaterTime += InDeltaTime;
 		FVector originPos = OwningCharacter->GetMesh()->GetRelativeLocation();
 		OwningCharacter->GetMesh()->SetRelativeLocation( FVector( originPos.X, originPos.Y, originPos.Z - 1.7f ) );
 	}
@@ -588,4 +591,15 @@ void UGameObject::_ProcessLand()
 			LandOnce = false;
 		}
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 根鸥林 包访 肺流 贸府甫 茄促.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameObject::_ProcessMontage( float InDeltaTime )
+{
+	if( AnimState != EAnimState::COMMON_ACTION )
+		return;
+
+	MontagePlayTime += InDeltaTime;
 }
