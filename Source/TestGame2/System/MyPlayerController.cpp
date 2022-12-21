@@ -80,7 +80,7 @@ void AMyPlayerController::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::MoveForward( float Value )
 {
-	if( !MyPlayer )
+	if( !MyPlayer || !GameObject )
 		return;
 
 	UMyAnimInstance* animInstance = MyPlayer ? Cast<UMyAnimInstance>( MyPlayer->GetMesh()->GetAnimInstance() ) : nullptr;
@@ -108,7 +108,7 @@ void AMyPlayerController::MoveForward( float Value )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::MoveRight( float Value )
 {
-	if( !MyPlayer )
+	if( !MyPlayer || !GameObject )
 		return;
 
 	UMyAnimInstance* animInstance = MyPlayer ? Cast<UMyAnimInstance>( MyPlayer->GetMesh()->GetAnimInstance() ) : nullptr;
