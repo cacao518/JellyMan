@@ -35,7 +35,8 @@ IsForceMove           ( false   ),
 IsEnabledAttackColl   ( false   ),
 LandOnce              ( false   ),
 FallWaterTime         ( 0       ),
-MontagePlayTime       ( 0       )
+MontagePlayTime       ( 0       ),
+DeathTime             ( 0       )
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
@@ -64,11 +65,11 @@ void UGameObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	_AnimStateChange();
-	_CheckDie();
-	_Move();
+	_ProcessDie();
+	_ProcessMove();
+	_ProcessAccTime( DeltaTime );
 	_CoolingSkills( DeltaTime );
 	_FallingWater( DeltaTime );
-	_ProcessMontage( DeltaTime );
 	_ProcessLand();
 
 	ResetInfo();
@@ -392,7 +393,7 @@ void UGameObject::_AnimStateChange()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 이동 관련 로직을 수행한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameObject::_Move()
+void UGameObject::_ProcessMove()
 {
 	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
 
@@ -418,9 +419,9 @@ void UGameObject::_Move()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 해당 캐릭터가 사망했는지 체크한다.
+//// @brief 사망 관련 로직을 수행한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameObject::_CheckDie()
+void UGameObject::_ProcessDie()
 {
 	if( !OwningCharacter )
 		return;
@@ -460,6 +461,11 @@ void UGameObject::_CheckDie()
 		}
 
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( TEXT( "NoCollision" ) );
+	}
+
+	if( AnimState == EAnimState::DIE && DeathTime >= Const::DEAD_ACTOR_DESTROY_TIME )
+	{
+		GetObjectManager().DestroyActor( OwningCharacter );
 	}
 }
 
@@ -605,12 +611,12 @@ void UGameObject::_ProcessLand()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 몽타주 관련 로직 처리를 한다.
+//// @brief 누적 시간 관련 로직 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameObject::_ProcessMontage( float InDeltaTime )
+void UGameObject::_ProcessAccTime( float InDeltaTime )
 {
-	if( AnimState != EAnimState::COMMON_ACTION )
-		return;
-
-	MontagePlayTime += InDeltaTime;
+	if( AnimState == EAnimState::COMMON_ACTION )
+		MontagePlayTime += InDeltaTime;
+	else if( AnimState == EAnimState::DIE )
+		DeathTime += InDeltaTime;
 }

@@ -51,8 +51,10 @@ private:
 	bool               IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
 	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
 	bool               LandOnce;                // 착지 체크 변수
+
 	float              FallWaterTime;           // 물에 빠져있는 시간 누적
 	float              MontagePlayTime;         // 몽타주 재생시간 누적
+	float              DeathTime;               // 사망 시간 누적
 
 public:	
 
@@ -197,10 +199,10 @@ private:
 	void _AnimStateChange();
 
 	// 이동 관련 로직을 수행한다.
-	void _Move();
+	void _ProcessMove();
 
-	// 해당 캐릭터가 사망했는지 체크한다.
-	void _CheckDie();
+	// 사망 관련 로직을 수행한다.
+	void _ProcessDie();
 
 	// 스킬 쿨타임을 등록한다.
 	void _RegisterCoolTime( const FSkillInfo& InSkillInfo );
@@ -220,6 +222,6 @@ private:
 	// 착지 로직을 실행한다.
 	void _ProcessLand();
 
-	// 몽타주 관련 로직 처리를 한다.
-	void _ProcessMontage( float InDeltaTime );
+	// 누적시간 관련 로직 처리를 한다.
+	void _ProcessAccTime( float InDeltaTime );
 };
