@@ -306,10 +306,13 @@ bool UGameObject::IsCoolingSkill( int InSkillNum )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UGameObject::IsMontageInitialTime()
 {
-	if( MontagePlayTime <= Const::MONTAGE_INITIAL_TIME )
-		return true;
+	if( AnimState != EAnimState::COMMON_ACTION )
+		return false;
 
-	return false;
+	if( MontagePlayTime > Const::MONTAGE_INITIAL_TIME )
+		return false;
+
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -92,7 +92,8 @@ void AMyPlayerController::MoveForward( float Value )
 		if( animInstance->AnimState    == EAnimState   ::IDLE_RUN ||
 			animInstance->AnimState    == EAnimState   ::JUMP     ||
 			animInstance->AnimSubState == EAnimSubState::MOVABLE  ||
-			animInstance->AnimSubState == EAnimSubState::UPPER_LOWER_BLEND )
+			animInstance->AnimSubState == EAnimSubState::UPPER_LOWER_BLEND ||
+			GameObject->IsMontageInitialTime() )
 		{
 			const FRotator Rotation = GetControlRotation();
 			const FRotator YawRotation( 0, Rotation.Yaw, 0 );
@@ -119,7 +120,8 @@ void AMyPlayerController::MoveRight( float Value )
 		if( animInstance->AnimState    == EAnimState   ::IDLE_RUN ||
 			animInstance->AnimState    == EAnimState   ::JUMP     || 
 			animInstance->AnimSubState == EAnimSubState::MOVABLE  ||
-			animInstance->AnimSubState == EAnimSubState::UPPER_LOWER_BLEND )
+			animInstance->AnimSubState == EAnimSubState::UPPER_LOWER_BLEND ||
+			GameObject->IsMontageInitialTime() )
 		{
 			const FRotator Rotation = GetControlRotation();
 			const FRotator YawRotation( 0, Rotation.Yaw, 0 );
@@ -382,7 +384,7 @@ void AMyPlayerController::_ProcessRotationRate()
 		MyPlayer->GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::FLY_ROTATION_RATE, 0.0f );
 		return;
 	}
-	else if( ReadySkillResetTime > 0 )
+	else if( ReadySkillResetTime > 0 || GameObject->IsMontageInitialTime() )
 	{
 		MyPlayer->GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::READY_SKILL_ROTATION_RATE, 0.0f );
 		return;
