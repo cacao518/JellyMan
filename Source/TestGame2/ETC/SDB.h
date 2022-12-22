@@ -88,6 +88,19 @@ enum class ESkillPlaySpeedType : uint8
 	MAX,
 };
 
+// 팀 종류
+UENUM( BlueprintType )
+enum class ETeamType : uint8
+{
+	NEUTRAL              UMETA( DisplayName = "Neutral" ),
+	A                    UMETA( DisplayName = "A" ),
+	B                    UMETA( DisplayName = "B" ),
+	C                    UMETA( DisplayName = "C" ),
+	D                    UMETA( DisplayName = "D" ),
+
+	MAX,
+};
+
 // 충돌체 정보
 USTRUCT( Atomic, BlueprintType )
 struct FCollisionInfo
