@@ -28,6 +28,7 @@ UGameObject::UGameObject()
 :
 OwningCharacter       ( nullptr ),
 AnimState             ( EAnimState::IDLE_RUN ),
+TeamType              ( ETeamType::MAX ),
 CurSkillInfo          ( nullptr ),
 IsDie                 ( false   ),
 IsFallWater           ( false   ),
@@ -352,6 +353,13 @@ void UGameObject::_Init()
 	if( hitColl )
 		hitColl->OnComponentBeginOverlap.AddDynamic( this, &UGameObject::HitCollBeginOverlap );
 
+	ETeamType teamType = ETeamType::MAX;
+	if( auto characterPC = Cast< ACharacterPC >( OwningCharacter ) )
+		teamType = ETeamType::A;
+	else if( auto characterNPC = Cast< ACharacterNPC >( OwningCharacter ) )
+		teamType = ETeamType::NEUTRAL;
+
+	SetTeamType( teamType );
 	SetMoveSpeed( Stat.MoveSpeed );
 	SetJumpPower( Stat.JumpPower );
 	
@@ -536,6 +544,11 @@ void UGameObject::_ProcessHit( AActor* InOtherActor )
 {
 	auto othetGameObject = InOtherActor ? Cast<UGameObject>( InOtherActor->FindComponentByClass<UGameObject>() ) : nullptr;
 	if( !othetGameObject )
+		return;
+
+	if( TeamType != ETeamType::MAX && 
+		othetGameObject->GetTeamType() != ETeamType::MAX &&
+		othetGameObject->GetTeamType() == TeamType )
 		return;
 
 	othetGameObject->OnAttackSuccess();

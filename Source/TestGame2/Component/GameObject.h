@@ -39,6 +39,7 @@ public:
 private:
 	ACharacter*        OwningCharacter;         // 부모 캐릭터 클래스
 	EAnimState         AnimState;       	    // 애니메이션 상태
+	ETeamType          TeamType;                // 팀 타입
 	FCollisionInfo     AttackCollInfo;          // 공격 콜리전 정보
 	FVector            MovePos;                 // 이동할 위치
 	FStatusInfo        InitStat;                // 초기기본 능력치
@@ -92,6 +93,9 @@ public:
 	// 오브젝트 아이디를 셋팅한다.
 	void SetId( int InId ){ Id = InId; };
 
+	// 팀 타입을 설정한다.
+	void SetTeamType( ETeamType InTeamType ){ TeamType = InTeamType; };
+
 	// 공격 콜리전 정보를 셋팅한다.
 	void SetAttackCollInfo( const FCollisionInfo& InAttackCollInfo );
 
@@ -140,6 +144,9 @@ public:
 
     // 오브젝트 타입을 알아낸다.
 	EObjectType GetObjectType();
+
+	// 팀 타입을 반환한다.
+	ETeamType GetTeamType() { return TeamType; };
 
 	// 공격 콜리전 정보를 반환한다.
 	const FCollisionInfo& GetAttackCollInfo() { return AttackCollInfo; };
