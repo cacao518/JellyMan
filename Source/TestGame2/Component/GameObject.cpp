@@ -358,6 +358,8 @@ void UGameObject::_Init()
 		teamType = ETeamType::A;
 	else if( auto characterNPC = Cast< ACharacterNPC >( OwningCharacter ) )
 		teamType = ETeamType::NEUTRAL;
+	else if( auto groundObject = Cast< AGroundObject >( OwningCharacter ) )
+		teamType = ETeamType::NEUTRAL;
 
 	SetTeamType( teamType );
 	SetMoveSpeed( Stat.MoveSpeed );
