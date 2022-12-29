@@ -16,7 +16,7 @@ using CooltimeMap = TMap<int, float>; // (key:스킬ID, value:남은쿨타임)
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TESTGAME2_API UGameObject final : public UActorComponent
+class TESTGAME2_API UGameObject : public UActorComponent
 {
 	GENERATED_BODY()
 

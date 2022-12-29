@@ -4,8 +4,8 @@
 #include "../System/MyPlayerController.h"
 #include "../System/MyAnimInstance.h"
 #include "../Component/GameObject.h"
-#include "../Component/WeaponChange.h"
-#include "../Component/MaterialProperty.h"
+#include "../Component/WeaponComp.h"
+#include "../Component/MaterialComp.h"
 #include "Animation/AnimInstance.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Blueprint/UserWidget.h"
@@ -53,11 +53,11 @@ ACharacterPC::ACharacterPC()
 	// Create a GameObejct Component
 	GameObject = CreateDefaultSubobject<UGameObject>( TEXT( "GameObject" ) );
 
-	// Create a MaterialProperty Component
-	MatProperty = CreateDefaultSubobject<UMaterialProperty>( TEXT( "MatProperty" ) );
+	// Create a MaterialComp Component
+	MatComp = CreateDefaultSubobject<UMaterialComp>( TEXT( "MaterialComp" ) );
 
-	// Create a WeaponChange Component
-	WeaponChange = CreateDefaultSubobject<UWeaponChange>( TEXT( "WeaponChange" ) );
+	// Create a WeaponComp Component
+	WeaponComp = CreateDefaultSubobject<UWeaponComp>( TEXT( "WeaponComp" ) );
 
 	// HitBox Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );

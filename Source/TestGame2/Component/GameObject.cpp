@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GameObject.h"
-#include "MaterialProperty.h"
-#include "WeaponChange.h"
+#include "MaterialComp.h"
+#include "WeaponComp.h"
 #include "../ETC/SDB.h"
 #include "../Character/CharacterPC.h"
 #include "../Character/CharacterNPC.h"
@@ -183,11 +183,11 @@ bool UGameObject::SkillPlay( int InSkillNum )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameObject::OnAttackSuccess()
 {
-	auto weaponChange = OwningCharacter ? Cast<UWeaponChange>( OwningCharacter->FindComponentByClass<UWeaponChange>() ) : nullptr;
-	if( !weaponChange )
+	auto WeaponComp = OwningCharacter ? Cast<UWeaponComp>( OwningCharacter->FindComponentByClass<UWeaponComp>() ) : nullptr;
+	if( !WeaponComp )
 		return;
 
-	weaponChange->SubWeaponDurability();
+	WeaponComp->SubWeaponDurability();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -596,7 +596,7 @@ void UGameObject::_ProcessLandscapeHit( AActor* InOtherActor )
 		return;
 
 	/// 풀과 물은 물에 빠지지 않는다.
-	auto charMatProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->FindComponentByClass<UMaterialProperty>() ) : nullptr;
+	auto charMatProperty = OwningCharacter ? Cast<UMaterialComp>( OwningCharacter->FindComponentByClass<UMaterialComp>() ) : nullptr;
 	if( charMatProperty )
 	{
 		if( charMatProperty->GetMatState() == EMaterialState::GRASS || 

@@ -22,10 +22,10 @@ public:
 	class UGameObject* GameObject;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
-	class UMaterialProperty* MatProperty;
+	class UMaterialComp* MatComp;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
-	class UWeaponChange* WeaponChange;
+	class UWeaponComp* WeaponComp;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = ( AllowPrivateAccess = "true" ) )
 	class UBoxComponent* HitColl;

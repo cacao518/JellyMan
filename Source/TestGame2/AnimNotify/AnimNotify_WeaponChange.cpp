@@ -2,7 +2,7 @@
 
 
 #include "AnimNotify_WeaponChange.h"
-#include "../Component/WeaponChange.h"
+#include "../Component/WeaponComp.h"
 
 FString UAnimNotify_WeaponChange::GetNotifyName_Implementation() const
 {
@@ -14,8 +14,8 @@ void UAnimNotify_WeaponChange::Notify( USkeletalMeshComponent* MeshComp, UAnimSe
 	if( !MeshComp || !( MeshComp->GetOwner() ) )
 		return;
 
-	UWeaponChange* weaponChange = Cast<UWeaponChange>( MeshComp->GetOwner()->FindComponentByClass<UWeaponChange>() );
-	if( !weaponChange ) return;
+	UWeaponComp* weaponComp = Cast<UWeaponComp>( MeshComp->GetOwner()->FindComponentByClass<UWeaponComp>() );
+	if( !weaponComp ) return;
 
-	weaponChange->EquipWeapon( WeaponState );
+	weaponComp->EquipWeapon( WeaponState );
 }

@@ -5,14 +5,14 @@
 #include "../ETC/SDB.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "WeaponChange.generated.h"
+#include "WeaponComp.generated.h"
 
 
 using WeaponMeshMap = TMap< EWeaponState, UStaticMeshComponent* >;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TESTGAME2_API UWeaponChange final : public UActorComponent
+class TESTGAME2_API UWeaponComp final : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -33,7 +33,7 @@ private:
 	int                             WeaponDurabilityMax;         // 무기 내구도 최대
 
 public:	
-	UWeaponChange();
+	UWeaponComp();
 
 	// Begin 함수
 	virtual void BeginPlay() override;
@@ -42,7 +42,7 @@ public:
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
 	// 무기 소환 가능한지 여부
-	bool CanWeaponChange( EWeaponState InWeaponState );
+	bool CanWeaponComp( EWeaponState InWeaponState );
 
 	// 무기 내구도를 감소시킨다.
 	void SubWeaponDurability( int InValue = 1 );

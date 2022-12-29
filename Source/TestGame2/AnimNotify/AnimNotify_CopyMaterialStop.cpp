@@ -2,7 +2,7 @@
 
 
 #include "AnimNotify_CopyMaterialStop.h"
-#include "../Component/MaterialProperty.h"
+#include "../Component/MaterialComp.h"
 
 FString UAnimNotify_CopyMaterialStop::GetNotifyName_Implementation() const
 {
@@ -14,7 +14,7 @@ void UAnimNotify_CopyMaterialStop::Notify( USkeletalMeshComponent* MeshComp, UAn
 	if( !MeshComp || !( MeshComp->GetOwner() ) )
 		return;
 
-	UMaterialProperty* matProperty = Cast<UMaterialProperty>( MeshComp->GetOwner()->FindComponentByClass<UMaterialProperty>() );
+	UMaterialComp* matProperty = Cast<UMaterialComp>( MeshComp->GetOwner()->FindComponentByClass<UMaterialComp>() );
 	if( !matProperty ) return;
 
 	matProperty->SetIsEnabledTileColl( false );

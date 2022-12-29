@@ -2,7 +2,7 @@
 #include "CameraManager.h"
 #include "Engine/World.h"
 #include "../Component/GameObject.h"
-#include "../Component/MaterialProperty.h"
+#include "../Component/MaterialComp.h"
 #include "../Character/CharacterPC.h"
 #include "../System/MyAnimInstance.h"
 #include "../System/MyGameInstance.h"
@@ -64,7 +64,7 @@ void CameraManager::CameraShake( float InScale, bool InShakeByWeight, bool InSha
 	}
 	else if( InShakeByIntensity )
 	{
-		auto matProperty = player ? Cast<UMaterialProperty>( player->FindComponentByClass<UMaterialProperty>() ) : nullptr;
+		auto matProperty = player ? Cast<UMaterialComp>( player->FindComponentByClass<UMaterialComp>() ) : nullptr;
 		if( !matProperty )
 			return;
 

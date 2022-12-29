@@ -4,7 +4,7 @@
 #include "CharacterNPC.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Component/GameObject.h"
-#include "../Component/MaterialProperty.h"
+#include "../Component/MaterialComp.h"
 #include "../System/MonsterAIController.h"
 #include "Components/BoxComponent.h"
 

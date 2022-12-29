@@ -1,8 +1,8 @@
 #pragma once
 
-#include "MaterialProperty.h"
+#include "MaterialComp.h"
 #include "GameObject.h"
-#include "WeaponChange.h"
+#include "WeaponComp.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -18,7 +18,7 @@
 #include "../Manager/ObjectManager.h"
 #include "../System/MyAnimInstance.h"
 
-UMaterialProperty::UMaterialProperty()
+UMaterialComp::UMaterialComp()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	OwningCharacter = nullptr;	
@@ -27,7 +27,7 @@ UMaterialProperty::UMaterialProperty()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief Begin
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::BeginPlay()
+void UMaterialComp::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -37,7 +37,7 @@ void UMaterialProperty::BeginPlay()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief Tick
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UMaterialComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
@@ -48,7 +48,7 @@ void UMaterialProperty::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 물질을 변경한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::SetMatState( UMaterialInterface* InMatInterface )
+void UMaterialComp::SetMatState( UMaterialInterface* InMatInterface )
 {
 	if( !InitMaterial )
 		return;
@@ -71,9 +71,9 @@ void UMaterialProperty::SetMatState( UMaterialInterface* InMatInterface )
 
 	curMesh->SetMaterial( 0, InMatInterface );
 
-	auto weaponChange = OwningCharacter ? Cast<UWeaponChange>( OwningCharacter->FindComponentByClass<UWeaponChange>() ) : nullptr;
-	if( weaponChange && weaponChange->GetCurWeaponMesh() )
-		weaponChange->GetCurWeaponMesh()->SetMaterial( 0, InMatInterface );
+	auto weaponComp = OwningCharacter ? Cast<UWeaponComp>( OwningCharacter->FindComponentByClass<UWeaponComp>() ) : nullptr;
+	if( weaponComp && weaponComp->GetCurWeaponMesh() )
+		weaponComp->GetCurWeaponMesh()->SetMaterial( 0, InMatInterface );
 	
 	MatState = matState;
 
@@ -85,7 +85,7 @@ void UMaterialProperty::SetMatState( UMaterialInterface* InMatInterface )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 타일 콜리전 활성화 여부를 셋팅한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::SetIsEnabledTileColl( bool InIsEnabled )
+void UMaterialComp::SetIsEnabledTileColl( bool InIsEnabled )
 {
 	IsEnabledTileColl = InIsEnabled;
 
@@ -100,7 +100,7 @@ void UMaterialProperty::SetIsEnabledTileColl( bool InIsEnabled )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 중간 강도 인지 여부를 반환한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-bool UMaterialProperty::IsMiddleIntensity()
+bool UMaterialComp::IsMiddleIntensity()
 {
 	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( MatState );
 	if( matInfo )
@@ -115,7 +115,7 @@ bool UMaterialProperty::IsMiddleIntensity()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 고 강도 인지 여부를 반환한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-bool UMaterialProperty::IsHardIntensity()
+bool UMaterialComp::IsHardIntensity()
 {
 	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( MatState );
 	if( matInfo )
@@ -130,7 +130,7 @@ bool UMaterialProperty::IsHardIntensity()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 고 중량 인지 여부를 반환한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-bool UMaterialProperty::IsHeavyMass()
+bool UMaterialComp::IsHeavyMass()
 {
 	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( MatState );
 	if( matInfo )
@@ -145,7 +145,7 @@ bool UMaterialProperty::IsHeavyMass()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 충돌이 시작할시에 호출되는 델리게이트에 등록하는 함수
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
+void UMaterialComp::TileCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 									         AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 										     bool bFromSweep, const FHitResult& SweepResult )
 {
@@ -162,7 +162,7 @@ void UMaterialProperty::TileCollBeginOverlap( UPrimitiveComponent* OverlappedCom
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief  초기화 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::_Init()
+void UMaterialComp::_Init()
 {
 	MatState = EMaterialState::MAX;
 
@@ -186,7 +186,7 @@ void UMaterialProperty::_Init()
 
 	auto tileColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "TileColl" ) ) ) : nullptr;
 	if( tileColl )
-		tileColl->OnComponentBeginOverlap.AddDynamic( this, &UMaterialProperty::TileCollBeginOverlap );
+		tileColl->OnComponentBeginOverlap.AddDynamic( this, &UMaterialComp::TileCollBeginOverlap );
 
 	SetIsEnabledTileColl( false );
 
@@ -196,7 +196,7 @@ void UMaterialProperty::_Init()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief  머티리얼에 맞는 능력치를 초기화한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::_InitStatus()
+void UMaterialComp::_InitStatus()
 {
 	auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->FindComponentByClass<UGameObject>() ) : nullptr;
 	if( !gameObject )
@@ -226,7 +226,7 @@ void UMaterialProperty::_InitStatus()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief EMaterialState를 머터리얼 애셋 주소로 바꿔준다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface* InMaterial )
+EMaterialState UMaterialComp::_ConvertMatAssetToMatState( UMaterialInterface* InMaterial )
 {
 	FString path = InMaterial->GetPathName();
 
@@ -242,7 +242,7 @@ EMaterialState UMaterialProperty::_ConvertMatAssetToMatState( UMaterialInterface
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 충돌 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::_ProcessCollision( AActor* InOtherActor )
+void UMaterialComp::_ProcessCollision( AActor* InOtherActor )
 {
 	UMaterialInterface* matInterface = nullptr;
 
@@ -303,7 +303,7 @@ void UMaterialProperty::_ProcessCollision( AActor* InOtherActor )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 물질 변경 이펙트를 실행한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::_PlayChangeEffect()
+void UMaterialComp::_PlayChangeEffect()
 {
 	switch( MatState )
 	{
@@ -328,7 +328,7 @@ void UMaterialProperty::_PlayChangeEffect()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 게이지 관련 로직을 실행한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::_ProcessGauge( float InDeltaTime )
+void UMaterialComp::_ProcessGauge( float InDeltaTime )
 {
 	if( MatState == EMaterialState::JELLY )
 		JellyEnergy < JellyEnergyMax ? JellyEnergy += InDeltaTime * 2.f : JellyEnergy = JellyEnergyMax;
@@ -337,7 +337,7 @@ void UMaterialProperty::_ProcessGauge( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 풀재질 관련 로직을 실행한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialProperty::_ProcessGrass( float InDeltaTime )
+void UMaterialComp::_ProcessGrass( float InDeltaTime )
 {
 	if( MatState != EMaterialState::GRASS )
 		return;

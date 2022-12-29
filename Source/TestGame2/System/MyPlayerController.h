@@ -12,8 +12,8 @@
 
 class ACharacterPC;
 class UGameObject;
-class UMaterialProperty;
-class UWeaponChange;
+class UMaterialComp;
+class UWeaponComp;
 
 
 using InputMap = map< EInputKeyType, function<void()> >;
@@ -27,8 +27,8 @@ class TESTGAME2_API AMyPlayerController : public APlayerController
 private:
 	ACharacterPC*            MyPlayer;
 	UGameObject*             GameObject;
-	UMaterialProperty*       MatProperty;
-	UWeaponChange*           WeaponChange;
+	UMaterialComp*           MatComp;
+	UWeaponComp*             WeaponComp;
 
 	InputMap                 InputTypeAndFuncMap;  // Key:입력키종류, Value:입력키 함수
 	float                    ReadySkillResetTime;  // 발동 대기중인 스킬 초기화 시간

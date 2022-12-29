@@ -5,14 +5,14 @@
 #include "../ETC/SDB.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "MaterialProperty.generated.h"
+#include "MaterialComp.generated.h"
 
 
 class UMaterialInterface;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TESTGAME2_API UMaterialProperty final : public UActorComponent
+class TESTGAME2_API UMaterialComp final : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -35,7 +35,7 @@ private:
 	bool                IsEnabledTileColl;        // 타일 콜리전 활성화 여부
 
 public:	
-	UMaterialProperty();
+	UMaterialComp();
 
 	// Begin 함수
 	virtual void BeginPlay() override;

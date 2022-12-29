@@ -2,8 +2,8 @@
 
 #include "MyPlayerController.h"
 #include "../Component/GameObject.h"
-#include "../Component/MaterialProperty.h"
-#include "../Component/WeaponChange.h"
+#include "../Component/MaterialComp.h"
+#include "../Component/WeaponComp.h"
 #include "../Manager/LockOnManager.h"
 #include "../Manager/ObjectManager.h"
 #include "../Character/CharacterPC.h"
@@ -33,8 +33,8 @@ void AMyPlayerController::BeginPlay()
 		return;
 
 	GameObject   = MyPlayer->GameObject;
-	MatProperty  = MyPlayer->MatProperty;
-	WeaponChange = MyPlayer->WeaponChange;
+	MatComp      = MyPlayer->MatComp;
+	WeaponComp   = MyPlayer->WeaponComp;
 
 	check( InputComponent );
 	InputComponent->BindAxis( "MoveForward", this, &AMyPlayerController::MoveForward );
@@ -154,12 +154,12 @@ void AMyPlayerController::LookUpAtRate( float Rate )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessLeftMouse()
 {
-	if( !WeaponChange )
+	if( !WeaponComp )
 		return;
 
 	bool result = false;
 
-	switch( WeaponChange->GetWeaponState() )
+	switch( WeaponComp->GetWeaponState() )
 	{
 		case EWeaponState::MAX:
 		{
@@ -181,12 +181,12 @@ void AMyPlayerController::ProcessLeftMouse()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessRightMouse()
 {
-	if( !WeaponChange )
+	if( !WeaponComp )
 		return;
 
 	bool result = false;
 
-	switch( WeaponChange->GetWeaponState() )
+	switch( WeaponComp->GetWeaponState() )
 	{
 		case EWeaponState::MAX:
 		{
@@ -208,10 +208,10 @@ void AMyPlayerController::ProcessRightMouse()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessBothMouseDown()
 {
-	if( !MatProperty || !MyPlayer )
+	if( !MatComp || !MyPlayer )
 		return;
 
-	switch( MatProperty->GetMatState() )
+	switch( MatComp->GetMatState() )
 	{
 		case EMaterialState::GRASS:
 		{
@@ -233,10 +233,10 @@ void AMyPlayerController::ProcessBothMouseDown()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessBothMouseUp()
 {
-	if( !MatProperty || !MyPlayer )
+	if( !MatComp || !MyPlayer )
 		return;
 
-	switch( MatProperty->GetMatState() )
+	switch( MatComp->GetMatState() )
 	{
 		case EMaterialState::GRASS:
 		{
@@ -283,10 +283,10 @@ void AMyPlayerController::ProcessF()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessR()
 {
-	if( MatProperty && MatProperty->GetMatState() != EMaterialState::JELLY )
+	if( MatComp && MatComp->GetMatState() != EMaterialState::JELLY )
 	{
 		if( _SkillPlay( 10 ) )
-			MatProperty->SetMatState();
+			MatComp->SetMatState();
 	}
 }
 
@@ -295,10 +295,10 @@ void AMyPlayerController::ProcessR()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::Process1()
 {
-	if( !WeaponChange )
+	if( !WeaponComp )
 		return;
 
-	if( !( WeaponChange->CanWeaponChange( EWeaponState::SWORD ) ) )
+	if( !( WeaponComp->CanWeaponComp( EWeaponState::SWORD ) ) )
 		return;
 
 	_SkillPlay( 5 );
@@ -312,11 +312,11 @@ bool AMyPlayerController::_SkillPlay( int InBasicSkillNum, int InMiddleSkillNum,
 	if( !GameObject )
 		return false;
 
-	if( MatProperty && InMiddleSkillNum != 0 && InHardSkillNum != 0 )
+	if( MatComp && InMiddleSkillNum != 0 && InHardSkillNum != 0 )
 	{
-		if( MatProperty->IsHardIntensity() )
+		if( MatComp->IsHardIntensity() )
 			return GameObject->SkillPlay( InHardSkillNum );
-		else if( MatProperty->IsMiddleIntensity() )
+		else if( MatComp->IsMiddleIntensity() )
 			return GameObject->SkillPlay( InMiddleSkillNum );
 	}
 

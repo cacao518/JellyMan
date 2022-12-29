@@ -1,13 +1,13 @@
 #pragma once
 
-#include "WeaponChange.h"
-#include "MaterialProperty.h"
+#include "WeaponComp.h"
+#include "MaterialComp.h"
 #include "GameObject.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Manager/DataInfoManager.h"
 
-UWeaponChange::UWeaponChange()
+UWeaponComp::UWeaponComp()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	OwningCharacter                   = nullptr;
@@ -26,7 +26,7 @@ UWeaponChange::UWeaponChange()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief Begin
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UWeaponChange::BeginPlay()
+void UWeaponComp::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -38,7 +38,7 @@ void UWeaponChange::BeginPlay()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief Tick
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UWeaponChange::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UWeaponComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
@@ -57,9 +57,9 @@ void UWeaponChange::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 무기 소환 가능한지 여부
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-bool UWeaponChange::CanWeaponChange( EWeaponState InWeaponState )
+bool UWeaponComp::CanWeaponComp( EWeaponState InWeaponState )
 {
-	auto matProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->FindComponentByClass<UMaterialProperty>() ) : nullptr;
+	auto matProperty = OwningCharacter ? Cast<UMaterialComp>( OwningCharacter->FindComponentByClass<UMaterialComp>() ) : nullptr;
 	auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->FindComponentByClass<UGameObject>() ) : nullptr;
 
 	if( !gameObject || !matProperty )
@@ -87,7 +87,7 @@ bool UWeaponChange::CanWeaponChange( EWeaponState InWeaponState )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 무기 내구도를 감소시킨다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UWeaponChange::SubWeaponDurability( int InValue )
+void UWeaponComp::SubWeaponDurability( int InValue )
 {
 	WeaponDurability -= 1;
 
@@ -98,7 +98,7 @@ void UWeaponChange::SubWeaponDurability( int InValue )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 무기를 변경한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UWeaponChange::EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim )
+void UWeaponComp::EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim )
 {
 	if( InWeaponState == EWeaponState::MAX )
 		return;
@@ -110,8 +110,8 @@ void UWeaponChange::EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim )
 	if( !curWeaponInfo )
 		return;
 
-	// MaterialProperty 가 있고 젤리 상태라면 WeaponInfo의 필요젤리양 만큼 젤리에너지가 소모된다.
-	auto matProperty = OwningCharacter ? Cast<UMaterialProperty>( OwningCharacter->FindComponentByClass<UMaterialProperty>() ) : nullptr;
+	// MaterialComp 가 있고 젤리 상태라면 WeaponInfo의 필요젤리양 만큼 젤리에너지가 소모된다.
+	auto matProperty = OwningCharacter ? Cast<UMaterialComp>( OwningCharacter->FindComponentByClass<UMaterialComp>() ) : nullptr;
 	if( matProperty && matProperty->GetMatState() == EMaterialState::JELLY )
 	{
 		if( matProperty->GetJellyEnergy() >= curWeaponInfo->RequireJellyAmount )
@@ -148,7 +148,7 @@ void UWeaponChange::EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 무기를 해제한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UWeaponChange::UnEquipWeapon()
+void UWeaponComp::UnEquipWeapon()
 {
 	CurWeaponMesh = nullptr;
 	WeaponState = EWeaponState::MAX;
@@ -160,7 +160,7 @@ void UWeaponChange::UnEquipWeapon()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 무기 메쉬 주소를 저장해놓는다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UWeaponChange::_InitWeaponMesh()
+void UWeaponComp::_InitWeaponMesh()
 {
 	for( const auto& [state, weaponInfo] : GetDataInfoManager().GetWeaponInfos() )
 	{
@@ -172,7 +172,7 @@ void UWeaponChange::_InitWeaponMesh()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 디졸브 애니메이션을 종료 처리한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UWeaponChange::_DissovleAnimEnd()
+void UWeaponComp::_DissovleAnimEnd()
 {
 	if ( !CurWeaponMesh )
 		return;
