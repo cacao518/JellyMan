@@ -15,7 +15,7 @@ using CooltimeMap = TMap<int, float>; // (key:스킬ID, value:남은쿨타임)
 
 
 UCLASS( ClassGroup = ( Custom ), meta = ( BlueprintSpawnableComponent ) )
-class TESTGAME2_API UCharacterComp : public UObjectComp
+class TESTGAME2_API UCharacterComp final : public UObjectComp
 {
 	GENERATED_BODY()
 	
@@ -24,10 +24,10 @@ public:
 	TArray<FSkillInfo> SkillInfos;              // 해당 BP 모든 스킬 정보
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	UAnimMontage* HitAnim;                 // 피격 애니메이션
+	UAnimMontage*      HitAnim;                 // 피격 애니메이션
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	UAnimMontage* LandAnim;                // 착지 애니메이션
+	UAnimMontage*      LandAnim;                // 착지 애니메이션
 
 private:
 	ACharacter*        OwningCharacter;         // 부모 캐릭터 클래스
@@ -65,6 +65,9 @@ public:
 
 	// 스킬을 플레이한다.
 	bool SkillPlay( int InSkillNum );
+
+	// 공격 성공 처리를 한다.
+	virtual void OnAttackSuccess() override;
 
 	///////////////////////////////////////////////////////////////////////
 	// Setter

@@ -74,18 +74,6 @@ void UObjectComp::LookAt( ACharacter* InTarget )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 공격 성공 처리를 한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UObjectComp::OnAttackSuccess()
-{
-	auto WeaponComp = OwningActor ? Cast<UWeaponComp>( OwningActor->FindComponentByClass<UWeaponComp>() ) : nullptr;
-	if( !WeaponComp )
-		return;
-
-	WeaponComp->SubWeaponDurability();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 공격 콜리전 정보를 셋팅한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UObjectComp::SetAttackCollInfo( const FCollisionInfo& InAttackCollInfo )
@@ -160,7 +148,7 @@ void UObjectComp::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 		return;
 
 	// 자기 자신 충돌은 무시한다.
-	if( Cast<ACharacter>( OtherActor ) == OwningActor ) 
+	if( Cast<AActor>( OtherActor ) == OwningActor ) 
 		return;
 
 	auto boxComponent = Cast<UBoxComponent>( OtherComp );

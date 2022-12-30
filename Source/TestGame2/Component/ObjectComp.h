@@ -47,7 +47,7 @@ public:
 	void LookAt( ACharacter* InTarget );
 
 	// 공격 성공 처리를 한다.
-	void OnAttackSuccess();
+	virtual void OnAttackSuccess() {};
 
 	///////////////////////////////////////////////////////////////////////
 	// Setter
