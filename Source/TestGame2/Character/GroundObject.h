@@ -4,15 +4,12 @@
 
 #include "../ETC/SDB.h"
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "GameFramework/Actor.h"
 #include "GroundObject.generated.h"
 
 
-class UAnimMontage;
-
-
 UCLASS()
-class TESTGAME2_API AGroundObject final : public ACharacter
+class TESTGAME2_API AGroundObject final : public AActor
 {
 	GENERATED_BODY()
 

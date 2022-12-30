@@ -2,7 +2,6 @@
 
 
 #include "GroundObject.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "../Component/ObjectComp.h"
 #include "Components/BoxComponent.h"
 
@@ -12,25 +11,19 @@ AGroundObject::AGroundObject()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// 회전을 부드럽게 하기 위한 코드
-	bUseControllerRotationYaw = false;
-	GetCharacterMovement()->bUseControllerDesiredRotation = false;
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+	RootComponent = CreateDefaultSubobject<USceneComponent>( TEXT( "RootComp" ) );
 
 	// ObjectComp
 	ObjectComp = CreateDefaultSubobject<UObjectComp>( TEXT( "ObjectComp" ) );
 
-	// Configure character movement
-	GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f );
-
 	// Box Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
-	HitColl->SetupAttachment( GetMesh() );
+	HitColl->SetupAttachment( RootComponent );
 	HitColl->SetCollisionProfileName( TEXT( "HitColl" ) );
 
 	// AttackBox Component
 	AttackColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "AttackColl" ) );
-	AttackColl->SetupAttachment( GetMesh() );
+	AttackColl->SetupAttachment( RootComponent );
 	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
 }
 
