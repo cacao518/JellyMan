@@ -47,9 +47,6 @@ public:
 	// 액터 생성
 	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, AActorSpawner* InSpawner = nullptr );
 
-	// 그라운드 오브젝트 생성
-	AActor* SpawnGroundObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator );
-
 	// 파티클 생성
 	void SpawnParticle( const FString& InEffectName, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator );
 

@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GroundObject.h"
+#include "StaticObject.h"
 #include "../Component/ObjectComp.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
-AGroundObject::AGroundObject()
+AStaticObject::AStaticObject()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -28,7 +28,7 @@ AGroundObject::AGroundObject()
 }
 
 // Called when the game starts or when spawned
-void AGroundObject::BeginPlay()
+void AStaticObject::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -36,7 +36,7 @@ void AGroundObject::BeginPlay()
 }
 
 // Called every frame
-void AGroundObject::Tick(float DeltaTime)
+void AStaticObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }

@@ -6,7 +6,7 @@
 #include "../ETC/SDB.h"
 #include "../Character/CharacterPC.h"
 #include "../Character/CharacterNPC.h"
-#include "../Character/GroundObject.h"
+#include "../Character/StaticObject.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
@@ -285,8 +285,8 @@ EObjectType UGameObject::GetObjectType()
 		return EObjectType::PC;
 	else if( auto characterNPC = Cast< ACharacterNPC >( OwningCharacter ) )
 		return EObjectType::NPC;
-	else if( auto groundObject = Cast< AGroundObject >( OwningCharacter ) )
-		return EObjectType::GROUND_OBJECT;
+	else if( auto groundObject = Cast< AStaticObject >( OwningCharacter ) )
+		return EObjectType::STATIC_OBJECT;
 
 	return EObjectType::MAX;
 }
@@ -358,7 +358,7 @@ void UGameObject::_Init()
 		teamType = ETeamType::A;
 	else if( auto characterNPC = Cast< ACharacterNPC >( OwningCharacter ) )
 		teamType = ETeamType::NEUTRAL;
-	else if( auto groundObject = Cast< AGroundObject >( OwningCharacter ) )
+	else if( auto staticObject = Cast< AStaticObject >( OwningCharacter ) )
 		teamType = ETeamType::NEUTRAL;
 
 	SetTeamType( teamType );
@@ -466,7 +466,7 @@ void UGameObject::_ProcessDie()
 				}
 			}
 			break;
-			case  EObjectType::GROUND_OBJECT:
+			case  EObjectType::STATIC_OBJECT:
 			{
 				GetObjectManager().DestroyActor( OwningCharacter );
 			}

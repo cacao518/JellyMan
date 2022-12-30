@@ -5,11 +5,11 @@
 #include "../ETC/SDB.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GroundObject.generated.h"
+#include "StaticObject.generated.h"
 
 
 UCLASS()
-class TESTGAME2_API AGroundObject final : public AActor
+class TESTGAME2_API AStaticObject final : public AActor
 {
 	GENERATED_BODY()
 
@@ -25,7 +25,7 @@ public:
 
 public:
 	// Sets default values for this character's properties
-	AGroundObject();
+	AStaticObject();
 
 protected:
 	// Called when the game starts or when spawned

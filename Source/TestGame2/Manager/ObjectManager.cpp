@@ -3,7 +3,6 @@
 #include "Engine/World.h"
 #include "../Character/CharacterPC.h"
 #include "../Character/CharacterNPC.h"
-#include "../Character/GroundObject.h"
 #include "../System/MyGameInstance.h"
 #include "../Component/ObjectComp.h"
 #include "Engine/BlueprintGeneratedClass.h"
@@ -69,19 +68,6 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		ObjectId++;
 		return newActor;
 	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 그라운드 오브젝트 생성
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-AActor* ObjectManager::SpawnGroundObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator )
-{
-	FString path = FString( TEXT( "/Game/GroundObject/" ) ) + InName;
-	UClass* groundObject = ConstructorHelpersInternal::FindOrLoadClass( path, AGroundObject::StaticClass() );
-	if( !groundObject )
-		return nullptr;
-
-	return SpawnActor( groundObject, InLocation, InRotator, nullptr );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

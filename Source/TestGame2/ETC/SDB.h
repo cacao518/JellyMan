@@ -15,7 +15,7 @@ enum class EObjectType : uint8
 	PC				  UMETA( DisplayName = "PC" ),
 	NPC				  UMETA( DisplayName = "NPC" ),
 	PROJECTILE        UMETA( DisplayName = "PROJECTILE" ),
-	GROUND_OBJECT     UMETA( DisplayName = "GROUND_OBJECT" ),
+	STATIC_OBJECT     UMETA( DisplayName = "STATIC_OBJECT" ),
 	MAX,
 };
 

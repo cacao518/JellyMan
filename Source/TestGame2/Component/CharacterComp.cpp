@@ -6,7 +6,6 @@
 #include "../ETC/SDB.h"
 #include "../Character/CharacterPC.h"
 #include "../Character/CharacterNPC.h"
-#include "../Character/GroundObject.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
@@ -273,7 +272,7 @@ void UCharacterComp::_ProcessDie()
 			}
 		}
 		break;
-		case  EObjectType::GROUND_OBJECT:
+		case  EObjectType::STATIC_OBJECT:
 		{
 			GetObjectManager().DestroyActor( OwningCharacter );
 		}

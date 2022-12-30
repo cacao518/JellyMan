@@ -6,7 +6,7 @@
 #include "../ETC/SDB.h"
 #include "../Character/CharacterPC.h"
 #include "../Character/CharacterNPC.h"
-#include "../Character/GroundObject.h"
+#include "../Character/StaticObject.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
@@ -143,8 +143,8 @@ EObjectType UObjectComp::GetObjectType()
 		return EObjectType::PC;
 	else if( auto characterNPC = Cast< ACharacterNPC >( OwningActor ) )
 		return EObjectType::NPC;
-	else if( auto groundObject = Cast< AGroundObject >( OwningActor ) )
-		return EObjectType::GROUND_OBJECT;
+	else if( auto staticObject = Cast< AStaticObject >( OwningActor ) )
+		return EObjectType::STATIC_OBJECT;
 
 	return EObjectType::MAX;
 }
@@ -238,7 +238,7 @@ void UObjectComp::_Init()
 		teamType = ETeamType::A;
 	else if( auto characterNPC = Cast< ACharacterNPC >( OwningActor ) )
 		teamType = ETeamType::NEUTRAL;
-	else if( auto groundObject = Cast< AGroundObject >( OwningActor ) )
+	else if( auto staticObject = Cast< AStaticObject >( OwningActor ) )
 		teamType = ETeamType::NEUTRAL;
 
 	SetTeamType( teamType );
