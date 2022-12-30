@@ -14,7 +14,7 @@ class UAnimMontage;
 using CooltimeMap = TMap<int, float>; // (key:스킬ID, value:남은쿨타임)
 
 
-UCLASS()
+UCLASS( ClassGroup = ( Custom ), meta = ( BlueprintSpawnableComponent ) )
 class TESTGAME2_API UCharacterComp : public UObjectComp
 {
 	GENERATED_BODY()
