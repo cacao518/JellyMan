@@ -4,7 +4,7 @@
 #include "BTS_CheckRange.h"
 #include "GameFramework/Character.h"
 #include "../System/MonsterAIController.h"
-#include "../Component/GameObject.h"
+#include "../Component/CharacterComp.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 
@@ -26,13 +26,13 @@ void UBTS_CheckRange::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 	if( !target )
 		return;
 
-	auto gameObject = controllingPawn ? Cast<UGameObject>( controllingPawn->FindComponentByClass<UGameObject>() ) : nullptr;
-	if( !gameObject )
+	auto characterComp = controllingPawn ? Cast<UCharacterComp>( controllingPawn->FindComponentByClass<UCharacterComp>() ) : nullptr;
+	if( !characterComp )
 		return;
 
-	for( auto& skill : gameObject->GetSkillInfos() )
+	for( auto& skill : characterComp->GetSkillInfos() )
 	{
-		if( gameObject->IsCoolingSkill( skill.Num ) )
+		if( characterComp->IsCoolingSkill( skill.Num ) )
 			continue;
 
 		if( target->GetDistanceTo( controllingPawn ) <= skill.ActivateRangeMax &&

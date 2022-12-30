@@ -4,7 +4,7 @@
 #include "BTT_Attack.h"
 #include "../ETC/SDB.h"
 #include "../System/MonsterAIController.h"
-#include "../Component/GameObject.h"
+#include "../Component/CharacterComp.h"
 #include "GameFramework/Character.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -24,13 +24,13 @@ EBTNodeResult::Type UBTT_Attack::ExecuteTask( UBehaviorTreeComponent& OwnerComp,
 	if( !target )
 		return EBTNodeResult::Failed;
 
-	auto gameObject = controllingPawn ? Cast<UGameObject>( controllingPawn->FindComponentByClass<UGameObject>() ) : nullptr;
-	if( !gameObject )
+	auto characterComp = controllingPawn ? Cast<UCharacterComp>( controllingPawn->FindComponentByClass<UCharacterComp>() ) : nullptr;
+	if( !characterComp )
 		return EBTNodeResult::Failed;
 
-	gameObject->LookAt( target );
+	characterComp->LookAt( target );
 
-	bool result = gameObject->SkillPlay( OwnerComp.GetBlackboardComponent()->GetValueAsInt( AMonsterAIController::CurSkillNumKey ) );
+	bool result = characterComp->SkillPlay( OwnerComp.GetBlackboardComponent()->GetValueAsInt( AMonsterAIController::CurSkillNumKey ) );
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, 0 );
 

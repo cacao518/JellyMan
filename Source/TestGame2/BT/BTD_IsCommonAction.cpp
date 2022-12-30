@@ -4,7 +4,7 @@
 #include "BTD_IsCommonAction.h"
 #include "GameFramework/Character.h"
 #include "../System/MonsterAIController.h"
-#include "../Component/GameObject.h"
+#include "../Component/CharacterComp.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTD_IsCommonAction::UBTD_IsCommonAction()
@@ -18,10 +18,10 @@ bool UBTD_IsCommonAction::CalculateRawConditionValue(UBehaviorTreeComponent& Own
 	if( !controllingPawn )
 		return false;
 
-	auto gameObject = controllingPawn ? Cast<UGameObject>( controllingPawn->FindComponentByClass<UGameObject>() ) : nullptr;
-	if( !gameObject )
+	auto characterComp = controllingPawn ? Cast<UCharacterComp>( controllingPawn->FindComponentByClass<UCharacterComp>() ) : nullptr;
+	if( !characterComp )
 		return false;
 
-	bool bResult = gameObject->GetAnimState() == EAnimState::COMMON_ACTION;
+	bool bResult = characterComp->GetAnimState() == EAnimState::COMMON_ACTION;
 	return bResult;
 }

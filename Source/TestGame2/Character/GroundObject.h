@@ -18,7 +18,7 @@ class TESTGAME2_API AGroundObject final : public ACharacter
 
 public:
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
-	class UGameObject* GameObject;
+	class UObjectComp* ObjectComp;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = ( AllowPrivateAccess = "true" ) )
 	class UBoxComponent* HitColl;

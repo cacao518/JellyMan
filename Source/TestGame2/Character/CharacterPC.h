@@ -19,7 +19,7 @@ class ACharacterPC final : public ACharacter
 
 public:
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
-	class UGameObject* GameObject;
+	class UCharacterComp* CharacterComp;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
 	class UMaterialComp* MatComp;

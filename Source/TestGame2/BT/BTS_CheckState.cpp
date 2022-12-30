@@ -4,7 +4,7 @@
 #include "BTS_CheckState.h"
 #include "GameFramework/Character.h"
 #include "../System/MonsterAIController.h"
-#include "../Component/GameObject.h"
+#include "../Component/CharacterComp.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTS_CheckState::UBTS_CheckState()
@@ -21,13 +21,13 @@ void UBTS_CheckState::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 	if( !controllingPawn )
 		return;
 
-	auto gameObject = controllingPawn ? Cast<UGameObject>( controllingPawn->FindComponentByClass<UGameObject>() ) : nullptr;
-	if( !gameObject )
+	auto characterComp = controllingPawn ? Cast<UCharacterComp>( controllingPawn->FindComponentByClass<UCharacterComp>() ) : nullptr;
+	if( !characterComp )
 		return;
 
-	if( gameObject->GetAnimState() != EAnimState::COMMON_ACTION && OwnerComp.GetBlackboardComponent()->GetValueAsBool( AMonsterAIController::IsCommonActionKey ) )
+	if( characterComp->GetAnimState() != EAnimState::COMMON_ACTION && OwnerComp.GetBlackboardComponent()->GetValueAsBool( AMonsterAIController::IsCommonActionKey ) )
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool( AMonsterAIController::IsCommonActionKey, false );
-	else if( gameObject->GetAnimState() == EAnimState::COMMON_ACTION && !OwnerComp.GetBlackboardComponent()->GetValueAsBool( AMonsterAIController::IsCommonActionKey ) )
+	else if( characterComp->GetAnimState() == EAnimState::COMMON_ACTION && !OwnerComp.GetBlackboardComponent()->GetValueAsBool( AMonsterAIController::IsCommonActionKey ) )
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool( AMonsterAIController::IsCommonActionKey, true );
 
 	return;

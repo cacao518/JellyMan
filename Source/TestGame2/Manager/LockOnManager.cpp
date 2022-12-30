@@ -1,7 +1,8 @@
 
 #include "LockOnManager.h"
 #include "Engine/World.h"
-#include "../Component/GameObject.h"
+#include "../Component/ObjectComp.h"
+#include "../Component/CharacterComp.h"
 #include "../Character/CharacterPC.h"
 #include "../System/MyAnimInstance.h"
 #include "../System/MyGameInstance.h"
@@ -118,17 +119,17 @@ void LockOnManager::_ProcessLockOn()
 	if( !myPlayer )
 		return;
 
-	auto ownerGameObject = Cast<UGameObject>( myPlayer->FindComponentByClass<UGameObject>() );
-	if( !ownerGameObject )
+	auto ownerObjectComp = Cast<UCharacterComp>( myPlayer->FindComponentByClass<UCharacterComp>() );
+	if( !ownerObjectComp )
 		return;
 
-	auto otherGameObject = Cast<UGameObject>( LockOnTarget->FindComponentByClass<UGameObject>() );
-	if( !otherGameObject )
+	auto otherObjectComp = Cast<UObjectComp>( LockOnTarget->FindComponentByClass<UObjectComp>() );
+	if( !otherObjectComp )
 		return;
 
-	bool targetDie = !GetValid( LockOnTarget ) || otherGameObject->GetIsDie();
+	bool targetDie = !GetValid( LockOnTarget ) || otherObjectComp->GetIsDie();
 	bool targetAway = LockOnTarget->GetDistanceTo( myPlayer ) > Const::LOCKON_RANGE;
-	bool ownerDie = !GetValid( myPlayer ) || ownerGameObject->GetIsDie();
+	bool ownerDie = !GetValid( myPlayer ) || ownerObjectComp->GetIsDie();
 
 	if( targetDie || targetAway || ownerDie )
 	{
@@ -141,7 +142,7 @@ void LockOnManager::_ProcessLockOn()
 	myPlayer->GetController()->SetControlRotation( rotator );
 	
 	// 락온 상태에서 스킬 사용 시 내 캐릭터가 적을 바라보게 할 것 인지 확인
-	auto skillInfo = ownerGameObject->GetCurSkillInfo();
-	if( skillInfo && skillInfo->LockOnLookAt && ownerGameObject->IsMontageInitialTime() )
-		ownerGameObject->LookAt( GetLockOnManager().GetLockOnTarget() );
+	auto skillInfo = ownerObjectComp->GetCurSkillInfo();
+	if( skillInfo && skillInfo->LockOnLookAt && ownerObjectComp->IsMontageInitialTime() )
+		ownerObjectComp->LookAt( GetLockOnManager().GetLockOnTarget() );
 }

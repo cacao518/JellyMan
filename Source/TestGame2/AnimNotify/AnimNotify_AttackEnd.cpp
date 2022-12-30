@@ -2,7 +2,7 @@
 
 
 #include "AnimNotify_AttackEnd.h"
-#include "../Component/GameObject.h"
+#include "../Component/ObjectComp.h"
 
 FString UAnimNotify_AttackEnd::GetNotifyName_Implementation() const
 {
@@ -14,7 +14,7 @@ void UAnimNotify_AttackEnd::Notify( USkeletalMeshComponent* MeshComp, UAnimSeque
 	if( !MeshComp || !( MeshComp->GetOwner() ) )
 		return;
 
-	UGameObject* obj = Cast<UGameObject>( MeshComp->GetOwner()->FindComponentByClass<UGameObject>() );
+	UObjectComp* obj = Cast<UObjectComp>( MeshComp->GetOwner()->FindComponentByClass<UObjectComp>() );
 	if( !obj ) return;
 
 	obj->SetIsEnabledAttackColl( false );

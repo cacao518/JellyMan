@@ -1,7 +1,7 @@
 
 
 #include "MyPlayerController.h"
-#include "../Component/GameObject.h"
+#include "../Component/CharacterComp.h"
 #include "../Component/MaterialComp.h"
 #include "../Component/WeaponComp.h"
 #include "../Manager/LockOnManager.h"
@@ -32,7 +32,7 @@ void AMyPlayerController::BeginPlay()
 	if( !MyPlayer )
 		return;
 
-	GameObject   = MyPlayer->GameObject;
+	CharacterComp   = MyPlayer->CharacterComp;
 	MatComp      = MyPlayer->MatComp;
 	WeaponComp   = MyPlayer->WeaponComp;
 
@@ -80,7 +80,7 @@ void AMyPlayerController::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::MoveForward( float Value )
 {
-	if( !MyPlayer || !GameObject )
+	if( !MyPlayer || !CharacterComp )
 		return;
 
 	UMyAnimInstance* animInstance = MyPlayer ? Cast<UMyAnimInstance>( MyPlayer->GetMesh()->GetAnimInstance() ) : nullptr;
@@ -93,7 +93,7 @@ void AMyPlayerController::MoveForward( float Value )
 			animInstance->AnimState    == EAnimState   ::JUMP     ||
 			animInstance->AnimSubState == EAnimSubState::MOVABLE  ||
 			animInstance->AnimSubState == EAnimSubState::UPPER_LOWER_BLEND ||
-			GameObject->IsMontageInitialTime() )
+			CharacterComp->IsMontageInitialTime() )
 		{
 			const FRotator Rotation = GetControlRotation();
 			const FRotator YawRotation( 0, Rotation.Yaw, 0 );
@@ -108,7 +108,7 @@ void AMyPlayerController::MoveForward( float Value )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::MoveRight( float Value )
 {
-	if( !MyPlayer || !GameObject )
+	if( !MyPlayer || !CharacterComp )
 		return;
 
 	UMyAnimInstance* animInstance = MyPlayer ? Cast<UMyAnimInstance>( MyPlayer->GetMesh()->GetAnimInstance() ) : nullptr;
@@ -121,7 +121,7 @@ void AMyPlayerController::MoveRight( float Value )
 			animInstance->AnimState    == EAnimState   ::JUMP     || 
 			animInstance->AnimSubState == EAnimSubState::MOVABLE  ||
 			animInstance->AnimSubState == EAnimSubState::UPPER_LOWER_BLEND ||
-			GameObject->IsMontageInitialTime() )
+			CharacterComp->IsMontageInitialTime() )
 		{
 			const FRotator Rotation = GetControlRotation();
 			const FRotator YawRotation( 0, Rotation.Yaw, 0 );
@@ -309,18 +309,18 @@ void AMyPlayerController::Process1()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AMyPlayerController::_SkillPlay( int InBasicSkillNum, int InMiddleSkillNum, int InHardSkillNum )
 {
-	if( !GameObject )
+	if( !CharacterComp )
 		return false;
 
 	if( MatComp && InMiddleSkillNum != 0 && InHardSkillNum != 0 )
 	{
 		if( MatComp->IsHardIntensity() )
-			return GameObject->SkillPlay( InHardSkillNum );
+			return CharacterComp->SkillPlay( InHardSkillNum );
 		else if( MatComp->IsMiddleIntensity() )
-			return GameObject->SkillPlay( InMiddleSkillNum );
+			return CharacterComp->SkillPlay( InMiddleSkillNum );
 	}
 
-	return GameObject->SkillPlay( InBasicSkillNum );
+	return CharacterComp->SkillPlay( InBasicSkillNum );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -384,7 +384,7 @@ void AMyPlayerController::_ProcessRotationRate()
 		MyPlayer->GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::FLY_ROTATION_RATE, 0.0f );
 		return;
 	}
-	else if( ReadySkillResetTime > 0 || GameObject->IsMontageInitialTime() )
+	else if( ReadySkillResetTime > 0 || CharacterComp->IsMontageInitialTime() )
 	{
 		MyPlayer->GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::READY_SKILL_ROTATION_RATE, 0.0f );
 		return;

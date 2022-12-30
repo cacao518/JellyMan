@@ -1,7 +1,7 @@
 
 #include "CameraManager.h"
 #include "Engine/World.h"
-#include "../Component/GameObject.h"
+#include "../Component/ObjectComp.h"
 #include "../Component/MaterialComp.h"
 #include "../Character/CharacterPC.h"
 #include "../System/MyAnimInstance.h"
@@ -55,11 +55,11 @@ void CameraManager::CameraShake( float InScale, bool InShakeByWeight, bool InSha
 
 	if( InShakeByWeight )
 	{
-		auto gameObject = player ? Cast<UGameObject>( player->FindComponentByClass<UGameObject>() ) : nullptr;
-		if( !gameObject )
+		auto objectComp = player ? Cast<UObjectComp>( player->FindComponentByClass<UObjectComp>() ) : nullptr;
+		if( !objectComp )
 			return;
 
-		if( !moveComponent->IsFalling() && gameObject->GetStat().Weight >= Const::HARD_RATE )
+		if( !moveComponent->IsFalling() && objectComp->GetStat().Weight >= Const::HARD_RATE )
 			controller->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
 	}
 	else if( InShakeByIntensity )

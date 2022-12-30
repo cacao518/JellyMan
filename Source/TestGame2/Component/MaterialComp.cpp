@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MaterialComp.h"
-#include "GameObject.h"
+#include "ObjectComp.h"
 #include "WeaponComp.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -198,8 +198,8 @@ void UMaterialComp::_Init()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialComp::_InitStatus()
 {
-	auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->FindComponentByClass<UGameObject>() ) : nullptr;
-	if( !gameObject )
+	auto objectComp = OwningCharacter ? Cast<UObjectComp>( OwningCharacter->FindComponentByClass<UObjectComp>() ) : nullptr;
+	if( !objectComp )
 		return;
 
 	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
@@ -209,13 +209,13 @@ void UMaterialComp::_InitStatus()
 	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( MatState );
 	if( matInfo )
 	{
-		gameObject->SetMoveSpeed   ( ( Const::MAX_MASS - matInfo->Mass ) * gameObject->GetInitStat().MoveSpeed );
-		gameObject->SetAttackSpeed ( ( Const::MAX_MASS - matInfo->Mass ) * gameObject->GetInitStat().AttackSpeed );
-		gameObject->SetJumpPower   ( ( Const::MAX_MASS - matInfo->Mass ) * gameObject->GetInitStat().JumpPower );
-		gameObject->SetAttackPower ( matInfo->Intensity              * gameObject->GetInitStat().AttackPower );
-		gameObject->SetDefensePower( matInfo->Intensity              * gameObject->GetInitStat().DefensePower );
-		gameObject->SetStrength    ( matInfo->Intensity              * gameObject->GetInitStat().Strength  );
-		gameObject->SetWeight      ( matInfo->Mass                   * gameObject->GetInitStat().Weight );
+		objectComp->SetMoveSpeed   ( ( Const::MAX_MASS - matInfo->Mass ) * objectComp->GetInitStat().MoveSpeed );
+		objectComp->SetAttackSpeed ( ( Const::MAX_MASS - matInfo->Mass ) * objectComp->GetInitStat().AttackSpeed );
+		objectComp->SetJumpPower   ( ( Const::MAX_MASS - matInfo->Mass ) * objectComp->GetInitStat().JumpPower );
+		objectComp->SetAttackPower ( matInfo->Intensity              * objectComp->GetInitStat().AttackPower );
+		objectComp->SetDefensePower( matInfo->Intensity              * objectComp->GetInitStat().DefensePower );
+		objectComp->SetStrength    ( matInfo->Intensity              * objectComp->GetInitStat().Strength  );
+		objectComp->SetWeight      ( matInfo->Mass                   * objectComp->GetInitStat().Weight );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( matInfo->CollisonName );
 
 		MatEnergy    = matInfo->MatEnergyMax;

@@ -3,7 +3,6 @@
 #include "Engine/World.h"
 #include "Engine/DataTable.h"
 #include "../System/MyGameInstance.h"
-#include "../Component/GameObject.h"
 #include "GameFramework/Actor.h"
 
 

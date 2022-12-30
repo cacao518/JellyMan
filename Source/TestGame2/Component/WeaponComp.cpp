@@ -2,7 +2,7 @@
 
 #include "WeaponComp.h"
 #include "MaterialComp.h"
-#include "GameObject.h"
+#include "CharacterComp.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Manager/DataInfoManager.h"
@@ -60,15 +60,15 @@ void UWeaponComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 bool UWeaponComp::CanWeaponComp( EWeaponState InWeaponState )
 {
 	auto matProperty = OwningCharacter ? Cast<UMaterialComp>( OwningCharacter->FindComponentByClass<UMaterialComp>() ) : nullptr;
-	auto gameObject = OwningCharacter ? Cast<UGameObject>( OwningCharacter->FindComponentByClass<UGameObject>() ) : nullptr;
+	auto characterComp = OwningCharacter ? Cast<UCharacterComp>( OwningCharacter->FindComponentByClass<UCharacterComp>() ) : nullptr;
 
-	if( !gameObject || !matProperty )
+	if( !characterComp || !matProperty )
 		return false;
 
 	if( WeaponState != EWeaponState::MAX )
 		return false;
 
-	if( gameObject->GetAnimState() != EAnimState::IDLE_RUN )
+	if( characterComp->GetAnimState() != EAnimState::IDLE_RUN )
 		return false;
 
 	if( matProperty->GetMatState() != EMaterialState::JELLY )

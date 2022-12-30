@@ -3,7 +3,7 @@
 
 #include "GroundObject.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "../Component/GameObject.h"
+#include "../Component/ObjectComp.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -17,8 +17,8 @@ AGroundObject::AGroundObject()
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
-	// GameObject
-	GameObject = CreateDefaultSubobject<UGameObject>( TEXT( "GameObject" ) );
+	// ObjectComp
+	ObjectComp = CreateDefaultSubobject<UObjectComp>( TEXT( "ObjectComp" ) );
 
 	// Configure character movement
 	GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f );

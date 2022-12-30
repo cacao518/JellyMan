@@ -2,7 +2,6 @@
 
 
 #include "AnimNotify_CameraShake.h"
-#include "../Component/GameObject.h"
 #include "../Manager/CameraManager.h"
 
 FString UAnimNotify_CameraShake::GetNotifyName_Implementation() const

@@ -3,6 +3,7 @@
 #include "CharacterPC.h"
 #include "../System/MyPlayerController.h"
 #include "../System/MyAnimInstance.h"
+#include "../Component/CharacterComp.h"
 #include "../Component/GameObject.h"
 #include "../Component/WeaponComp.h"
 #include "../Component/MaterialComp.h"
@@ -51,7 +52,7 @@ ACharacterPC::ACharacterPC()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	// Create a GameObejct Component
-	GameObject = CreateDefaultSubobject<UGameObject>( TEXT( "GameObject" ) );
+	CharacterComp = CreateDefaultSubobject<UCharacterComp>( TEXT( "CharacterComp" ) );
 
 	// Create a MaterialComp Component
 	MatComp = CreateDefaultSubobject<UMaterialComp>( TEXT( "MaterialComp" ) );
@@ -98,6 +99,6 @@ void ACharacterPC::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void ACharacterPC::Jump()
 {
-	if( GameObject && GameObject->GetAnimState() == EAnimState::IDLE_RUN )
+	if( CharacterComp && CharacterComp->GetAnimState() == EAnimState::IDLE_RUN )
 		Super::Jump();
 }

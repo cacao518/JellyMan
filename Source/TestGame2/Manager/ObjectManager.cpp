@@ -5,7 +5,7 @@
 #include "../Character/CharacterNPC.h"
 #include "../Character/GroundObject.h"
 #include "../System/MyGameInstance.h"
-#include "../Component/GameObject.h"
+#include "../Component/ObjectComp.h"
 #include "Engine/BlueprintGeneratedClass.h"
 #include "UObject/ConstructorHelpers.h"
 #include "NiagaraSystem.h"
@@ -57,10 +57,10 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		if( !newActor )
 			return nullptr;
 
-		auto gameObject = newActor ? Cast<UGameObject>( newActor->FindComponentByClass<UGameObject>() ) : nullptr;
-		if( gameObject )
+		auto objectComp = newActor ? Cast<UObjectComp>( newActor->FindComponentByClass<UObjectComp>() ) : nullptr;
+		if( objectComp )
 		{
-			gameObject->SetId  ( ObjectId );
+			objectComp->SetId  ( ObjectId );
 		}
 
 		Objects.Add( ObjectId, newActor );
@@ -102,16 +102,16 @@ void ObjectManager::SpawnParticle( const FString& InEffectName, const AActor* In
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void ObjectManager::DestroyActor( AActor* InActor )
 {
-	auto gameObject = InActor ? Cast<UGameObject>( InActor->FindComponentByClass<UGameObject>() ) : nullptr;
-	if( !gameObject )
+	auto objectComp = InActor ? Cast<UObjectComp>( InActor->FindComponentByClass<UObjectComp>() ) : nullptr;
+	if( !objectComp )
 		return;
 
-	if( Objects.Find( gameObject->GetId() ) )
+	if( Objects.Find( objectComp->GetId() ) )
 	{
 		InActor->Destroy();
-		Objects.Remove( gameObject->GetId() );
+		Objects.Remove( objectComp->GetId() );
 
-		if( AActorSpawner* spawner = SpawnerMap.FindRef( gameObject->GetId() ) )
+		if( AActorSpawner* spawner = SpawnerMap.FindRef( objectComp->GetId() ) )
 		{
 			spawner->SubSpawnCountInWorld();
 			spawner->ResetSpawnIntervalCount();

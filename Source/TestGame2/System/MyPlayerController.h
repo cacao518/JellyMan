@@ -11,7 +11,7 @@
 
 
 class ACharacterPC;
-class UGameObject;
+class UCharacterComp;
 class UMaterialComp;
 class UWeaponComp;
 
@@ -26,7 +26,7 @@ class TESTGAME2_API AMyPlayerController : public APlayerController
 	
 private:
 	ACharacterPC*            MyPlayer;
-	UGameObject*             GameObject;
+	UCharacterComp*          CharacterComp;
 	UMaterialComp*           MatComp;
 	UWeaponComp*             WeaponComp;
 
