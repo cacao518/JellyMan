@@ -16,6 +16,12 @@ public:
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	FCollisionInfo     AttackCollInfo;          // 공격 콜리전 정보
 
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
+	float LifeTime;    
+
+private:
+	float LifeTimeAcc;
+
 public:
 	// 생성자 함수
 	UProjectileComp();
@@ -35,4 +41,10 @@ public:
 private:
 	// 초기화 한다.
 	void _Init();
+
+	// 이동 관련 로직을 수행한다.
+	void _ProcessMove();
+
+	// 시간 관련 로직을 수행한다.
+	void _ProcessTime( float InDeltaTime );
 };

@@ -4,6 +4,9 @@
 #include "ProjectileComp.h"
 
 UProjectileComp::UProjectileComp()
+:
+LifeTime    ( 0 ),
+LifeTimeAcc ( 0 )
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
@@ -30,12 +33,8 @@ void UProjectileComp::TickComponent( float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
-
-	const FRotator rotation = OwningActor->GetActorRotation();
-	const FRotator yawRotation( 0, rotation.Yaw, 0 );
-	const FVector  direction = FRotationMatrix( yawRotation ).GetUnitAxis( EAxis::X );
-
-	OwningActor->SetActorLocation( OwningActor->GetActorLocation() + ( direction * ( 3.f * Stat.MoveSpeed ) ), true );
+	_ProcessMove();
+	_ProcessTime( DeltaTime );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,4 +52,27 @@ void UProjectileComp::_Init()
 {
 	SetAttackCollInfo( AttackCollInfo );
 	SetIsEnabledAttackColl( true );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 이동 관련 로직을 수행한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UProjectileComp::_ProcessMove()
+{
+	const FRotator rotation = OwningActor->GetActorRotation();
+	const FRotator yawRotation( 0, rotation.Yaw, 0 );
+	const FVector  direction = FRotationMatrix( yawRotation ).GetUnitAxis( EAxis::X );
+
+	OwningActor->SetActorLocation( OwningActor->GetActorLocation() + ( direction * ( 3.f * Stat.MoveSpeed ) ), true );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 시간 관련 로직을 수행한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UProjectileComp::_ProcessTime( float InDeltaTime )
+{
+	LifeTimeAcc += InDeltaTime;
+
+	if( LifeTimeAcc >= LifeTime )
+		Stat.Hp = 0;
 }
