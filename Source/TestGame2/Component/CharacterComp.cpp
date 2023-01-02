@@ -309,9 +309,7 @@ void UCharacterComp::_ProcessHit( AActor* InOtherActor )
 	if( !othetObjectComp )
 		return;
 
-	if( TeamType != ETeamType::MAX &&
-		othetObjectComp->GetTeamType() != ETeamType::MAX &&
-		othetObjectComp->GetTeamType() == TeamType )
+	if( ( TeamType == ETeamType::MAX || othetObjectComp->GetTeamType() == ETeamType::MAX ) || othetObjectComp->GetTeamType() == TeamType )
 		return;
 
 	othetObjectComp->OnAttackSuccess();
@@ -357,6 +355,14 @@ void UCharacterComp::_Init()
 
 	for( const auto& skill : SkillInfos )
 		CoolingSkills.Add( skill.Num, 0 );
+
+	ETeamType teamType = ETeamType::MAX;
+	if( auto characterPC = Cast< ACharacterPC >( OwningActor ) )
+		teamType = ETeamType::A;
+	else if( auto characterNPC = Cast< ACharacterNPC >( OwningActor ) )
+		teamType = ETeamType::NEUTRAL;
+
+	SetTeamType( teamType );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

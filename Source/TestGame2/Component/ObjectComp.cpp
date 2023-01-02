@@ -186,9 +186,7 @@ void UObjectComp::_ProcessHit( AActor* InOtherActor )
 	if( !othetObjectComp )
 		return;
 
-	if( TeamType != ETeamType::MAX &&
-		othetObjectComp->GetTeamType() != ETeamType::MAX &&
-		othetObjectComp->GetTeamType() == TeamType )
+	if( ( TeamType == ETeamType::MAX || othetObjectComp->GetTeamType() == ETeamType::MAX ) || othetObjectComp->GetTeamType() == TeamType )
 		return;
 
 	othetObjectComp->OnAttackSuccess();
@@ -221,15 +219,6 @@ void UObjectComp::_Init()
 	if( hitColl )
 		hitColl->OnComponentBeginOverlap.AddDynamic( this, &UObjectComp::HitCollBeginOverlap );
 
-	ETeamType teamType = ETeamType::MAX;
-	if( auto characterPC = Cast< ACharacterPC >( OwningActor ) )
-		teamType = ETeamType::A;
-	else if( auto characterNPC = Cast< ACharacterNPC >( OwningActor ) )
-		teamType = ETeamType::NEUTRAL;
-	else if( auto staticObject = Cast< AStaticObject >( OwningActor ) )
-		teamType = ETeamType::NEUTRAL;
-
-	SetTeamType( teamType );
 	SetMoveSpeed( Stat.MoveSpeed );
 	SetJumpPower( Stat.JumpPower );
 }

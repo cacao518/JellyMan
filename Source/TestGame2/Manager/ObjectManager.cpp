@@ -34,7 +34,7 @@ void ObjectManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 액터 생성
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, AActorSpawner* InSpawner )
+AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InParentTeamType, AActorSpawner* InSpawner )
 {
 	if( AActor* actor = Objects.FindRef( ObjectId ) )
 	{
@@ -58,7 +58,11 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 
 		auto objectComp = newActor ? Cast<UObjectComp>( newActor->FindComponentByClass<UObjectComp>() ) : nullptr;
 		if( objectComp )
-			objectComp->SetId  ( ObjectId );
+		{
+			objectComp->SetId( ObjectId );
+			if( InParentTeamType != ETeamType::MAX )
+				objectComp->SetTeamType( InParentTeamType );
+		}
 
 		if( InSpawner )
 			SpawnerMap.Add( ObjectId, InSpawner );
@@ -146,7 +150,7 @@ void ObjectManager::SpawnActorInSpawner( float InDeltaTime )
 
 		if( spawner->CanSpawn() )
 		{
-			SpawnActor( spawner->GetActor(), spawner->GetActorLocation(), spawner->GetActorRotation(), spawner );
+			SpawnActor( spawner->GetActor(), spawner->GetActorLocation(), spawner->GetActorRotation(), ETeamType::MAX, spawner );
 
 			spawner->AddSpawnCountTotal();
 			spawner->AddSpawnCountInWorld();

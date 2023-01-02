@@ -45,7 +45,7 @@ public:
 	///////////////////////////////////////////////////////////////
 	
 	// 액터 생성
-	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, AActorSpawner* InSpawner = nullptr );
+	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InParentTeamType = ETeamType::MAX, AActorSpawner* InSpawner = nullptr );
 
 	// 파티클 생성
 	void SpawnParticle( const FString& InEffectName, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator );

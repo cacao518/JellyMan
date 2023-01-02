@@ -3,6 +3,7 @@
 #include "AnimNotify_SpawnActor.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "../Manager/ObjectManager.h"
+#include "../Component/ObjectComp.h"
 
 FString UAnimNotify_SpawnActor::GetNotifyName_Implementation() const
 {
@@ -14,6 +15,13 @@ void UAnimNotify_SpawnActor::Notify( USkeletalMeshComponent* MeshComp, UAnimSequ
 	if( !MeshComp || !( MeshComp->GetOwner() ) )
 		return;
 
+	if( !ObjectManager::IsVaild() )
+		return;
+
+	UObjectComp* objComp = Cast<UObjectComp>( MeshComp->GetOwner()->FindComponentByClass<UObjectComp>() );
+	if( !objComp )
+		return;
+
 	auto spawnPosComp = Cast<USceneComponent>( MeshComp->GetOwner()->GetDefaultSubobjectByName( TEXT( "SpawnPosComp" ) ) );
 	if( !spawnPosComp )
 		return;
@@ -21,6 +29,8 @@ void UAnimNotify_SpawnActor::Notify( USkeletalMeshComponent* MeshComp, UAnimSequ
 	FVector relativeSpawnPos = spawnPosComp->GetRelativeLocation() + Pos;
 	FVector worldSpawnPos = UKismetMathLibrary::TransformLocation( spawnPosComp->GetComponentTransform(), relativeSpawnPos );
 
-	if( ObjectManager::IsVaild() )
+	if( SetAsParentTeamType )
+		GetObjectManager().SpawnActor( Actor, worldSpawnPos, MeshComp->GetOwner()->GetActorRotation() + Rotate, objComp->GetTeamType() );
+	else
 		GetObjectManager().SpawnActor( Actor, worldSpawnPos, MeshComp->GetOwner()->GetActorRotation() + Rotate );
 }
