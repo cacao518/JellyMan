@@ -58,12 +58,12 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 
 		auto objectComp = newActor ? Cast<UObjectComp>( newActor->FindComponentByClass<UObjectComp>() ) : nullptr;
 		if( objectComp )
-		{
 			objectComp->SetId  ( ObjectId );
-		}
+
+		if( InSpawner )
+			SpawnerMap.Add( ObjectId, InSpawner );
 
 		Objects.Add( ObjectId, newActor );
-		SpawnerMap.Add( ObjectId, InSpawner );
 
 		ObjectId++;
 		return newActor;
