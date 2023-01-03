@@ -3,6 +3,7 @@
 #include "Engine/World.h"
 #include "../Character/CharacterPC.h"
 #include "../Character/CharacterNPC.h"
+#include "../Character/StaticObject.h"
 #include "../System/MyGameInstance.h"
 #include "../Component/ObjectComp.h"
 #include "Engine/BlueprintGeneratedClass.h"
@@ -34,7 +35,7 @@ void ObjectManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 액터 생성
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InParentTeamType, AActorSpawner* InSpawner )
+AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType, AActorSpawner* InSpawner )
 {
 	if( AActor* actor = Objects.FindRef( ObjectId ) )
 	{
@@ -52,7 +53,8 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		if( !World )
 			return nullptr;
 
-		AActor* newActor = World->SpawnActor< AActor >( InClass, InLocation, InRotator );
+		FTransform spawnTransform( InRotator, InLocation );
+		AActor* newActor = World->SpawnActorDeferred< AActor >( InClass, spawnTransform );
 		if( !newActor )
 			return nullptr;
 
@@ -60,9 +62,10 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		if( objectComp )
 		{
 			objectComp->SetId( ObjectId );
-			if( InParentTeamType != ETeamType::MAX )
-				objectComp->SetTeamType( InParentTeamType );
+			objectComp->SetTeamType( InTeamType );
 		}
+
+		newActor->FinishSpawning( spawnTransform );
 
 		if( InSpawner )
 			SpawnerMap.Add( ObjectId, InSpawner );
@@ -72,6 +75,19 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		ObjectId++;
 		return newActor;
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 정적 오브젝트 생성
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+AActor* ObjectManager::SpawnStaticObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator )
+{
+	FString path = FString( TEXT( "/Game/GroundObject/" ) ) + InName;
+	UClass* staticObject = ConstructorHelpersInternal::FindOrLoadClass( path, AStaticObject::StaticClass() );
+	if( !staticObject )
+		return nullptr;
+
+	return SpawnActor( staticObject, InLocation, InRotator, ETeamType::MAX );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
