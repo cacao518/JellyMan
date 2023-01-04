@@ -5,8 +5,11 @@
 #include "GameFramework/Character.h"
 #include "../System/MonsterAIController.h"
 #include "../Character/CharacterNPC.h"
+#include "../Component/CharacterComp.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
+#include <map>
+#include <algorithm>
 
 UBTS_Detect::UBTS_Detect()
 {
@@ -18,22 +21,25 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 {
 	Super::TickNode( OwnerComp, NodeMemory, DeltaSeconds );
 
-	APawn* controllingPawn = OwnerComp.GetAIOwner()->GetPawn();
-	if( !controllingPawn )
+	ACharacterNPC* controllingChar = Cast< ACharacterNPC >( OwnerComp.GetAIOwner()->GetPawn() );
+	if( !controllingChar )
 		return;
 
-	UWorld* world = controllingPawn->GetWorld();
+	auto characterComp = Cast<UCharacterComp>( controllingChar->FindComponentByClass<UCharacterComp>() );
+	if( !characterComp )
+		return;
+
+	UWorld* world = controllingChar->GetWorld();
 	if( !world )
 		return;
 
-	if( ACharacterNPC* controllingCharacterNPC = Cast< ACharacterNPC >( OwnerComp.GetAIOwner()->GetPawn() ) )
-		DetectRadius = controllingCharacterNPC->DetectRange;
+	DetectRadius = controllingChar->DetectRange;
 
-	FVector center = controllingPawn->GetActorLocation();
+	FVector center = controllingChar->GetActorLocation();
 
 	// 600의 반지름을 가진 구체를 만들어서 오브젝트를 감지한다.
 	TArray<FOverlapResult> overlapResults;
-	FCollisionQueryParams collisionQueryParam( NAME_None, false, controllingPawn );
+	FCollisionQueryParams collisionQueryParam( NAME_None, false, controllingChar );
 	bool bResult = world->OverlapMultiByChannel(
 		overlapResults,
 		center,
@@ -43,34 +49,43 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		collisionQueryParam
 	);
 
-	// 오브젝트가 감지가 되면, 그 오브젝트가 Character인지 검사한다.
-	if( bResult )
+	if( !bResult )
 	{
-		for( FOverlapResult overlapResult : overlapResults )
-		{
-			ACharacter* character = Cast<ACharacter>( overlapResult.GetActor() );
-			if( character && character->GetController() )
-			{
-				if( !character->GetController()->IsPlayerController() )
-					continue;
-
-				// Character면, 블랙보드에 저장한다.
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, character );
-
-				// 디버깅 용.
-				//DrawDebugSphere( world, center, DetectRadius, 16, FColor::Green, false, 0.2f );
-				//DrawDebugPoint( world, character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f );
-				//DrawDebugLine( world, controllingPawn->GetActorLocation(), character->GetActorLocation(), FColor::Blue, false, 0.2f );
-				return;
-			}
-		}
-
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, nullptr );
+		return;
 	}
+
+	map< ACharacter*, float > distanceMap;
+	for( FOverlapResult overlapResult : overlapResults )
+	{
+		ACharacter* detectedChar = Cast<ACharacter>( overlapResult.GetActor() );
+		if( !detectedChar )
+			continue;
+
+		auto detectedCharComp = Cast<UCharacterComp>( detectedChar->FindComponentByClass<UCharacterComp>() );
+		if( !detectedCharComp )
+			continue;
+
+		if( detectedCharComp->GetTeamType() == characterComp->GetTeamType() )
+			continue;
+
+		distanceMap[ detectedChar ] = detectedChar->GetDistanceTo( controllingChar );
+	}
+
+	// 가장 가까운 거리로 선택
+	auto minDistanceChar = min_element( distanceMap.begin(), distanceMap.end(), []( const auto& a, const auto& b ) {
+		return a.second < b.second;
+		} );
+
+	if( minDistanceChar != distanceMap.end() )
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, minDistanceChar->first );
 	else
-	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, nullptr );
-	}
+
+	// 디버깅 용.
+	//DrawDebugSphere( world, center, DetectRadius, 16, FColor::Green, false, 0.2f );
+	//DrawDebugPoint( world, detectedChar->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f );
+	//DrawDebugLine( world, controllingPawn->GetActorLocation(), detectedChar->GetActorLocation(), FColor::Blue, false, 0.2f );
 
 	/*DrawDebugSphere( world, center, DetectRadius, 16, FColor::Red, false, 0.2f );*/
 }
