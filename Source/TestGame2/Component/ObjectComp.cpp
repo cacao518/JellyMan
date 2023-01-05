@@ -221,6 +221,14 @@ void UObjectComp::_Init()
 
 	SetMoveSpeed( Stat.MoveSpeed );
 	SetJumpPower( Stat.JumpPower );
+
+	if( GetTeamType() == ETeamType::MAX )
+	{
+		if( GetObjectType() == EObjectType::PC )
+			SetTeamType( ETeamType::A );
+		else 
+			SetTeamType( ETeamType::NEUTRAL );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
