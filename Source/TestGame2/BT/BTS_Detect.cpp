@@ -55,7 +55,11 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		return;
 	}
 
-	map< ACharacter*, float > distanceMap;
+	// 제일 가까운 적이 선택 되도록 정렬
+	overlapResults.Sort( [controllingChar]( const auto& A, const auto& B ){
+		return A.GetActor()->GetDistanceTo( controllingChar ) < B.GetActor()->GetDistanceTo( controllingChar );
+		} );
+
 	for( FOverlapResult overlapResult : overlapResults )
 	{
 		ACharacter* detectedChar = Cast<ACharacter>( overlapResult.GetActor() );
@@ -69,18 +73,11 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		if( detectedCharComp->GetTeamType() == characterComp->GetTeamType() )
 			continue;
 
-		distanceMap[ detectedChar ] = detectedChar->GetDistanceTo( controllingChar );
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, detectedChar );
+		return;
 	}
 
-	// 가장 가까운 거리로 선택
-	auto minDistanceChar = min_element( distanceMap.begin(), distanceMap.end(), []( const auto& a, const auto& b ) {
-		return a.second < b.second;
-		} );
-
-	if( minDistanceChar != distanceMap.end() )
-		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, minDistanceChar->first );
-	else
-		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, nullptr );
+	OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, nullptr );
 
 	// 디버깅 용.
 	//DrawDebugSphere( world, center, DetectRadius, 16, FColor::Green, false, 0.2f );
