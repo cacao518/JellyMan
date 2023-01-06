@@ -61,6 +61,7 @@ void UCharacterComp::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
 	_AnimStateChange();
+	_ProcessHold( DeltaTime );
 	_ProcessMove();
 	_ProcessAccTime( DeltaTime );
 	_CoolingSkills( DeltaTime );
@@ -169,6 +170,8 @@ void UCharacterComp::OnAttackSuccess()
 		return;
 
 	WeaponComp->SubWeaponDurability();
+
+	HoldTime += Const::HOLD_TIME_INCREASE_VALUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -247,6 +250,14 @@ bool UCharacterComp::IsMontageInitialTime()
 		return false;
 
 	return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 역경직 상태 여부를 반환한다. 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+bool UCharacterComp::IsHold()
+{
+	return HoldTime > 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -335,6 +346,8 @@ void UCharacterComp::_ProcessHit( AActor* InOtherActor )
 			SetMovePos( knockbackPower, true );
 			SetIsForceMove( true );
 		}
+
+		HoldTime += Const::HOLD_TIME_INCREASE_VALUE;
 	}
 
 	FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
@@ -394,6 +407,9 @@ void UCharacterComp::_AnimStateChange()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UCharacterComp::_ProcessMove()
 {
+	if ( IsHold() )
+		return;
+
 	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
 
 	if( !characterMovement )
@@ -496,12 +512,47 @@ void UCharacterComp::_ProcessLand()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 역경직 로직을 수행한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UCharacterComp::_ProcessHold( float InDeltaTime )
+{
+	if ( !IsHold() )
+		return;
+
+	if ( !OwningCharacter )
+		return;
+
+	auto animInstance = OwningCharacter->GetMesh()->GetAnimInstance();
+	if ( !animInstance )
+		return;
+
+	auto curMontage = animInstance->GetCurrentActiveMontage();
+	if ( !curMontage )
+		return;
+
+	HoldTime -= InDeltaTime;
+
+	if ( HoldTime <= 0 )
+	{
+		HoldTime = 0;
+		animInstance->Montage_Resume( curMontage );
+		return;
+	}
+
+	animInstance->Montage_Pause( curMontage );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 누적 시간 관련 로직 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UCharacterComp::_ProcessAccTime( float InDeltaTime )
 {
-	if( AnimState == EAnimState::COMMON_ACTION )
+	if ( AnimState == EAnimState::COMMON_ACTION )
+	{
 		MontagePlayTime += InDeltaTime;
-	else if( AnimState == EAnimState::DIE )
+	}
+	else if ( AnimState == EAnimState::DIE )
+	{
 		DeathTime += InDeltaTime;
+	}
 }
