@@ -60,7 +60,7 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		return A.GetActor()->GetDistanceTo( controllingChar ) < B.GetActor()->GetDistanceTo( controllingChar );
 		} );
 
-	for( FOverlapResult overlapResult : overlapResults )
+	for( const FOverlapResult& overlapResult : overlapResults )
 	{
 		ACharacter* detectedChar = Cast<ACharacter>( overlapResult.GetActor() );
 		if( !detectedChar )

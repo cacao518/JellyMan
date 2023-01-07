@@ -74,7 +74,7 @@ void LockOnManager::LockOnStart()
 		return A.GetActor()->GetDistanceTo( myPlayer ) < B.GetActor()->GetDistanceTo( myPlayer );
 		} );
 
-	for( FOverlapResult overlapResult : overlapResults )
+	for( const FOverlapResult& overlapResult : overlapResults )
 	{
 		ACharacter* character = Cast<ACharacter>( overlapResult.GetActor() );
 		if( !character )
