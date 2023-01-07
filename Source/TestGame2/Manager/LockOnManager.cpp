@@ -49,6 +49,10 @@ void LockOnManager::LockOnStart()
 	if( !myPlayer )
 		return;
 
+	auto myPlayerCharComp = Cast<UCharacterComp>( myPlayer->FindComponentByClass<UCharacterComp>() );
+	if( !myPlayerCharComp )
+		return;
+
 	FVector center = myPlayer->GetActorLocation();
 
 	TArray<FOverlapResult> overlapResults;
@@ -74,6 +78,13 @@ void LockOnManager::LockOnStart()
 	{
 		ACharacter* character = Cast<ACharacter>( overlapResult.GetActor() );
 		if( !character )
+			continue;
+
+		auto charComp = Cast<UCharacterComp>( character->FindComponentByClass<UCharacterComp>() );
+		if( !charComp )
+			continue;
+
+		if( charComp->GetTeamType() == myPlayerCharComp->GetTeamType() )
 			continue;
 
 		if( auto widgetComp = Cast<UWidgetComponent>( character->GetDefaultSubobjectByName( TEXT( "LockOnMark" ) ) ) )
