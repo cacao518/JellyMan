@@ -63,7 +63,8 @@ void UProjectileComp::_ProcessMove()
 	const FRotator yawRotation( 0, rotation.Yaw, 0 );
 	const FVector  direction = FRotationMatrix( yawRotation ).GetUnitAxis( EAxis::X );
 
-	OwningActor->SetActorLocation( OwningActor->GetActorLocation() + ( direction * ( 3.f * Stat.MoveSpeed ) ), true );
+	float moveSpeed = GetWorld()->GetDeltaSeconds() * Stat.MoveSpeed * Const::ANIM_LERP_MULITPLIER;
+	OwningActor->SetActorLocation( OwningActor->GetActorLocation() + ( direction * moveSpeed ), true );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
