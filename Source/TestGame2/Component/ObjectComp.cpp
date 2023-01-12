@@ -241,12 +241,15 @@ void UObjectComp::_ProcessLandscapeHit( AActor* InOtherActor )
 	if( !waterBody )
 		return;
 
-	/// 풀과 물은 물에 빠지지 않는다.
+	/// 가벼운 재질은 물에 빠지지 않는다.
+	if( Stat.Weight <= 0.7f )
+		return;
+
+	/// 물은 물에 빠지지 않는다.
 	auto charMatProperty = OwningActor ? Cast<UMaterialComp>( OwningActor->FindComponentByClass<UMaterialComp>() ) : nullptr;
 	if( charMatProperty )
 	{
-		if( charMatProperty->GetMatState() == EMaterialState::GRASS || 
-			charMatProperty->GetMatState() == EMaterialState::WATER )
+		if( charMatProperty->GetMatState() == EMaterialState::WATER )
 			return;
 	}
 
