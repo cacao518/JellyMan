@@ -497,6 +497,8 @@ void UCharacterComp::_FallingWater( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UCharacterComp::_ProcessLand()
 {
+	auto curMontage = OwningCharacter ? OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage() : nullptr;
+
 	auto moveComponent = OwningCharacter->GetMovementComponent();
 	if( moveComponent )
 	{
@@ -506,7 +508,9 @@ void UCharacterComp::_ProcessLand()
 		}
 		else if( LandOnce )
 		{
-			MontagePlay( LandAnim );
+			if( !curMontage )
+				MontagePlay( LandAnim );
+			
 			GetCameraManager().CameraShake( 1.f, true );
 			LandOnce = false;
 		}

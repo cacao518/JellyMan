@@ -195,7 +195,7 @@ void AMyPlayerController::ProcessRightMouse()
 		}
 		case EWeaponState::SWORD:
 		{
-			result = _SkillPlay( 8 );
+			result = _SkillPlay( 8, 14, 14 );
 			break;
 		}
 	}
