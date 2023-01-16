@@ -8,6 +8,13 @@
 #include <unordered_map>
 #include <list>
 
+enum class ELockOnMode : uint8
+{
+	Default,
+	Prev,
+	Next,
+	Max
+};
 
 class LockOnManager final : public SingletonBase< LockOnManager>
 {
@@ -23,7 +30,7 @@ public:
 	void Tick( float InDeltaTime );
 
 	// 록온 시작
-	void LockOnStart();
+	void LockOnStart( ELockOnMode InMode = ELockOnMode::Default );
 
 	// 록온 해제
 	void LockOnRelease();

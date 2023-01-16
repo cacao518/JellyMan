@@ -53,7 +53,9 @@ void AMyPlayerController::BeginPlay()
 	InputComponent->BindAction( "R",          IE_Pressed, this, &AMyPlayerController::ProcessR );
 	InputComponent->BindAction( "LeftClick",  IE_Pressed, this, &AMyPlayerController::ProcessLeftMouse );
 	InputComponent->BindAction( "RightClick", IE_Pressed, this, &AMyPlayerController::ProcessRightMouse );
-	InputComponent->BindAction( "WheelClick", IE_Pressed, this, &AMyPlayerController::ProcessWheel );
+	InputComponent->BindAction( "WheelClick", IE_Pressed, this, &AMyPlayerController::ProcessWheelClick );
+	InputComponent->BindAction( "WheelUp",    IE_Pressed, this, &AMyPlayerController::ProcessWheelUp );
+	InputComponent->BindAction( "WheelDown",  IE_Pressed, this, &AMyPlayerController::ProcessWheelDown );
 	InputComponent->BindAction( "1",          IE_Pressed, this, &AMyPlayerController::Process1 );
 
 	InputTypeAndFuncMap[ EInputKeyType::LEFT_MOUSE ]  = bind( &AMyPlayerController::ProcessLeftMouse, this );
@@ -249,9 +251,9 @@ void AMyPlayerController::ProcessBothMouseUp()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 마우스 휠 실행
+//// @brief 마우스 휠 클릭 실행
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void AMyPlayerController::ProcessWheel()
+void AMyPlayerController::ProcessWheelClick()
 {
 	if( GetLockOnManager().GetLockOnTarget() )
 	{
@@ -260,6 +262,28 @@ void AMyPlayerController::ProcessWheel()
 	}
 
 	GetLockOnManager().LockOnStart();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 마우스 휠 위로 실행
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AMyPlayerController::ProcessWheelUp()
+{
+	if ( GetLockOnManager().GetLockOnTarget() )
+	{
+		GetLockOnManager().LockOnStart( ELockOnMode::Prev );
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 마우스 휠 아래로 실행
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AMyPlayerController::ProcessWheelDown()
+{
+	if ( GetLockOnManager().GetLockOnTarget() )
+	{
+		GetLockOnManager().LockOnStart( ELockOnMode::Next );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

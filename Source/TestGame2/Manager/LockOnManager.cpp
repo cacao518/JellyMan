@@ -39,7 +39,7 @@ void LockOnManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 락온 시작
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void LockOnManager::LockOnStart()
+void LockOnManager::LockOnStart( ELockOnMode InMode )
 {
 	UWorld* world = GetMyGameInstance().GetWorld();
 	if( !world )
@@ -69,39 +69,86 @@ void LockOnManager::LockOnStart()
 	if( !bResult )
 		return;
 
-	// 제일 가까운 적이 락온 되도록 정렬
-	overlapResults.Sort( [myPlayer]( const auto& A, const auto& B ){
-		return A.GetActor()->GetDistanceTo( myPlayer ) < B.GetActor()->GetDistanceTo( myPlayer );
-		} );
-
-	for( const FOverlapResult& overlapResult : overlapResults )
+	// Character만 고른다.
+	TArray< ACharacter* > filteredCharacters;
+	for ( auto result : overlapResults )
 	{
-		ACharacter* character = Cast<ACharacter>( overlapResult.GetActor() );
-		if( !character )
+		ACharacter* character = Cast< ACharacter >( result.GetActor() );
+		if ( !character )
 			continue;
 
-		auto charComp = Cast<UCharacterComp>( character->FindComponentByClass<UCharacterComp>() );
-		if( !charComp )
-			continue;
+		filteredCharacters.AddUnique( character );
+	}
 
-		if( charComp->GetTeamType() == myPlayerCharComp->GetTeamType() )
-			continue;
+	if ( filteredCharacters.IsEmpty() )
+		return;
 
-		if( auto widgetComp = Cast<UWidgetComponent>( character->GetDefaultSubobjectByName( TEXT( "LockOnMark" ) ) ) )
+	ACharacter* selectLockOnTarget = nullptr;
+
+	switch ( InMode )
+	{
+		case ELockOnMode::Default:
 		{
-			if( auto userWidget = Cast<UUserWidget>( widgetComp->GetUserWidgetObject() ) )
-			{
-				FOutputDeviceNull ar;
-				userWidget->CallFunctionByNameWithArguments( TEXT( "AnimStart" ), ar, NULL, true );
-				userWidget->SetVisibility( ESlateVisibility::SelfHitTestInvisible );
+			// 제일 가까운 적이 락온 되도록 정렬 후 락온
+			filteredCharacters.Sort( [myPlayer]( const auto& A, const auto& B ){
+				return A.GetDistanceTo( myPlayer ) < B.GetDistanceTo( myPlayer );
+				} );
 
-				LockOnTarget = character;
-				return;
+			selectLockOnTarget = ( *filteredCharacters.begin() );
+			break;
+		}
+		case ELockOnMode::Prev:
+		{
+			// 락온 된 대상 이전 대상으로 다시 락온
+			int32 index = filteredCharacters.IndexOfByPredicate( [this]( const ACharacter* InChar ){
+				return InChar == LockOnTarget;
+				} );
+
+			if ( index != INDEX_NONE && filteredCharacters.IsValidIndex( index - 1) )
+			{
+				selectLockOnTarget = filteredCharacters[ index - 1 ];
+				GetLockOnManager().LockOnRelease();
 			}
+			break;
+		}
+		case ELockOnMode::Next:
+		{
+			// 락온 된 대상 다음 대상으로 다시 락온
+			int32 index = filteredCharacters.IndexOfByPredicate( [this]( const ACharacter* InChar ){
+				return InChar == LockOnTarget;
+				} );
+
+			if ( index != INDEX_NONE && filteredCharacters.IsValidIndex( index + 1 ) )
+			{
+				selectLockOnTarget = filteredCharacters[ index + 1 ];
+				GetLockOnManager().LockOnRelease();
+			}
+			break;
 		}
 	}
 
-	LockOnTarget = nullptr;
+	if ( !selectLockOnTarget )
+		return;
+
+	auto charComp = Cast<UCharacterComp>( selectLockOnTarget->FindComponentByClass<UCharacterComp>() );
+	if ( !charComp )
+		return;
+
+	if ( charComp->GetTeamType() == myPlayerCharComp->GetTeamType() )
+		return;
+
+	if ( auto widgetComp = Cast<UWidgetComponent>( selectLockOnTarget->GetDefaultSubobjectByName( TEXT( "LockOnMark" ) ) ) )
+	{
+		if ( auto userWidget = Cast<UUserWidget>( widgetComp->GetUserWidgetObject() ) )
+		{
+			FOutputDeviceNull ar;
+			userWidget->CallFunctionByNameWithArguments( TEXT( "AnimStart" ), ar, NULL, true );
+			userWidget->SetVisibility( ESlateVisibility::SelfHitTestInvisible );
+
+			LockOnTarget = selectLockOnTarget;
+			return;
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
