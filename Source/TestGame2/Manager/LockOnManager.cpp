@@ -71,7 +71,7 @@ void LockOnManager::LockOnStart( ELockOnMode InMode )
 
 	// Character만 고른다.
 	TArray< ACharacter* > filteredCharacters;
-	for ( auto result : overlapResults )
+	for ( const auto& result : overlapResults )
 	{
 		ACharacter* character = Cast< ACharacter >( result.GetActor() );
 		if ( !character )
