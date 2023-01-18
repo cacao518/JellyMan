@@ -77,6 +77,14 @@ void LockOnManager::LockOnStart( ELockOnMode InMode )
 		if ( !character )
 			continue;
 
+		auto charComp = Cast<UCharacterComp>( character->FindComponentByClass<UCharacterComp>() );
+		if ( !charComp )
+			continue;
+
+		// 같은 팀은 제외한다.
+		if ( charComp->GetTeamType() == myPlayerCharComp->GetTeamType() )
+			continue;
+
 		filteredCharacters.AddUnique( character );
 	}
 
@@ -128,13 +136,6 @@ void LockOnManager::LockOnStart( ELockOnMode InMode )
 	}
 
 	if ( !selectLockOnTarget )
-		return;
-
-	auto charComp = Cast<UCharacterComp>( selectLockOnTarget->FindComponentByClass<UCharacterComp>() );
-	if ( !charComp )
-		return;
-
-	if ( charComp->GetTeamType() == myPlayerCharComp->GetTeamType() )
 		return;
 
 	if ( auto widgetComp = Cast<UWidgetComponent>( selectLockOnTarget->GetDefaultSubobjectByName( TEXT( "LockOnMark" ) ) ) )
