@@ -17,8 +17,6 @@ UWeaponComp::UWeaponComp()
 	WeaponDurability                  = 0;
 	WeaponDurabilityMax               = 0;
 
-	WeaponState = EWeaponState::MAX;
-
 	ConstructorHelpers::FObjectFinder<UMaterialInterface> materialAsset( TEXT( "/Game/Shader/Dissolve_Inst.Dissolve_Inst" ) );
 	if( materialAsset.Succeeded() ) DissolveMaterial = materialAsset.Object;
 }
@@ -33,6 +31,7 @@ void UWeaponComp::BeginPlay()
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 
 	_InitWeaponMesh();
+	EquipWeapon( WeaponState, false );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +64,7 @@ bool UWeaponComp::CanWeaponComp( EWeaponState InWeaponState )
 	if( !characterComp || !matProperty )
 		return false;
 
-	if( WeaponState != EWeaponState::MAX )
+	if( WeaponState != EWeaponState::DEFAULT )
 		return false;
 
 	if( characterComp->GetAnimState() != EAnimState::IDLE_RUN )
@@ -100,7 +99,7 @@ void UWeaponComp::SubWeaponDurability( int InValue )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UWeaponComp::EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim )
 {
-	if( InWeaponState == EWeaponState::MAX )
+	if( InWeaponState == EWeaponState::DEFAULT )
 		return;
 
 	if( WeaponMeshes.IsEmpty() )
@@ -151,7 +150,7 @@ void UWeaponComp::EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim )
 void UWeaponComp::UnEquipWeapon()
 {
 	CurWeaponMesh = nullptr;
-	WeaponState = EWeaponState::MAX;
+	WeaponState = EWeaponState::DEFAULT;
 
 	for( auto& [_, mesh] : WeaponMeshes )
 		mesh->SetVisibility( false );
@@ -175,9 +174,6 @@ void UWeaponComp::_InitWeaponMesh()
 void UWeaponComp::_DissovleAnimEnd()
 {
 	if ( !CurWeaponMesh )
-		return;
-
-	if( CurWeaponMesh->GetMaterial(0) != DissovleMaterialInstance )
 		return;
 
 	auto curMesh = OwningCharacter->GetMesh();

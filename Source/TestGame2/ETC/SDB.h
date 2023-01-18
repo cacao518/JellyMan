@@ -60,6 +60,7 @@ enum class EMaterialState : uint8
 UENUM( BlueprintType )
 enum class EWeaponState : uint8
 {
+	DEFAULT          UMETA( DisplayName = "Default" ),
 	SWORD            UMETA( DisplayName = "Sword" ),
 
 	MAX,

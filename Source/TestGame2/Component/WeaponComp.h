@@ -17,7 +17,7 @@ class TESTGAME2_API UWeaponComp final : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay )
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	EWeaponState                    WeaponState;       	         // 무기 상태
 
 private:

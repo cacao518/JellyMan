@@ -163,7 +163,7 @@ void AMyPlayerController::ProcessLeftMouse()
 
 	switch( WeaponComp->GetWeaponState() )
 	{
-		case EWeaponState::MAX:
+		case EWeaponState::DEFAULT:
 		{
 			result = _SkillPlay( 2 );
 			break;
@@ -190,7 +190,7 @@ void AMyPlayerController::ProcessRightMouse()
 
 	switch( WeaponComp->GetWeaponState() )
 	{
-		case EWeaponState::MAX:
+		case EWeaponState::DEFAULT:
 		{
 			result = _SkillPlay( 3 );
 			break;
