@@ -4,7 +4,6 @@
 #include "../System/MyPlayerController.h"
 #include "../System/MyAnimInstance.h"
 #include "../Component/CharacterComp.h"
-#include "../Component/GameObject.h"
 #include "../Component/WeaponComp.h"
 #include "../Component/MaterialComp.h"
 #include "Animation/AnimInstance.h"
