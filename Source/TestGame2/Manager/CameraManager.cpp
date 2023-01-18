@@ -43,21 +43,21 @@ void CameraManager::CameraShake( AActor* InCaster, float InScale, bool InShakeBy
 
 	if ( !InCaster )
 		return;
-
-	ACharacter* caster = Cast< ACharacter> ( InCaster );
-	if( !caster )
-		return;
 	
 	APlayerController* controller = GetMyGameInstance().GetMyController();
 	if( !controller )
 		return;
 
-	auto moveComponent = caster->GetCharacterMovement();
-	if( !moveComponent )
-		return;
-
 	if( InShakeByWeight )
 	{
+		ACharacter* caster = Cast< ACharacter>( InCaster );
+		if ( !caster )
+			return;
+
+		auto moveComponent = caster->GetCharacterMovement();
+		if ( !moveComponent )
+			return;
+
 		auto objectComp = caster ? Cast<UObjectComp>( caster->FindComponentByClass<UObjectComp>() ) : nullptr;
 		if( !objectComp )
 			return;
@@ -67,7 +67,7 @@ void CameraManager::CameraShake( AActor* InCaster, float InScale, bool InShakeBy
 	}
 	else if( InShakeByIntensity )
 	{
-		auto matProperty = caster ? Cast<UMaterialComp>( caster->FindComponentByClass<UMaterialComp>() ) : nullptr;
+		auto matProperty = InCaster ? Cast<UMaterialComp>( InCaster->FindComponentByClass<UMaterialComp>() ) : nullptr;
 		if( !matProperty )
 			return;
 
