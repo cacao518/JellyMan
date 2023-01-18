@@ -11,5 +11,5 @@ FString UAnimNotify_CameraShake::GetNotifyName_Implementation() const
 
 void UAnimNotify_CameraShake::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
 {
-	GetCameraManager().CameraShake( Scale, ShakeByWeight, ShakeByIntensity );
+	GetCameraManager().CameraShake( MeshComp->GetOwner(), Scale, ShakeByWeight, ShakeByIntensity );
 }

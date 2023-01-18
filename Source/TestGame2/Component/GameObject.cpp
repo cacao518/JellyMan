@@ -582,7 +582,7 @@ void UGameObject::_ProcessHit( AActor* InOtherActor )
 	if( GEngine )
 		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
 
-	GetCameraManager().CameraShake();
+	GetCameraManager().CameraShake( OwningCharacter );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -622,7 +622,7 @@ void UGameObject::_ProcessLand()
 		else if( LandOnce )
 		{
 			MontagePlay( LandAnim );
-			GetCameraManager().CameraShake( 1.f, true );
+			GetCameraManager().CameraShake( OwningCharacter, 1.f, true );
 			LandOnce = false;
 		}
 	}

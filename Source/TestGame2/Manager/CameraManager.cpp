@@ -36,26 +36,29 @@ void CameraManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 카메라 쉐이크를 실행한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void CameraManager::CameraShake( float InScale, bool InShakeByWeight, bool InShakeByIntensity )
+void CameraManager::CameraShake( AActor* InCaster, float InScale, bool InShakeByWeight, bool InShakeByIntensity )
 {
 	if( !GetMyGameInstance().IsValidLowLevel() )
 		return;
 
-	ACharacterPC* player = GetMyGameInstance().GetMyPlayer();
-	if( !player )
+	if ( !InCaster )
+		return;
+
+	ACharacter* caster = Cast< ACharacter> ( InCaster );
+	if( !caster )
 		return;
 	
 	APlayerController* controller = GetMyGameInstance().GetMyController();
 	if( !controller )
 		return;
 
-	auto moveComponent = player->GetCharacterMovement();
+	auto moveComponent = caster->GetCharacterMovement();
 	if( !moveComponent )
 		return;
 
 	if( InShakeByWeight )
 	{
-		auto objectComp = player ? Cast<UObjectComp>( player->FindComponentByClass<UObjectComp>() ) : nullptr;
+		auto objectComp = caster ? Cast<UObjectComp>( caster->FindComponentByClass<UObjectComp>() ) : nullptr;
 		if( !objectComp )
 			return;
 
@@ -64,7 +67,7 @@ void CameraManager::CameraShake( float InScale, bool InShakeByWeight, bool InSha
 	}
 	else if( InShakeByIntensity )
 	{
-		auto matProperty = player ? Cast<UMaterialComp>( player->FindComponentByClass<UMaterialComp>() ) : nullptr;
+		auto matProperty = caster ? Cast<UMaterialComp>( caster->FindComponentByClass<UMaterialComp>() ) : nullptr;
 		if( !matProperty )
 			return;
 

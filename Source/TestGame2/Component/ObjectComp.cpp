@@ -203,7 +203,13 @@ void UObjectComp::_ProcessHit( AActor* InOtherActor )
 	if( GEngine )
 		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
 
-	GetCameraManager().CameraShake();
+	// 내 플레이어가 맞거나, 때린 경우에만 카메라 쉐이크
+	ACharacterPC* myPlayer = GetMyGameInstance().GetMyPlayer();
+	if ( !myPlayer )
+		return;
+
+	if ( OwningActor == myPlayer || InOtherActor == myPlayer )
+		GetCameraManager().CameraShake( OwningActor );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
