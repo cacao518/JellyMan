@@ -6,6 +6,7 @@
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
 #include "../Manager/LockOnManager.h"
+#include "../Manager/UIManager.h"
 #include "../Character/CharacterPC.h"
 
 
@@ -36,6 +37,7 @@ void UMyGameInstance::Init()
 	DataInfoManager::CreateInstance();
 	CameraManager::CreateInstance();
 	LockOnManager::CreateInstance();
+	UIManager::CreateInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,6 +51,7 @@ void UMyGameInstance::Shutdown()
 	DataInfoManager::DestroyInstance();
 	CameraManager::DestroyInstance();
 	LockOnManager::DestroyInstance();
+	UIManager::CreateInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,6 +62,7 @@ void UMyGameInstance::Tick( float InDeltaTime )
 	GetObjectManager().Tick( InDeltaTime );
 	GetCameraManager().Tick( InDeltaTime );
 	GetLockOnManager().Tick( InDeltaTime );
+	GetUIManager().Tick( InDeltaTime );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
