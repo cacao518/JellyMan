@@ -15,6 +15,7 @@ DataInfoManager::~DataInfoManager()
 {
 	MaterialInfos.Empty();
 	WeaponInfos.Empty();
+	SkillInfos.Empty();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,4 +25,5 @@ void DataInfoManager::DataCreate()
 {
 	_LoadDataTable< FMaterialInfo, MaterialInfoMap >( MaterialInfos, TEXT( "/Game/Data/DT_MaterialInfo" ) );
 	_LoadDataTable< FWeaponInfo,   WeaponInfoMap >  ( WeaponInfos,   TEXT( "/Game/Data/DT_WeaponInfo" ) );
+	_LoadDataTable< FSkillInfo,    SkillInfoMap >   ( SkillInfos,    TEXT( "/Game/Data/DT_SkillInfo" ) );
 }

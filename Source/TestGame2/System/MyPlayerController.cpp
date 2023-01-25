@@ -170,7 +170,7 @@ void AMyPlayerController::ProcessLeftMouse()
 		}
 		case EWeaponState::SWORD:
 		{
-			result = _SkillPlay( 6, 12, 12 );
+			result = _SkillPlay( 5, 8, 8 );
 			break;
 		}
 	}
@@ -197,7 +197,7 @@ void AMyPlayerController::ProcessRightMouse()
 		}
 		case EWeaponState::SWORD:
 		{
-			result = _SkillPlay( 8, 14, 14 );
+			result = _SkillPlay( 7, 10, 10 );
 			break;
 		}
 	}
@@ -224,7 +224,7 @@ void AMyPlayerController::ProcessBothMouseDown()
 		break;
 		case EMaterialState::ROCK:
 		{
-			_SkillPlay( 11 );
+			_SkillPlay( 14 );
 		}
 		break;
 	}
@@ -299,7 +299,7 @@ void AMyPlayerController::ProcessSpace()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessF()
 {
-	_SkillPlay( 4 );
+	_SkillPlay( 12 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -309,7 +309,7 @@ void AMyPlayerController::ProcessR()
 {
 	if( MatComp && MatComp->GetMatState() != EMaterialState::JELLY )
 	{
-		if( _SkillPlay( 10 ) )
+		if( _SkillPlay( 13 ) )
 			MatComp->SetMatState();
 	}
 }
@@ -325,7 +325,7 @@ void AMyPlayerController::Process1()
 	if( !( WeaponComp->CanWeaponComp( EWeaponState::SWORD ) ) )
 		return;
 
-	_SkillPlay( 5 );
+	_SkillPlay( 11 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

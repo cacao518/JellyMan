@@ -3,7 +3,9 @@
 
 #include "BTS_CheckRange.h"
 #include "GameFramework/Character.h"
+#include "../Character/CharacterNPC.h"
 #include "../System/MonsterAIController.h"
+#include "../Manager/DataInfoManager.h"
 #include "../Component/CharacterComp.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
@@ -18,27 +20,31 @@ void UBTS_CheckRange::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 {
 	Super::TickNode( OwnerComp, NodeMemory, DeltaSeconds );
 
-	APawn* controllingPawn = OwnerComp.GetAIOwner()->GetPawn();
-	if( !controllingPawn )
+	ACharacterNPC* controllingNPC = Cast< ACharacterNPC> ( OwnerComp.GetAIOwner()->GetPawn() );
+	if( !controllingNPC )
 		return;
 
 	ACharacter* target = Cast<ACharacter>( OwnerComp.GetBlackboardComponent()->GetValueAsObject( AMonsterAIController::TargetKey ) );
 	if( !target )
 		return;
 
-	auto characterComp = controllingPawn ? Cast<UCharacterComp>( controllingPawn->FindComponentByClass<UCharacterComp>() ) : nullptr;
+	auto characterComp = controllingNPC ? Cast<UCharacterComp>( controllingNPC->FindComponentByClass<UCharacterComp>() ) : nullptr;
 	if( !characterComp )
 		return;
 
-	for( auto& skill : characterComp->GetSkillInfos() )
+	for( const auto& skillNum : controllingNPC->SkillInfos )
 	{
-		if( characterComp->IsCoolingSkill( skill.Num ) )
+		const auto& skillInfo = GetDataInfoManager().GetSkillInfos().Find( skillNum );
+		if ( !skillInfo )
 			continue;
 
-		if( target->GetDistanceTo( controllingPawn ) <= skill.ActivateRangeMax &&
-			target->GetDistanceTo( controllingPawn ) >= skill.ActivateRangeMin )
+		if( characterComp->IsCoolingSkill( skillNum ) )
+			continue;
+
+		if( target->GetDistanceTo( controllingNPC ) <= skillInfo->ActivateRangeMax &&
+			target->GetDistanceTo( controllingNPC ) >= skillInfo->ActivateRangeMin )
 		{
-			OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, skill.Num );
+			OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, skillNum );
 			return;
 		}
 	}

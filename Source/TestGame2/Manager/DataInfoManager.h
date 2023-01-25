@@ -9,6 +9,7 @@
 
 using MaterialInfoMap = TMap< EMaterialState, FMaterialInfo >;
 using WeaponInfoMap   = TMap< EWeaponState, FWeaponInfo >;
+using SkillInfoMap   = TMap< int, FSkillInfo >;
 
 
 class DataInfoManager final : public SingletonBase< DataInfoManager >
@@ -16,6 +17,7 @@ class DataInfoManager final : public SingletonBase< DataInfoManager >
 private:
 	MaterialInfoMap MaterialInfos;  // 물질 정보
 	WeaponInfoMap   WeaponInfos;    // 무기 정보
+	SkillInfoMap    SkillInfos;     // 스킬 정보
 
 public:
 	DataInfoManager();
@@ -30,6 +32,7 @@ public:
 
 	const MaterialInfoMap& GetMaterialInfos() { return MaterialInfos; };
 	const WeaponInfoMap& GetWeaponInfos() { return WeaponInfos; };
+	const SkillInfoMap& GetSkillInfos() { return SkillInfos; };
 
 private:
 	//  데이터 테이블을 인포 맵에 불러온다.

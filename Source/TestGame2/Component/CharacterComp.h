@@ -21,9 +21,6 @@ class TESTGAME2_API UCharacterComp final : public UObjectComp
 	
 public:
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	TArray<FSkillInfo> SkillInfos;              // 해당 BP 모든 스킬 정보
-
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	UAnimMontage*      HitAnim;                 // 피격 애니메이션
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
@@ -34,7 +31,7 @@ private:
 	EAnimState         AnimState;       	    // 애니메이션 상태
 	FVector            MovePos;                 // 이동할 위치
 	CooltimeMap        CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보		
-	FSkillInfo*        CurSkillInfo;            // 현재 스킬 정보     
+	const FSkillInfo*  CurSkillInfo;            // 현재 스킬 정보     
 
 	bool               IsForceMove;             // 강제 이동 여부(스킬 이동, 넉백)
 	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
@@ -104,9 +101,6 @@ public:
 
 	// 애니메이션 상태를 반환한다.
 	const EAnimState& GetAnimState() { return AnimState; };
-
-	// 스킬 정보를 반환한다.
-	const TArray<FSkillInfo>& GetSkillInfos() { return SkillInfos; };
 
 	// 현재 발동 중 스킬 정보를 반환한다.
 	const FSkillInfo* GetCurSkillInfo() { return CurSkillInfo; };

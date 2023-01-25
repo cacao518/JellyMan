@@ -40,7 +40,6 @@ DeathTime       ( 0 )
 UCharacterComp::~UCharacterComp()
 {
 	CoolingSkills.Reset();
-	SkillInfos.Reset();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,52 +111,48 @@ void UCharacterComp::MontagePlay( UAnimMontage* InMontage, float InScale )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UCharacterComp::SkillPlay( int InSkillNum )
 {
-	for( auto& skillInfo : SkillInfos )
+	auto skillInfo = GetDataInfoManager().GetSkillInfos().Find( InSkillNum );
+	if ( !skillInfo )
+		return false;
+
+	// 파생스킬을 발동 시킬 것인지 확인
+	if ( skillInfo->DerivedSkillNum != 0 && IsEnableDerivedKey )
+		return SkillPlay( skillInfo->DerivedSkillNum );
+
+	// 쿨타임 확인
+	if ( IsCoolingSkill( skillInfo->Num ) )
+		return false;
+
+	// 현재 스킬 사용 가능한 AnimState / SkillNum 인지 확인
+	bool isEmptyEnableState = skillInfo->PlayEnableState.IsEmpty();
+	bool isEmptyEnableSkillNum = skillInfo->PlayEnableSkillNum.IsEmpty();
+	bool isFindEnableState = skillInfo->PlayEnableState.Find( AnimState ) != INDEX_NONE;
+	bool isFindEnableSkillNum = skillInfo->PlayEnableSkillNum.Find( CurSkillInfo ? CurSkillInfo->Num : 0 ) != INDEX_NONE;
+
+	// 사용가능한 AnimState / SkillNum 이 둘 다 설정 되어 있을 경우 둘 중 하나만 만족하면 된다.
+	if ( !isEmptyEnableState && !isEmptyEnableSkillNum )
 	{
-		if( InSkillNum != skillInfo.Num )
-			continue;
-
-		// 파생스킬을 발동 시킬 것인지 확인
-		if( skillInfo.DerivedSkillNum != 0 && IsEnableDerivedKey )
-			return SkillPlay( skillInfo.DerivedSkillNum );
-
-		// 쿨타임 확인
-		if( IsCoolingSkill( skillInfo.Num ) )
-			break;
-
-		// 현재 스킬 사용 가능한 AnimState / SkillNum 인지 확인
-		bool isEmptyEnableState = skillInfo.PlayEnableState.IsEmpty();
-		bool isEmptyEnableSkillNum = skillInfo.PlayEnableSkillNum.IsEmpty();
-		bool isFindEnableState = skillInfo.PlayEnableState.Find( AnimState ) != INDEX_NONE;
-		bool isFindEnableSkillNum = skillInfo.PlayEnableSkillNum.Find( CurSkillInfo ? CurSkillInfo->Num : 0 ) != INDEX_NONE;
-
-		// 사용가능한 AnimState / SkillNum 이 둘 다 설정 되어 있을 경우 둘 중 하나만 만족하면 된다.
-		if( !isEmptyEnableState && !isEmptyEnableSkillNum )
-		{
-			if( !isFindEnableState && !isFindEnableSkillNum )
-				break;
-		}
-		else
-		{   // 사용가능한 AnimState / SkillNum 둘 중 하나만 설정 되어 있을 경우 설정 되어 있는 것만 만족하면 된다.
-			if( !isEmptyEnableState && !isFindEnableState )
-				break;
-			if( !isEmptyEnableSkillNum && !isFindEnableSkillNum )
-				break;
-		}
-
-		if( skillInfo.PlaySpeedType == ESkillPlaySpeedType::DEFAULT )
-			MontagePlay( skillInfo.Anim );
-		else
-			MontagePlay( skillInfo.Anim, skillInfo.PlaySpeedType == ESkillPlaySpeedType::ATTACK_SPEED ? Stat.AttackSpeed : Stat.MoveSpeed );
-
-		_RegisterCoolTime( skillInfo );
-
-		CurSkillInfo = &skillInfo;
-
-		return true;
+		if ( !isFindEnableState && !isFindEnableSkillNum )
+			return false;
+	}
+	else
+	{   // 사용가능한 AnimState / SkillNum 둘 중 하나만 설정 되어 있을 경우 설정 되어 있는 것만 만족하면 된다.
+		if ( !isEmptyEnableState && !isFindEnableState )
+			return false;
+		if ( !isEmptyEnableSkillNum && !isFindEnableSkillNum )
+			return false;
 	}
 
-	return false;
+	if ( skillInfo->PlaySpeedType == ESkillPlaySpeedType::DEFAULT )
+		MontagePlay( skillInfo->Anim );
+	else
+		MontagePlay( skillInfo->Anim, skillInfo->PlaySpeedType == ESkillPlaySpeedType::ATTACK_SPEED ? Stat.AttackSpeed : Stat.MoveSpeed );
+
+	_RegisterCoolTime( *skillInfo );
+
+	CurSkillInfo = skillInfo;
+
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -233,10 +228,16 @@ FString UCharacterComp::GetCurMontageName()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UCharacterComp::IsCoolingSkill( int InSkillNum )
 {
-	if( CoolingSkills.FindRef( InSkillNum ) > 0 )
-		return true;
-	else
-		return false;
+	const auto& cooltime = CoolingSkills.Find( InSkillNum );
+	if ( cooltime )
+	{
+		if ( *cooltime > 0 )
+			return true;
+		else
+			return false;
+	}
+
+	return false;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -373,9 +374,6 @@ void UCharacterComp::_Init()
 	OwningCharacter = Cast<ACharacter>( OwningActor );
 
 	ResetInfo( true );
-
-	for( const auto& skill : SkillInfos )
-		CoolingSkills.Add( skill.Num, 0 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -407,7 +405,7 @@ void UCharacterComp::_AnimStateChange()
 	}
 
 	animInstance->AnimState = AnimState;
-	animInstance->AnimSubState = CurSkillInfo ? CurSkillInfo->AnimSubState : EAnimSubState::NONE;
+	animInstance->AnimSubState = CurSkillInfo ? CurSkillInfo->AnimSubState : EAnimSubState::DEFAULT;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
