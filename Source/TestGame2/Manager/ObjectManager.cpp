@@ -16,7 +16,7 @@
 
 ObjectManager::ObjectManager()
 {
-	ObjectId = 0;
+	ObjectId = 1;
 }
 
 ObjectManager::~ObjectManager()
