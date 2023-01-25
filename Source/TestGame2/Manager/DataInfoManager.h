@@ -9,7 +9,7 @@
 
 using MaterialInfoMap = TMap< EMaterialState, FMaterialInfo >;
 using WeaponInfoMap   = TMap< EWeaponState, FWeaponInfo >;
-using SkillInfoMap   = TMap< int, FSkillInfo >;
+using SkillInfoMap    = TMap< int, FSkillInfo >;
 
 
 class DataInfoManager final : public SingletonBase< DataInfoManager >

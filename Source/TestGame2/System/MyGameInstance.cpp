@@ -51,7 +51,7 @@ void UMyGameInstance::Shutdown()
 	DataInfoManager::DestroyInstance();
 	CameraManager::DestroyInstance();
 	LockOnManager::DestroyInstance();
-	UIManager::CreateInstance();
+	UIManager::DestroyInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
