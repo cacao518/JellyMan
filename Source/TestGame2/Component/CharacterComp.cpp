@@ -111,7 +111,7 @@ void UCharacterComp::MontagePlay( UAnimMontage* InMontage, float InScale )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UCharacterComp::SkillPlay( int InSkillNum )
 {
-	auto skillInfo = GetDataInfoManager().GetSkillInfos().Find( InSkillNum );
+	const auto& skillInfo = GetDataInfoManager().GetSkillInfos().Find( InSkillNum );
 	if ( !skillInfo )
 		return false;
 
@@ -228,7 +228,7 @@ FString UCharacterComp::GetCurMontageName()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UCharacterComp::IsCoolingSkill( int InSkillNum )
 {
-	const auto& cooltime = CoolingSkills.Find( InSkillNum );
+	float* cooltime = CoolingSkills.Find( InSkillNum );
 	if ( cooltime )
 	{
 		if ( *cooltime > 0 )
