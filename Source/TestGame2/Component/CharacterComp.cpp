@@ -289,12 +289,15 @@ void UCharacterComp::_ProcessDie()
 		break;
 		case  EObjectType::PC:
 		{
-			if( UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
+			OwningCharacter->GetMesh()->SetSimulatePhysics( true );
+			OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
+			GetObjectManager().SpawnParticle( TEXT( "Die" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
+			/*if( UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
 			{
 				auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
 				animInstance->Montage_Stop( 0.f, curMontage );
 				animInstance->IsDie = true;
-			}
+			}*/
 		}
 		break;
 		case  EObjectType::STATIC_OBJECT:
