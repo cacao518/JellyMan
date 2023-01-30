@@ -193,6 +193,7 @@ void LockOnManager::_ProcessLockOn()
 	if( targetDie || targetAway || ownerDie )
 	{
 		LockOnRelease();
+		LockOnStart(); // 락온 된 적이 죽을 경우, 근처 적을 다시 락온.
 		return;
 	}
 
