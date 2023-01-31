@@ -189,8 +189,14 @@ void LockOnManager::_ProcessLockOn()
 	bool targetDie = !GetValid( LockOnTarget ) || otherObjectComp->GetIsDie();
 	bool targetAway = LockOnTarget->GetDistanceTo( myPlayer ) > Const::LOCKON_RANGE;
 	bool ownerDie = !GetValid( myPlayer ) || ownerObjectComp->GetIsDie();
+	
+	if ( ownerDie )
+	{
+		LockOnRelease();
+		return;
+	}
 
-	if( targetDie || targetAway || ownerDie )
+	if( targetDie || targetAway )
 	{
 		LockOnRelease();
 		LockOnStart(); // 락온 된 적이 죽을 경우, 근처 적을 다시 락온.
