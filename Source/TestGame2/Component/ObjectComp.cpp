@@ -7,6 +7,7 @@
 #include "../Character/CharacterPC.h"
 #include "../Character/CharacterNPC.h"
 #include "../Character/StaticObject.h"
+#include "../Character/Projectile.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/CameraManager.h"
@@ -133,6 +134,8 @@ EObjectType UObjectComp::GetObjectType()
 		return EObjectType::NPC;
 	else if( auto staticObject = Cast< AStaticObject >( OwningActor ) )
 		return EObjectType::STATIC_OBJECT;
+	else if ( auto projectile = Cast< AProjectile >( OwningActor ) )
+		return EObjectType::PROJECTILE;
 
 	return EObjectType::MAX;
 }
