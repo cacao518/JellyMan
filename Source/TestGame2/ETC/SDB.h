@@ -202,7 +202,7 @@ public:
 	FName CollisonName;      // 물질 변경 시 콜리전이름
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FString AssetPath;       // 애셋 경로
+	TArray < UMaterialInterface* > MaterialAsset;    // 머터리얼 애셋 ( 해당 하는 머터리얼은 State가 될 수 있다 )
 
 	/// 맵 키를 반환한다.
 	EMaterialState GetKey(){ return State; };

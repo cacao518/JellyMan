@@ -179,8 +179,8 @@ void UMaterialComp::_Init()
 	}
 
 	const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::WATER );
-	if( waterMatInfo )
-		WaterMaterial = LoadObject<UMaterialInterface>( NULL, *( waterMatInfo->AssetPath ), NULL, LOAD_None, NULL );
+	if ( waterMatInfo )
+		WaterMaterial = waterMatInfo->MaterialAsset[ 0 ];
 	
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 
@@ -228,11 +228,9 @@ void UMaterialComp::_InitStatus()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 EMaterialState UMaterialComp::_ConvertMatAssetToMatState( UMaterialInterface* InMaterial )
 {
-	FString path = InMaterial->GetPathName();
-
 	for( const auto& [state, matInfo] : GetDataInfoManager().GetMaterialInfos() )
 	{
-		if( path == matInfo.AssetPath )
+		if( matInfo.MaterialAsset.Find( InMaterial ) != INDEX_NONE )
 			return state;
 	}
 
