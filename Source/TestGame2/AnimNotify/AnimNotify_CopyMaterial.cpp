@@ -2,6 +2,7 @@
 
 
 #include "AnimNotify_CopyMaterial.h"
+#include "../Util/UtilMaterial.h"
 #include "../Component/MaterialComp.h"
 
 FString UAnimNotify_CopyMaterial::GetNotifyName_Implementation() const
@@ -14,8 +15,13 @@ void UAnimNotify_CopyMaterial::Notify( USkeletalMeshComponent* MeshComp, UAnimSe
 	if( !MeshComp || !( MeshComp->GetOwner() ) )
 		return;
 
-	UMaterialComp* matProperty = Cast<UMaterialComp>( MeshComp->GetOwner()->FindComponentByClass<UMaterialComp>() );
-	if( !matProperty ) return;
+	AActor* owner = Cast<AActor>( MeshComp->GetOwner() );
+	if ( !owner )
+		return;
 
-	matProperty->SetIsEnabledTileColl( true );
+	UMaterialComp* matProperty = Cast<UMaterialComp>( owner->FindComponentByClass<UMaterialComp>() );
+	if( !matProperty ) 
+		return;
+
+	matProperty->SetMatState( UtilMaterial::GetSteppedMatrialInterface( owner ) );
 }

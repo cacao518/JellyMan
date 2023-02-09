@@ -1,9 +1,54 @@
 
 #include "UtilMaterial.h"
+#include "Engine/World.h"
+#include "../System/MyGameInstance.h"
 #include "../Manager/DataInfoManager.h"
 
 namespace UtilMaterial
 {
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	//// @briefActor 발 밑에 있는 MaterialInterface을 알아낸다.
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	UMaterialInterface* GetSteppedMatrialInterface( AActor* InActor )
+	{
+		FVector LineTraceStart = InActor->GetActorLocation();
+		FVector LineTraceEnd = FVector( InActor->GetActorLocation().X, InActor->GetActorLocation().Y, InActor->GetActorLocation().Z - 150.f );
+
+		/*DrawDebugLine(
+			GetWorld(),
+			LineTraceStart,
+			LineTraceEnd,
+			FColor( 255, 0, 0 ),
+			false,
+			0.f,
+			0.f,
+			10.f
+		);*/
+
+		// 쿼리 변수 설정
+		FCollisionQueryParams TraceParameters( FName( TEXT( "" ) ), false, InActor ); //Tag, Bool Trace Complex, Ignore 액터 (자신 제외)
+		FHitResult hitResult;
+		GetMyGameInstance().GetWorld()->LineTraceSingleByObjectType(
+			OUT hitResult,
+			LineTraceStart,
+			LineTraceEnd,
+			FCollisionObjectQueryParams( ECollisionChannel::ECC_WorldStatic ),
+			TraceParameters
+		);
+
+		AActor* hitActor = hitResult.GetActor();
+		if ( hitActor )
+		{
+			//FString str = InActor->GetName() + TEXT( "Set SteppedMatState" );
+			//if ( GEngine )
+			//	GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
+
+			return GetMatrialInterface( hitActor );
+		}
+
+		return nullptr;
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//// @brief Actor가 가지고 있는 MaterialInterface를 알아낸다.
 	/////////////////////////////////////////////////////////////////////////////////////////////////////

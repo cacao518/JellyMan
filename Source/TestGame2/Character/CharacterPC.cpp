@@ -68,11 +68,6 @@ ACharacterPC::ACharacterPC()
 	AttackColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "AttackColl" ) );
 	AttackColl->SetupAttachment( GetMesh() );
 	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
-
-	// TileBox Component
-	TileColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "TileColl" ) );
-	TileColl->SetupAttachment( GetMesh() );
-	TileColl->SetCollisionProfileName( TEXT( "TileColl" ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

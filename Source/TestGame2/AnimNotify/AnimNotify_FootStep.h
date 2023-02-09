@@ -24,6 +24,4 @@ public:
 
 private:
 	void Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation ) override;
-
-	EMaterialState _GetMatState( ACharacter* InOwner );
 };

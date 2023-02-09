@@ -19,7 +19,7 @@ void UAnimNotify_FootStep::Notify( USkeletalMeshComponent* MeshComp, UAnimSequen
 	if ( !MeshComp )
 		return;
 
-	ACharacter* owner = Cast<ACharacter>( MeshComp->GetOwner() );
+	AActor* owner = Cast<AActor>( MeshComp->GetOwner() );
 	if ( !owner )
 		return;
 
@@ -30,8 +30,8 @@ void UAnimNotify_FootStep::Notify( USkeletalMeshComponent* MeshComp, UAnimSequen
 	FVector relativeSpawnPos = spawnPosComp->GetRelativeLocation() + FootLocation;
 	FVector worldSpawnPos = UKismetMathLibrary::TransformLocation( spawnPosComp->GetComponentTransform(), relativeSpawnPos );
 
-
-	switch ( _GetMatState( owner ) )
+	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( UtilMaterial::GetSteppedMatrialInterface( owner ) );
+	switch ( matState )
 	{
 		case EMaterialState::WATER :
 		{
@@ -39,45 +39,4 @@ void UAnimNotify_FootStep::Notify( USkeletalMeshComponent* MeshComp, UAnimSequen
 			break;
 		}
 	}
-}
-
-EMaterialState UAnimNotify_FootStep::_GetMatState( ACharacter* InOwner )
-{
-	FVector LineTraceStart = InOwner->GetActorLocation();
-	FVector LineTraceEnd = FVector( InOwner->GetActorLocation().X, InOwner->GetActorLocation().Y, InOwner->GetActorLocation().Z - 150.f );
-
-	/*DrawDebugLine(
-		GetWorld(),
-		LineTraceStart,
-		LineTraceEnd,
-		FColor( 255, 0, 0 ),
-		false,
-		0.f,
-		0.f,
-		10.f
-	);*/
-
-	// 쿼리 변수 설정
-	FCollisionQueryParams TraceParameters( FName( TEXT( "" ) ), false, InOwner ); //Tag, Bool Trace Complex, Ignore 액터 (자신 제외)
-	FHitResult hitResult;
-	GetWorld()->LineTraceSingleByObjectType(
-		OUT hitResult,
-		LineTraceStart,
-		LineTraceEnd,
-		FCollisionObjectQueryParams( ECollisionChannel::ECC_WorldStatic ),
-		TraceParameters
-	);
-
-	AActor* hitActor = hitResult.GetActor();
-	if ( hitActor )
-	{
-		FString str = InOwner->GetName() + TEXT( "Set SteppedMatState" );
-		if ( GEngine )
-			GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
-
-		UMaterialInterface* matInterface = UtilMaterial::GetMatrialInterface( hitActor );
-		return UtilMaterial::ConvertMatAssetToMatState( matInterface );
-	}
-
-	return EMaterialState::MAX;
 }

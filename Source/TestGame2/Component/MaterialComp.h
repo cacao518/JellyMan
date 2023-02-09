@@ -47,10 +47,7 @@ public:
 	///////////////////////////////////////////////////////////////////////
 	
 	// 물질을 변경한다.
-	void SetMatState( UMaterialInterface* InMatInterface = nullptr );
-
-	// 타일 콜리전 활성화 여부를 셋팅한다.
-	void SetIsEnabledTileColl( bool InIsEnabled );
+	void SetMatState( UMaterialInterface* InMatInterface = nullptr, bool InIsInit = false );
 
 	// 젤리 에너지를 셋팅한다.
 	void SetJellyEnergy( float InJellyEnergy ){ JellyEnergyMax > InJellyEnergy ? JellyEnergy = InJellyEnergy : JellyEnergy = JellyEnergyMax; };
@@ -74,23 +71,12 @@ public:
 	// 고 중량 인지 여부를 반환한다.
 	bool IsHeavyMass();
 
-	///////////////////////////////////////////////////////////////////////
-	// Delegate Function
-	///////////////////////////////////////////////////////////////////////
-
-	// 충돌이 시작할시에 호출되는 델리게이트에 등록하는 함수
-	UFUNCTION()
-	void TileCollBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult );
-
 private:
 	// 초기화 한다.
 	void _Init();
 
 	// 머티리얼에 맞는 능력치를 초기화한다.
 	void _InitStatus();
-
-	// 충돌 처리를 한다.
-	void _ProcessCollision( AActor* InOtherActor );
 
 	// 물질 변경 이펙트를 실행한다.
 	void _PlayChangeEffect();

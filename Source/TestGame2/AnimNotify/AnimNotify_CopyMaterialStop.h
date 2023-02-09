@@ -7,7 +7,7 @@
 #include "AnimNotify_CopyMaterialStop.generated.h"
 
 /**
- * 
+ *  해당 코드 라인 트레이스 방식으로 변경 이후 사용 안함
  */
 UCLASS()
 class TESTGAME2_API UAnimNotify_CopyMaterialStop : public UAnimNotify

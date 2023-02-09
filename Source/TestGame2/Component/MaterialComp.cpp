@@ -49,7 +49,7 @@ void UMaterialComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 물질을 변경한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialComp::SetMatState( UMaterialInterface* InMatInterface )
+void UMaterialComp::SetMatState( UMaterialInterface* InMatInterface, bool InIsInit )
 {
 	if( !InitMaterial )
 		return;
@@ -80,21 +80,13 @@ void UMaterialComp::SetMatState( UMaterialInterface* InMatInterface )
 
 	_InitStatus();
 
-	SetIsEnabledTileColl( false );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 타일 콜리전 활성화 여부를 셋팅한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialComp::SetIsEnabledTileColl( bool InIsEnabled )
-{
-	IsEnabledTileColl = InIsEnabled;
-
-	auto tileColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "TileColl" ) ) ) : nullptr;
-	if( tileColl )
+	if ( !InIsInit )
 	{
-		tileColl->SetCollisionEnabled( IsEnabledTileColl ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
-		tileColl->SetVisibility( IsEnabledTileColl );
+		_PlayChangeEffect();
+
+		FString str = OwningCharacter->GetName() + TEXT( ": Material Change -> " ) + InMatInterface->GetName();
+		if ( GEngine )
+			GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
 	}
 }
 
@@ -144,23 +136,6 @@ bool UMaterialComp::IsHeavyMass()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 충돌이 시작할시에 호출되는 델리게이트에 등록하는 함수
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialComp::TileCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
-									         AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
-										     bool bFromSweep, const FHitResult& SweepResult )
-{
-	if( !OtherActor )
-		return;
-
-	// 자기 자신 충돌은 무시한다.
-	if( Cast<ACharacter>( OtherActor ) == OwningCharacter )
-		return;
-
-	_ProcessCollision( OtherActor );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief  초기화 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialComp::_Init()
@@ -181,13 +156,7 @@ void UMaterialComp::_Init()
 	
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 
-	auto tileColl = OwningCharacter ? Cast<UBoxComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "TileColl" ) ) ) : nullptr;
-	if( tileColl )
-		tileColl->OnComponentBeginOverlap.AddDynamic( this, &UMaterialComp::TileCollBeginOverlap );
-
-	SetIsEnabledTileColl( false );
-
-	SetMatState();
+	SetMatState( nullptr, true );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,22 +187,6 @@ void UMaterialComp::_InitStatus()
 		MatEnergy    = matInfo->MatEnergyMax;
 		MatEnergyMax = matInfo->MatEnergyMax;
 	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 충돌 처리를 한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialComp::_ProcessCollision( AActor* InOtherActor )
-{
-	UMaterialInterface* matInterface = UtilMaterial::GetMatrialInterface( InOtherActor );
-
-	FString str = OwningCharacter->GetName() + TEXT( ": Material Change -> " ) + matInterface->GetName();
-	if( GEngine )
-		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
-
-	SetIsEnabledTileColl( false );
-	SetMatState( matInterface );
-	_PlayChangeEffect();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
