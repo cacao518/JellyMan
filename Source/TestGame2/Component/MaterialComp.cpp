@@ -17,6 +17,7 @@
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/ObjectManager.h"
 #include "../System/MyAnimInstance.h"
+#include "../Util/UtilMaterial.h"
 
 UMaterialComp::UMaterialComp()
 {
@@ -57,7 +58,7 @@ void UMaterialComp::SetMatState( UMaterialInterface* InMatInterface )
 	if( !InMatInterface )
 		InMatInterface = InitMaterial;
 
-	EMaterialState matState = _ConvertMatAssetToMatState( InMatInterface );
+	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( InMatInterface );
 
 	if( matState == EMaterialState::MAX || matState == MatState )
 		return;
@@ -177,10 +178,6 @@ void UMaterialComp::_Init()
 		JellyEnergy    = jellyMatInfo->MatEnergyMax;
 		JellyEnergyMax = jellyMatInfo->MatEnergyMax;
 	}
-
-	const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::WATER );
-	if ( waterMatInfo )
-		WaterMaterial = waterMatInfo->MaterialAsset[ 0 ];
 	
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 
@@ -224,70 +221,11 @@ void UMaterialComp::_InitStatus()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief EMaterialState를 머터리얼 애셋 주소로 바꿔준다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-EMaterialState UMaterialComp::_ConvertMatAssetToMatState( UMaterialInterface* InMaterial )
-{
-	for( const auto& [state, matInfo] : GetDataInfoManager().GetMaterialInfos() )
-	{
-		if( matInfo.MaterialAsset.Find( InMaterial ) != INDEX_NONE )
-			return state;
-	}
-
-	return EMaterialState::MAX;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 충돌 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialComp::_ProcessCollision( AActor* InOtherActor )
 {
-	UMaterialInterface* matInterface = nullptr;
-
-	// 몬스터나 플레이어
-	if( Cast<ACharacter>( InOtherActor ) )
-	{
-		/*auto meshOnTile = Cast<ACharacter>( OtherActor )->GetMesh();
-		if( !meshOnTile )
-			return;
-
-		MatStateOnTile = _ConvertMatAssetToMatState( meshOnTile->GetMaterial( 0 ) );*/
-	}
-	else
-	{
-		// 스테틱 매쉬
-		auto staticMesh = Cast<UStaticMeshComponent>( InOtherActor->GetComponentByClass( UStaticMeshComponent::StaticClass() ) );
-		if( staticMesh )
-		{
-			matInterface = staticMesh->GetMaterial( 0 );
-			if( !matInterface )
-				return;
-		}
-
-		// 워터 바디
-		auto waterBody = Cast<UWaterBodyComponent>( InOtherActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
-		if( waterBody )
-		{
-			matInterface = WaterMaterial;
-		}
-
-		// 랜드스케이프
-		auto landScape = Cast<ULandscapeComponent>( InOtherActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
-		if( landScape )
-		{
-			auto proxy = landScape->GetLandscapeProxy();
-			if( !proxy )
-			{
-				if( GEngine )
-					GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, "proxy is null" );
-				return;
-			}
-
-			matInterface = proxy->GetLandscapeMaterial( 0 );
-			if( !matInterface )
-				return;
-		}
-	}
+	UMaterialInterface* matInterface = UtilMaterial::GetMatrialInterface( InOtherActor );
 
 	FString str = OwningCharacter->GetName() + TEXT( ": Material Change -> " ) + matInterface->GetName();
 	if( GEngine )

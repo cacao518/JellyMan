@@ -25,7 +25,6 @@ public:
 
 private:
 	ACharacter*         OwningCharacter;          // 부모 캐릭터 클래스
-	UMaterialInterface* WaterMaterial;            // 워터 머터리얼
 
 	float               JellyEnergy;              // 젤리 에너지
 	float               JellyEnergyMax;           // 젤리 에너지 최대
@@ -89,9 +88,6 @@ private:
 
 	// 머티리얼에 맞는 능력치를 초기화한다.
 	void _InitStatus();
-
-	// 머터리얼 애셋 주소를 EMaterialState로 바꿔준다.
-	EMaterialState _ConvertMatAssetToMatState( UMaterialInterface* InMaterial );
 
 	// 충돌 처리를 한다.
 	void _ProcessCollision( AActor* InOtherActor );
