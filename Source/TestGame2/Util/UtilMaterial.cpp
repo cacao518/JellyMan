@@ -52,12 +52,12 @@ namespace UtilMaterial
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//// @brief Actor가 가지고 있는 MaterialInterface를 알아낸다.
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	UMaterialInterface* GetMatrialInterface( AActor* InOtherActor )
+	UMaterialInterface* GetMatrialInterface( AActor* InActor )
 	{
 		UMaterialInterface* matInterface = nullptr;
 
 		// 몬스터나 플레이어
-		if ( Cast<ACharacter>( InOtherActor ) )
+		if ( Cast<ACharacter>( InActor ) )
 		{
 			/*auto meshOnTile = Cast<ACharacter>( OtherActor )->GetMesh();
 			if( !meshOnTile )
@@ -68,12 +68,12 @@ namespace UtilMaterial
 		else
 		{
 			// 스테틱 매쉬
-			auto staticMesh = Cast<UStaticMeshComponent>( InOtherActor->GetComponentByClass( UStaticMeshComponent::StaticClass() ) );
+			auto staticMesh = Cast<UStaticMeshComponent>( InActor->GetComponentByClass( UStaticMeshComponent::StaticClass() ) );
 			if ( staticMesh )
 				matInterface = staticMesh->GetMaterial( 0 );
 
 			// 워터 바디
-			auto waterBody = Cast<UWaterBodyComponent>( InOtherActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
+			auto waterBody = Cast<UWaterBodyComponent>( InActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
 			if ( waterBody )
 			{
 				const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::WATER );
@@ -82,7 +82,7 @@ namespace UtilMaterial
 			}
 
 			// 랜드스케이프
-			auto landScape = Cast<ULandscapeComponent>( InOtherActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
+			auto landScape = Cast<ULandscapeComponent>( InActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
 			if ( landScape )
 			{
 				auto proxy = landScape->GetLandscapeProxy();
@@ -101,7 +101,7 @@ namespace UtilMaterial
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	//// @brief EMaterialState를 머터리얼 애셋 주소로 바꿔준다.
+	//// @brief MaterialInterface를 EMaterialState로 바꿔준다.
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	EMaterialState ConvertMatAssetToMatState( UMaterialInterface* InMaterial )
 	{
