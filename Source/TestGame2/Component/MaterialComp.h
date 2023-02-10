@@ -68,9 +68,6 @@ public:
 	// 고 강도 인지 여부를 반환한다.
 	bool IsHardIntensity();
 
-	// 고 중량 인지 여부를 반환한다.
-	bool IsHeavyMass();
-
 private:
 	// 초기화 한다.
 	void _Init();

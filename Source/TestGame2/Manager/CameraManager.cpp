@@ -62,7 +62,7 @@ void CameraManager::CameraShake( AActor* InCaster, float InScale, bool InShakeBy
 		if( !objectComp )
 			return;
 
-		if( !moveComponent->IsFalling() && objectComp->GetStat().Weight >= Const::HARD_RATE )
+		if( !moveComponent->IsFalling() && objectComp->IsHeavyWeight() )
 			controller->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
 	}
 	else if( InShakeByIntensity )
