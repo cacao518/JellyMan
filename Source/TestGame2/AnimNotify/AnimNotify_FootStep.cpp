@@ -33,6 +33,16 @@ void UAnimNotify_FootStep::Notify( USkeletalMeshComponent* MeshComp, UAnimSequen
 	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( UtilMaterial::GetSteppedMatrialInterface( owner ) );
 	switch ( matState )
 	{
+		case EMaterialState::GRAVEL:
+		{
+			GetObjectManager().SpawnParticle( TEXT( "FootSteps/FootStep_Gravel" ), owner, worldSpawnPos, owner->GetActorRotation() );
+			break;
+		}
+		case EMaterialState::ROCK:
+		{
+			GetObjectManager().SpawnParticle( TEXT( "FootSteps/FootStep_Rock" ), owner, worldSpawnPos, owner->GetActorRotation() );
+			break;
+		}
 		case EMaterialState::WATER :
 		{
 			GetObjectManager().SpawnParticle( TEXT( "FootSteps/FootStep_Water" ), owner, worldSpawnPos, owner->GetActorRotation() );
