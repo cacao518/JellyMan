@@ -4,6 +4,7 @@
 #include "../ETC/SDB.h"
 #include "../Component/CharacterComp.h"
 #include "../Manager/ObjectManager.h"
+#include "../Manager/DataInfoManager.h"
 #include "../Util/UtilMaterial.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/Character.h"
@@ -31,22 +32,9 @@ void UAnimNotify_FootStep::Notify( USkeletalMeshComponent* MeshComp, UAnimSequen
 	FVector worldSpawnPos = UKismetMathLibrary::TransformLocation( spawnPosComp->GetComponentTransform(), relativeSpawnPos );
 
 	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( UtilMaterial::GetSteppedMatrialInterface( owner ) );
-	switch ( matState )
-	{
-		case EMaterialState::GRAVEL:
-		{
-			GetObjectManager().SpawnParticle( TEXT( "FootSteps/FootStep_Gravel" ), owner, worldSpawnPos, owner->GetActorRotation() );
-			break;
-		}
-		case EMaterialState::ROCK:
-		{
-			GetObjectManager().SpawnParticle( TEXT( "FootSteps/FootStep_Rock" ), owner, worldSpawnPos, owner->GetActorRotation() );
-			break;
-		}
-		case EMaterialState::WATER :
-		{
-			GetObjectManager().SpawnParticle( TEXT( "FootSteps/FootStep_Water" ), owner, worldSpawnPos, owner->GetActorRotation() );
-			break;
-		}
-	}
+	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( matState );
+	if( !matInfo )
+		return;
+
+	GetObjectManager().SpawnParticle( matInfo->FootStepParticle, owner, worldSpawnPos, owner->GetActorRotation() );
 }

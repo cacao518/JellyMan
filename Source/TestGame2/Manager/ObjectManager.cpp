@@ -100,7 +100,15 @@ void ObjectManager::SpawnParticle( const FString& InEffectName, const AActor* In
 	if( !effect )
 		return;
 
-	UNiagaraFunctionLibrary::SpawnSystemAttached( effect, InUseActor->GetRootComponent(), NAME_None, InLocation, InRotator, EAttachLocation::KeepWorldPosition, true, true, ENCPoolMethod::None );
+	SpawnParticle( effect, InUseActor, InLocation, InRotator );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 파티클 생성
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void ObjectManager::SpawnParticle( UNiagaraSystem* InEffect, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator )
+{
+	UNiagaraFunctionLibrary::SpawnSystemAttached( InEffect, InUseActor->GetRootComponent(), NAME_None, InLocation, InRotator, EAttachLocation::KeepWorldPosition, true, true, ENCPoolMethod::None );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

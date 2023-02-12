@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include "NiagaraSystem.h"
 #include "SDB.generated.h"
 
 
@@ -187,22 +188,25 @@ struct FMaterialInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	EMaterialState State;    // 물질 상태
+	EMaterialState State;                            // 물질 상태
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Mass;              // 질량(공격속도,이동속도,점프력 비율)
+	float Mass;                                      // 질량(공격속도,이동속도,점프력 비율)
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Intensity;         // 강도(공격력,방어력,강인함 비율, 공격모션)
+	float Intensity;                                 // 강도(공격력,방어력,강인함 비율, 공격모션)
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float MatEnergyMax;      // 최대 물질 에너지
+	float MatEnergyMax;                              // 최대 물질 에너지
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FName CollisonName;      // 물질 변경 시 콜리전이름
+	FName CollisonName;                              // 물질 변경 시 콜리전이름
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	TArray < UMaterialInterface* > MaterialAsset;    // 머터리얼 애셋 ( 해당 하는 머터리얼은 State가 될 수 있다 )
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UNiagaraSystem* FootStepParticle;                // 재질 밟을 때 스폰할 파티클
 
 	/// 맵 키를 반환한다.
 	EMaterialState GetKey(){ return State; };

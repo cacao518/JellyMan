@@ -53,6 +53,9 @@ public:
 	// 파티클 생성
 	void SpawnParticle( const FString& InEffectName, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator );
 
+	// 파티클 생성
+	void SpawnParticle( UNiagaraSystem* InEffect, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator );
+
 	// 액터 제거
 	void DestroyActor( AActor* InActor );
 
