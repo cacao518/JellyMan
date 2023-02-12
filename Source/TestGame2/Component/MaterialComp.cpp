@@ -179,24 +179,11 @@ void UMaterialComp::_InitStatus()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialComp::_PlayChangeEffect()
 {
-	switch( MatState )
-	{
-		case EMaterialState::GRASS:
-		{
-			GetObjectManager().SpawnParticle( TEXT( "MaterialChange/GrassChange" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
-		}
-		break;
-		case EMaterialState::ROCK:
-		{
-			GetObjectManager().SpawnParticle( TEXT( "MaterialChange/RockChange" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
-		}
-		break;
-		case EMaterialState::GRAVEL:
-		{
-			GetObjectManager().SpawnParticle( TEXT( "MaterialChange/GravelChange" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
-		}
-		break;
-	}
+	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( MatState );
+	if( !matInfo )
+		return;
+
+	GetObjectManager().SpawnParticle( matInfo->ChangeParticle, OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -208,6 +208,9 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	UNiagaraSystem* FootStepParticle;                // 재질 밟을 때 스폰할 파티클
 
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UNiagaraSystem* ChangeParticle;                  // 해당 재질로 변경되었을 때 스폰할 파티클
+
 	/// 맵 키를 반환한다.
 	EMaterialState GetKey(){ return State; };
 };
