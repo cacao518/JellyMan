@@ -26,18 +26,3 @@ AStaticObject::AStaticObject()
 	AttackColl->SetupAttachment( RootComponent );
 	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
 }
-
-// Called when the game starts or when spawned
-void AStaticObject::BeginPlay()
-{
-	Super::BeginPlay();
-	
-	PrimaryActorTick.bCanEverTick = true;
-}
-
-// Called every frame
-void AStaticObject::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-

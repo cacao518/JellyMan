@@ -7,6 +7,7 @@
 #include "../Component/MaterialComp.h"
 #include "../System/MonsterAIController.h"
 #include "Components/BoxComponent.h"
+#include "Components/SceneComponent.h"
 
 // Sets default values
 ACharacterNPC::ACharacterNPC()
@@ -28,6 +29,10 @@ ACharacterNPC::ACharacterNPC()
 	// Configure character movement
 	GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f );
 
+	// SpawnPosComp Component
+	SpawnPosComp = CreateDefaultSubobject<USceneComponent>( TEXT( "SpawnPosComp" ) );
+	SpawnPosComp->SetupAttachment( RootComponent );
+
 	// Box Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
 	HitColl->SetupAttachment( GetMesh() );
@@ -38,18 +43,3 @@ ACharacterNPC::ACharacterNPC()
 	AttackColl->SetupAttachment( GetMesh() );
 	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
 }
-
-// Called when the game starts or when spawned
-void ACharacterNPC::BeginPlay()
-{
-	Super::BeginPlay();
-	
-	PrimaryActorTick.bCanEverTick = true;
-}
-
-// Called every frame
-void ACharacterNPC::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-

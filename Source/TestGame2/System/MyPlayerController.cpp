@@ -45,8 +45,8 @@ void AMyPlayerController::BeginPlay()
 	InputComponent->BindAxis( "Turn", MyPlayer, &APawn::AddControllerYawInput );
 	InputComponent->BindAxis( "LookUp", MyPlayer, &APawn::AddControllerPitchInput );
 
-	InputComponent->BindAction( "Shift",      IE_Pressed, MyPlayer, &ACharacter::Jump );
-	InputComponent->BindAction( "Shift",      IE_Released, MyPlayer, &ACharacter::StopJumping );
+	InputComponent->BindAction( "Shift",      IE_Pressed, this, &AMyPlayerController::JumpStart );
+	InputComponent->BindAction( "Shift",      IE_Released, this, &AMyPlayerController::JumpStop );
 
 	InputComponent->BindAction( "Space",      IE_Pressed, this, &AMyPlayerController::ProcessSpace);
 	InputComponent->BindAction( "F",          IE_Pressed, this, &AMyPlayerController::ProcessF );
@@ -149,6 +149,24 @@ void AMyPlayerController::LookUpAtRate( float Rate )
 {
 	if( MyPlayer )
 		MyPlayer->AddControllerPitchInput( Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds() );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief JumpStart
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AMyPlayerController::JumpStart()
+{
+	if ( MyPlayer && CharacterComp && CharacterComp->GetAnimState() == EAnimState::IDLE_RUN )
+		MyPlayer->Jump();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief JumpStart
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AMyPlayerController::JumpStop()
+{
+	if( MyPlayer )
+		MyPlayer->StopJumping();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

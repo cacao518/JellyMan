@@ -50,6 +50,8 @@ public:
 	void MoveRight( float Value );
 	void TurnAtRate( float Rate );
 	void LookUpAtRate( float Rate );
+	void JumpStart();
+	void JumpStop();
 
 	void ProcessLeftMouse();
 	void ProcessRightMouse();

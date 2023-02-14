@@ -27,6 +27,9 @@ public:
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
 	class UWeaponComp* WeaponComp;
 
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Default, meta = ( AllowPrivateAccess = "true" ) )
+	class USceneComponent* SpawnPosComp;
+
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = ( AllowPrivateAccess = "true" ) )
 	class UBoxComponent* HitColl;
 
@@ -42,9 +45,4 @@ public:
 public:
 	ACharacterPC();
 
-	virtual void BeginPlay() override;
-
-	virtual void Tick(float InDeltaTime) override;
-
-	virtual void Jump() override;
 };

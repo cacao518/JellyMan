@@ -13,6 +13,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/SceneComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
@@ -59,6 +60,10 @@ ACharacterPC::ACharacterPC()
 	// Create a WeaponComp Component
 	WeaponComp = CreateDefaultSubobject<UWeaponComp>( TEXT( "WeaponComp" ) );
 
+	// SpawnPosComp Component
+	SpawnPosComp = CreateDefaultSubobject<USceneComponent>( TEXT( "SpawnPosComp" ) );
+	SpawnPosComp->SetupAttachment( RootComponent );
+
 	// HitBox Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
 	HitColl->SetupAttachment( GetMesh() );
@@ -68,31 +73,4 @@ ACharacterPC::ACharacterPC()
 	AttackColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "AttackColl" ) );
 	AttackColl->SetupAttachment( GetMesh() );
 	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief BeginPlay
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void ACharacterPC::BeginPlay()
-{
-	Super::BeginPlay();
-
-	PrimaryActorTick.bCanEverTick = true;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief Tick
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void ACharacterPC::Tick( float InDeltaTime )
-{
-	Super::Tick(InDeltaTime);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief มกวม 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void ACharacterPC::Jump()
-{
-	if( CharacterComp && CharacterComp->GetAnimState() == EAnimState::IDLE_RUN )
-		Super::Jump();
 }

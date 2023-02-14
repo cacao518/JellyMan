@@ -26,18 +26,3 @@ AProjectile::AProjectile()
 	AttackColl->SetupAttachment( RootComponent );
 	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
 }
-
-// Called when the game starts or when spawned
-void AProjectile::BeginPlay()
-{
-	Super::BeginPlay();
-	
-	PrimaryActorTick.bCanEverTick = true;
-}
-
-// Called every frame
-void AProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
