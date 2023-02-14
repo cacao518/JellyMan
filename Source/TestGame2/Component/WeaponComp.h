@@ -45,7 +45,7 @@ public:
 	bool CanWeaponComp( EWeaponState InWeaponState );
 
 	// 무기 내구도를 감소시킨다.
-	void SubWeaponDurability( int InValue = 1 );
+	void SubWeaponDurability();
 	
 	///////////////////////////////////////////////////////////////////////
 	// Setter

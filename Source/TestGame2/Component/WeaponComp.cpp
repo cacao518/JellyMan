@@ -47,7 +47,7 @@ void UWeaponComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	}
 	else
 	{ 
-		DissolveAmount = FMath::Lerp( DissolveAmount, 0.f, GetWorld()->GetDeltaSeconds() * 3.f );
+		DissolveAmount = FMath::Lerp( DissolveAmount, 0.f, GetWorld()->GetDeltaSeconds() * 5.f );
 		if( DissovleMaterialInstance )
 			DissovleMaterialInstance->SetScalarParameterValue( FName( TEXT( "Amount" ) ), DissolveAmount );
 	}
@@ -86,7 +86,7 @@ bool UWeaponComp::CanWeaponComp( EWeaponState InWeaponState )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 무기 내구도를 감소시킨다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UWeaponComp::SubWeaponDurability( int InValue )
+void UWeaponComp::SubWeaponDurability()
 {
 	WeaponDurability -= 1;
 
