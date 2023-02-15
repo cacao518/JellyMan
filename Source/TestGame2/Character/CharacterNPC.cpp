@@ -8,6 +8,7 @@
 #include "../System/MonsterAIController.h"
 #include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 ACharacterNPC::ACharacterNPC()
@@ -23,15 +24,23 @@ ACharacterNPC::ACharacterNPC()
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
-	// CharacterComp
-	CharacterComp = CreateDefaultSubobject<UCharacterComp>( TEXT( "CharacterComp" ) );
-
 	// Configure character movement
 	GetCharacterMovement()->RotationRate = FRotator( 0.0f, Const::DEFAULT_ROTATION_RATE, 0.0f );
+
+	// CharacterComp
+	CharacterComp = CreateDefaultSubobject<UCharacterComp>( TEXT( "CharacterComp" ) );
 
 	// SpawnPosComp Component
 	SpawnPosComp = CreateDefaultSubobject<USceneComponent>( TEXT( "SpawnPosComp" ) );
 	SpawnPosComp->SetupAttachment( RootComponent );
+
+	// LockOnMark Component
+	static ConstructorHelpers::FClassFinder<UUserWidget> lockOnWidget( TEXT( "/Game/Sprite/LockOnWidget" ) );
+	LockOnMark = CreateDefaultSubobject<UWidgetComponent>( TEXT( "LockOnMark" ) );
+	LockOnMark->SetupAttachment( RootComponent );
+	LockOnMark->SetWidgetClass( lockOnWidget.Class );
+	LockOnMark->SetWidgetSpace( EWidgetSpace::Screen );
+	LockOnMark->SetDrawSize( FVector2D( 30.f, 30.f ) );
 
 	// Box Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
