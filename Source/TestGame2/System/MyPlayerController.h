@@ -61,6 +61,7 @@ public:
 	void ProcessWheelUp();
 	void ProcessWheelDown();
 	void ProcessSpace();
+	void ProcessTab();
 	void ProcessF();
 	void ProcessR();
 	void Process1();

@@ -49,6 +49,7 @@ void AMyPlayerController::BeginPlay()
 	InputComponent->BindAction( "Shift",      IE_Released, this, &AMyPlayerController::JumpStop );
 
 	InputComponent->BindAction( "Space",      IE_Pressed, this, &AMyPlayerController::ProcessSpace);
+	InputComponent->BindAction( "Tab",        IE_Pressed, this, &AMyPlayerController::ProcessTab );
 	InputComponent->BindAction( "F",          IE_Pressed, this, &AMyPlayerController::ProcessF );
 	InputComponent->BindAction( "R",          IE_Pressed, this, &AMyPlayerController::ProcessR );
 	InputComponent->BindAction( "LeftClick",  IE_Pressed, this, &AMyPlayerController::ProcessLeftMouse );
@@ -61,6 +62,7 @@ void AMyPlayerController::BeginPlay()
 	InputTypeAndFuncMap[ EInputKeyType::LEFT_MOUSE ]  = bind( &AMyPlayerController::ProcessLeftMouse, this );
 	InputTypeAndFuncMap[ EInputKeyType::RIGHT_MOUSE ] = bind( &AMyPlayerController::ProcessRightMouse, this );
 	InputTypeAndFuncMap[ EInputKeyType::SPACE ]       = bind( &AMyPlayerController::ProcessSpace, this );
+	InputTypeAndFuncMap[ EInputKeyType::Tab ]         = bind( &AMyPlayerController::ProcessTab, this );
 
 	_ResetReadySkill();
 }
@@ -310,6 +312,20 @@ void AMyPlayerController::ProcessWheelDown()
 void AMyPlayerController::ProcessSpace()
 {
 	_SkillPlay( 1 ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::SPACE );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 스페이스 키 실행 ( 무기 던지기 )
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AMyPlayerController::ProcessTab()
+{
+	if ( !WeaponComp )
+		return;
+
+	if ( WeaponComp->GetWeaponState() == EWeaponState::DEFAULT )
+		return;
+
+	_SkillPlay( 15 ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::Tab );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

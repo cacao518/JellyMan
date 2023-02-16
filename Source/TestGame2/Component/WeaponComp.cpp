@@ -151,6 +151,7 @@ void UWeaponComp::UnEquipWeapon()
 {
 	CurWeaponMesh = nullptr;
 	WeaponState = EWeaponState::DEFAULT;
+	WeaponDurability = 0;
 
 	for( auto& [_, mesh] : WeaponMeshes )
 		mesh->SetVisibility( false );

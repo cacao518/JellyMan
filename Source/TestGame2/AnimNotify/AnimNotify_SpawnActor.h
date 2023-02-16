@@ -31,6 +31,6 @@ public:
 public:
 	virtual FString GetNotifyName_Implementation() const override;
 
-private:
+protected:
 	void Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation ) override;
 };

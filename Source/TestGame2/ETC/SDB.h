@@ -75,6 +75,7 @@ enum class EInputKeyType : uint8
 	RIGHT_MOUSE           UMETA( DisplayName = "RightMouse" ),
 	BOTH_MOUSE            UMETA( DisplayName = "BothMouse" ),
 	SPACE                 UMETA( DisplayName = "Space" ),
+	Tab                   UMETA( DisplayName = "Tab" ),
 
 	MAX,
 };
@@ -233,6 +234,9 @@ public:
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FName ComponentName;        // 스테틱 메쉬 컴포넌트 이름
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UClass* ThorwingBP;         // 무기 투척시 소환할 BP
 
 	/// 맵 키를 반환한다.
 	EWeaponState GetKey(){ return State; };
