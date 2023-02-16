@@ -132,6 +132,9 @@ public:
 	void HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult );
 
 protected:
+	// 카메라 쉐이크 처리를 한다.
+	void _ProcessCameraShake( AActor* InOtherActor );
+
 	// 사망 관련 로직을 수행한다.
 	virtual void _ProcessDie();
 

@@ -356,13 +356,7 @@ void UCharacterComp::_ProcessHit( AActor* InOtherActor )
 		HoldTime += Const::HOLD_TIME_INCREASE_VALUE;
 	}
 
-	// 내 플레이어가 맞거나, 때린 경우에만 카메라 쉐이크
-	ACharacterPC* myPlayer = GetMyGameInstance().GetMyPlayer();
-	if ( !myPlayer )
-		return;
-
-	if( OwningCharacter == myPlayer || InOtherActor == myPlayer )
-		GetCameraManager().CameraShake( myPlayer );
+	_ProcessCameraShake( InOtherActor );
 
 	FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
 	if ( GEngine )

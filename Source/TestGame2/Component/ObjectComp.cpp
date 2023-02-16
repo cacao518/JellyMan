@@ -176,6 +176,36 @@ void UObjectComp::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 카메라 쉐이크 처리를 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UObjectComp::_ProcessCameraShake( AActor* InOtherActor )
+{
+	// 내 플레이어가 맞거나, 때린 경우에만 카메라 쉐이크
+	ACharacterPC* myPlayer = GetMyGameInstance().GetMyPlayer();
+	if ( !myPlayer )
+		return;
+
+	if ( OwningActor == myPlayer || InOtherActor == myPlayer )
+	{
+		GetCameraManager().CameraShake( OwningActor );
+		return;
+	}
+
+	// 공격한 투사체가 내 팀일 경우 카메라 쉐이크
+	auto projectile = Cast< AProjectile >( InOtherActor );
+	if ( !projectile )
+		return;
+
+	auto projObjComp = Cast<UObjectComp>( projectile->FindComponentByClass<UObjectComp>() );
+	auto myPlayerObjComp = Cast<UObjectComp>( myPlayer->FindComponentByClass<UObjectComp>() );
+	if ( projObjComp && myPlayerObjComp && myPlayerObjComp->GetTeamType() == projObjComp->GetTeamType() )
+	{
+		GetCameraManager().CameraShake( OwningActor );
+		return;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 사망 관련 로직을 수행한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UObjectComp::_ProcessDie()
@@ -213,17 +243,11 @@ void UObjectComp::_ProcessHit( AActor* InOtherActor )
 	float decrease = Stat.Hp - totalDamage;
 	Stat.Hp = decrease > 0 ? decrease : 0;
 
+	_ProcessCameraShake( InOtherActor );
+
 	FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
-	if( GEngine )
+	if ( GEngine )
 		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
-
-	// 내 플레이어가 맞거나, 때린 경우에만 카메라 쉐이크
-	ACharacterPC* myPlayer = GetMyGameInstance().GetMyPlayer();
-	if ( !myPlayer )
-		return;
-
-	if ( OwningActor == myPlayer || InOtherActor == myPlayer )
-		GetCameraManager().CameraShake( OwningActor );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
