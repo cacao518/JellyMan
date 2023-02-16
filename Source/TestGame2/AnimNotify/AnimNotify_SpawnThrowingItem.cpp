@@ -3,8 +3,10 @@
 
 #include "AnimNotify_SpawnThrowingItem.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/Character.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
+#include "../Manager/LockOnManager.h"
 #include "../Component/ObjectComp.h"
 #include "../Component/WeaponComp.h"
 
@@ -13,12 +15,13 @@ FString UAnimNotify_SpawnThrowingItem::GetNotifyName_Implementation() const
 	return Super::GetNotifyName_Implementation();
 }
 
-void UAnimNotify_SpawnThrowingItem::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
+void UAnimNotify_SpawnThrowingItem::SetProperty( AActor* InOwner )
 {
-	if ( !MeshComp || !( MeshComp->GetOwner() ) )
+	if ( !InOwner )
 		return;
 
-	UWeaponComp* weaponComp = Cast<UWeaponComp>( MeshComp->GetOwner()->FindComponentByClass<UWeaponComp>() );
+	/* Set Actor */
+	UWeaponComp* weaponComp = Cast<UWeaponComp>( InOwner->FindComponentByClass<UWeaponComp>() );
 	if ( !weaponComp )
 		return;
 
@@ -26,7 +29,42 @@ void UAnimNotify_SpawnThrowingItem::Notify( USkeletalMeshComponent* MeshComp, UA
 	if ( !weaponInfo )
 		return;
 
-	Actor = weaponInfo->ThorwingBP;
+	ResultActor = weaponInfo->ThorwingBP;
+
+	/* Set Pos */
+	UObjectComp* objComp = Cast<UObjectComp>( InOwner->FindComponentByClass<UObjectComp>() );
+	if ( !objComp )
+		return;
+
+	auto spawnPosComp = Cast<USceneComponent>( InOwner->GetDefaultSubobjectByName( TEXT( "SpawnPosComp" ) ) );
+	if ( !spawnPosComp )
+		return;
+
+	FVector relativeSpawnPos = spawnPosComp->GetRelativeLocation() + Pos;
+	FVector worldSpawnPos = UKismetMathLibrary::TransformLocation( spawnPosComp->GetComponentTransform(), relativeSpawnPos );
+
+	ResultPos = worldSpawnPos;
+
+	/* Set Rotate */
+	ACharacter* lockOnTarget = GetLockOnManager().GetLockOnTarget();
+	if ( lockOnTarget )
+		ResultRotate = UKismetMathLibrary::FindLookAtRotation( InOwner->GetActorLocation(), lockOnTarget->GetActorLocation() );
+	else
+		ResultRotate = InOwner->GetActorRotation() + Rotate;
+}
+
+void UAnimNotify_SpawnThrowingItem::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
+{
+	if ( !MeshComp || !( MeshComp->GetOwner() ) )
+		return;
+
+	AActor* owner = Cast<AActor>( MeshComp->GetOwner() );
+	if ( !owner )
+		return;
+
+	UWeaponComp* weaponComp = Cast<UWeaponComp>( owner->FindComponentByClass<UWeaponComp>() );
+	if ( !weaponComp )
+		return;
 
 	Super::Notify( MeshComp, Animation );
 

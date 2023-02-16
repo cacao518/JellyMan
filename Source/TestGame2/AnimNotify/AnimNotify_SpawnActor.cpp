@@ -10,27 +10,47 @@ FString UAnimNotify_SpawnActor::GetNotifyName_Implementation() const
 	return Super::GetNotifyName_Implementation();
 }
 
-void UAnimNotify_SpawnActor::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
+void UAnimNotify_SpawnActor::SetProperty( AActor* InOwner )
 {
-	if( !MeshComp || !( MeshComp->GetOwner() ) )
+	if ( !InOwner )
 		return;
 
-	if( !ObjectManager::IsVaild() )
+	UObjectComp* objComp = Cast<UObjectComp>( InOwner->FindComponentByClass<UObjectComp>() );
+	if ( !objComp )
 		return;
 
-	UObjectComp* objComp = Cast<UObjectComp>( MeshComp->GetOwner()->FindComponentByClass<UObjectComp>() );
-	if( !objComp )
-		return;
-
-	auto spawnPosComp = Cast<USceneComponent>( MeshComp->GetOwner()->GetDefaultSubobjectByName( TEXT( "SpawnPosComp" ) ) );
-	if( !spawnPosComp )
+	auto spawnPosComp = Cast<USceneComponent>( InOwner->GetDefaultSubobjectByName( TEXT( "SpawnPosComp" ) ) );
+	if ( !spawnPosComp )
 		return;
 
 	FVector relativeSpawnPos = spawnPosComp->GetRelativeLocation() + Pos;
 	FVector worldSpawnPos = UKismetMathLibrary::TransformLocation( spawnPosComp->GetComponentTransform(), relativeSpawnPos );
 
+	ResultActor  = Actor;
+	ResultPos    = worldSpawnPos;
+	ResultRotate = InOwner->GetActorRotation() + Rotate;
+}
+
+void UAnimNotify_SpawnActor::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
+{
+	if( !MeshComp || !( MeshComp->GetOwner() ) )
+		return;
+
+	if ( !ObjectManager::IsVaild() )
+		return;
+
+	AActor* owner = Cast<AActor>( MeshComp->GetOwner() );
+	if ( !owner )
+		return;
+
+	UObjectComp* objComp = Cast<UObjectComp>( owner->FindComponentByClass<UObjectComp>() );
+	if ( !objComp )
+		return;
+
+	SetProperty( owner );
+
 	if( SetAsParentTeamType )
-		GetObjectManager().SpawnActor( Actor, worldSpawnPos, MeshComp->GetOwner()->GetActorRotation() + Rotate, objComp->GetTeamType() );
+		GetObjectManager().SpawnActor( ResultActor, ResultPos, ResultRotate, objComp->GetTeamType() );
 	else
-		GetObjectManager().SpawnActor( Actor, worldSpawnPos, MeshComp->GetOwner()->GetActorRotation() + Rotate );
+		GetObjectManager().SpawnActor( ResultActor, ResultPos, ResultRotate );
 }

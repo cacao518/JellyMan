@@ -28,9 +28,15 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
 	bool SetAsParentTeamType = true;
 
+protected:
+	UClass*  ResultActor;
+	FVector  ResultPos;
+	FRotator ResultRotate;
+
 public:
 	virtual FString GetNotifyName_Implementation() const override;
 
 protected:
-	void Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation ) override;
+	virtual void SetProperty( AActor* InOwner );
+	virtual void Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation ) override;
 };

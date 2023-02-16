@@ -18,5 +18,6 @@ public:
 	virtual FString GetNotifyName_Implementation() const override;
 
 protected:
-	void Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation ) override;
+	virtual void SetProperty( AActor* InOwner ) override;
+	virtual void Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation ) override;
 };
