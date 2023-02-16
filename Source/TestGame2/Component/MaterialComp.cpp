@@ -60,7 +60,7 @@ void UMaterialComp::SetMatState( UMaterialInterface* InMatInterface, bool InIsIn
 
 	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( InMatInterface );
 
-	if( matState == EMaterialState::MAX || matState == MatState )
+	if( matState == EMaterialState::DEFAULT || matState == MatState )
 		return;
 
 	if( !OwningCharacter )
@@ -125,7 +125,7 @@ bool UMaterialComp::IsHardIntensity()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialComp::_Init()
 {
-	MatState = EMaterialState::MAX;
+	MatState = EMaterialState::DEFAULT;
 
 	JellyEnergy = 0.f;
 	JellyEnergyMax = 0.f;

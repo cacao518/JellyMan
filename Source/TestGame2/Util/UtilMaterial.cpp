@@ -111,6 +111,6 @@ namespace UtilMaterial
 				return state;
 		}
 
-		return EMaterialState::MAX;
+		return EMaterialState::DEFAULT;
 	}
 }

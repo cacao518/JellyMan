@@ -47,7 +47,7 @@ enum class EAnimSubState : uint8
 UENUM( BlueprintType )
 enum class EMaterialState : uint8
 {
-	DEFAULT          UMETA( DisplayName = "DEFAULT" ),
+	DEFAULT          UMETA( DisplayName = "Default" ),
 	JELLY            UMETA( DisplayName = "Jelly" ),
 	GRASS            UMETA( DisplayName = "Grass" ),
 	ROCK             UMETA( DisplayName = "Rock" ),
