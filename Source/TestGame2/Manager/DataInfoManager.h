@@ -7,17 +7,22 @@
 #include <list>
 
 
-using MaterialInfoMap = TMap< EMaterialState, FMaterialInfo >;
-using WeaponInfoMap   = TMap< EWeaponState, FWeaponInfo >;
-using SkillInfoMap    = TMap< int, FSkillInfo >;
+using PlayerDefaultSkillInfoMap = TMap< EInputKeyType,  FPlayerDefaultSkillInfo >;
+using PlayerWeaponSkillInfoMap  = TMap< EWeaponState,   FPlayerWeaponSkillInfo >;
+using MaterialInfoMap           = TMap< EMaterialState, FMaterialInfo >;
+using WeaponInfoMap             = TMap< EWeaponState,   FWeaponInfo >;
+using SkillInfoMap              = TMap< int,            FSkillInfo >;
 
 
 class DataInfoManager final : public SingletonBase< DataInfoManager >
 {
 private:
-	MaterialInfoMap MaterialInfos;  // 물질 정보
-	WeaponInfoMap   WeaponInfos;    // 무기 정보
-	SkillInfoMap    SkillInfos;     // 스킬 정보
+	PlayerDefaultSkillInfoMap PlayerDefaultSkillInfos;  // 플레이어 기본 스킬 정보
+	PlayerWeaponSkillInfoMap  PlayerWeaponSkillInfos;   // 플레이어 무기 스킬 정보
+
+	MaterialInfoMap           MaterialInfos;            // 물질 정보
+	WeaponInfoMap             WeaponInfos;              // 무기 정보
+	SkillInfoMap              SkillInfos;               // 스킬 정보
 
 public:
 	DataInfoManager();
@@ -30,6 +35,8 @@ public:
 	/// Get
 	///////////////////////////////////////////////////////////////
 
+	const PlayerDefaultSkillInfoMap& GetPlayerDefaultSkillInfos() { return PlayerDefaultSkillInfos; };
+	const PlayerWeaponSkillInfoMap& GetPlayerWeaponSkillInfos() { return PlayerWeaponSkillInfos; };
 	const MaterialInfoMap& GetMaterialInfos() { return MaterialInfos; };
 	const WeaponInfoMap& GetWeaponInfos() { return WeaponInfos; };
 	const SkillInfoMap& GetSkillInfos() { return SkillInfos; };

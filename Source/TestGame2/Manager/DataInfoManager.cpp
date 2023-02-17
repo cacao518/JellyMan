@@ -13,6 +13,8 @@ DataInfoManager::DataInfoManager()
 
 DataInfoManager::~DataInfoManager()
 {
+	PlayerDefaultSkillInfos.Empty();
+	PlayerWeaponSkillInfos.Empty();
 	MaterialInfos.Empty();
 	WeaponInfos.Empty();
 	SkillInfos.Empty();
@@ -23,7 +25,9 @@ DataInfoManager::~DataInfoManager()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void DataInfoManager::DataCreate()
 {
-	_LoadDataTable< FMaterialInfo, MaterialInfoMap >( MaterialInfos, TEXT( "/Game/Data/DT_MaterialInfo" ) );
-	_LoadDataTable< FWeaponInfo,   WeaponInfoMap >  ( WeaponInfos,   TEXT( "/Game/Data/DT_WeaponInfo" ) );
-	_LoadDataTable< FSkillInfo,    SkillInfoMap >   ( SkillInfos,    TEXT( "/Game/Data/DT_SkillInfo" ) );
+	_LoadDataTable< FPlayerDefaultSkillInfo, PlayerDefaultSkillInfoMap >( PlayerDefaultSkillInfos, TEXT( "/Game/Data/DT_PlayerDefaultSkillInfo" ) );
+	_LoadDataTable< FPlayerWeaponSkillInfo,  PlayerWeaponSkillInfoMap > ( PlayerWeaponSkillInfos,  TEXT( "/Game/Data/DT_PlayerWeaponSkillInfo" ) );
+	_LoadDataTable< FMaterialInfo,           MaterialInfoMap >          ( MaterialInfos,           TEXT( "/Game/Data/DT_MaterialInfo" ) );
+	_LoadDataTable< FWeaponInfo,             WeaponInfoMap >            ( WeaponInfos,             TEXT( "/Game/Data/DT_WeaponInfo" ) );
+	_LoadDataTable< FSkillInfo,              SkillInfoMap >             ( SkillInfos,              TEXT( "/Game/Data/DT_SkillInfo" ) );
 }

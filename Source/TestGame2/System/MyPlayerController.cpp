@@ -6,6 +6,7 @@
 #include "../Component/WeaponComp.h"
 #include "../Manager/LockOnManager.h"
 #include "../Manager/ObjectManager.h"
+#include "../Manager/DataInfoManager.h"
 #include "../Character/CharacterPC.h"
 #include "../System/MyAnimInstance.h"
 #include "../System/MyGameInstance.h"
@@ -179,23 +180,11 @@ void AMyPlayerController::ProcessLeftMouse()
 	if( !WeaponComp )
 		return;
 
-	bool result = false;
+	const auto& skillInfo = GetDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetWeaponState() );
+	if ( !skillInfo )
+		return;
 
-	switch( WeaponComp->GetWeaponState() )
-	{
-		case EWeaponState::DEFAULT:
-		{
-			result = _SkillPlay( 2 );
-			break;
-		}
-		case EWeaponState::SWORD:
-		{
-			result = _SkillPlay( 5, 8, 8 );
-			break;
-		}
-	}
-	
-	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
+	_SkillPlay( skillInfo->L_BasicSkillNum, skillInfo->L_MiddleSkillNum, skillInfo->L_HardSkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,23 +195,11 @@ void AMyPlayerController::ProcessRightMouse()
 	if( !WeaponComp )
 		return;
 
-	bool result = false;
+	const auto& skillInfo = GetDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetWeaponState() );
+	if ( !skillInfo )
+		return;
 
-	switch( WeaponComp->GetWeaponState() )
-	{
-		case EWeaponState::DEFAULT:
-		{
-			result = _SkillPlay( 3 );
-			break;
-		}
-		case EWeaponState::SWORD:
-		{
-			result = _SkillPlay( 7, 10, 10 );
-			break;
-		}
-	}
-
-	result ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
+	_SkillPlay( skillInfo->R_BasicSkillNum, skillInfo->R_MiddleSkillNum, skillInfo->R_HardSkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -311,7 +288,11 @@ void AMyPlayerController::ProcessWheelDown()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessSpace()
 {
-	_SkillPlay( 1 ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::SPACE );
+	const auto& skillInfo = GetDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::SPACE );
+	if ( !skillInfo )
+		return;
+
+	_SkillPlay( skillInfo->SkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::SPACE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -325,7 +306,11 @@ void AMyPlayerController::ProcessTab()
 	if ( WeaponComp->GetWeaponState() == EWeaponState::DEFAULT )
 		return;
 
-	_SkillPlay( 15 ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::Tab );
+	const auto& skillInfo = GetDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetWeaponState() );
+	if ( !skillInfo )
+		return;
+
+	_SkillPlay( skillInfo->ThrowSkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::Tab );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -333,7 +318,11 @@ void AMyPlayerController::ProcessTab()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessF()
 {
-	_SkillPlay( 12 );
+	const auto& skillInfo = GetDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::F );
+	if ( !skillInfo )
+		return;
+
+	_SkillPlay( skillInfo->SkillNum );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -341,10 +330,16 @@ void AMyPlayerController::ProcessF()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::ProcessR()
 {
-	if( MatComp && MatComp->GetMatState() != EMaterialState::JELLY )
+	const auto& skillInfo = GetDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::R );
+	if ( !skillInfo )
+		return;
+
+	if ( MatComp && MatComp->GetMatState() != EMaterialState::JELLY )
 	{
-		if( _SkillPlay( 13 ) )
+		if ( _SkillPlay( skillInfo->SkillNum ) )
+		{
 			MatComp->SetMatState();
+		}
 	}
 }
 
@@ -359,7 +354,11 @@ void AMyPlayerController::Process1()
 	if( !( WeaponComp->CanWeaponComp( EWeaponState::SWORD ) ) )
 		return;
 
-	_SkillPlay( 11 );
+	const auto& skillInfo = GetDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::Num1 );
+	if ( !skillInfo )
+		return;
+
+	_SkillPlay( skillInfo->SkillNum );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

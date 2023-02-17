@@ -76,7 +76,11 @@ enum class EInputKeyType : uint8
 	RIGHT_MOUSE           UMETA( DisplayName = "RightMouse" ),
 	BOTH_MOUSE            UMETA( DisplayName = "BothMouse" ),
 	SPACE                 UMETA( DisplayName = "Space" ),
+	SHIFT                 UMETA( DisplayName = "Shift" ),
 	Tab                   UMETA( DisplayName = "Tab" ),
+	F                     UMETA( DisplayName = "F" ),
+	R                     UMETA( DisplayName = "R" ),
+	Num1                  UMETA( DisplayName = "Num1" ),
 
 	MAX,
 };
@@ -286,6 +290,58 @@ public:
 
 	/// 맵 키를 반환한다.
 	int GetKey(){ return Num; };
+};
+
+// 플레이어 기본 스킬 정보
+USTRUCT( Atomic, BlueprintType )
+struct FPlayerDefaultSkillInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	EInputKeyType InputKey;                          // 입력 키
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int SkillNum;                                    // 입력 키에 해당하는 스킬 넘버
+
+	/// 맵 키를 반환한다.
+	EInputKeyType GetKey(){ return InputKey; };
+};
+
+// 플레이어 무기 스킬 정보
+USTRUCT( Atomic, BlueprintType )
+struct FPlayerWeaponSkillInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	EWeaponState WeaponState;                     // 무기 종류
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int L_BasicSkillNum;                          // 약공격 (기본)  
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int L_MiddleSkillNum;                         // 약공격 (중간강도)
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int L_HardSkillNum;                           // 약공격 (강한강도)
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int R_BasicSkillNum;                          // 강공격 (기본)  
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int R_MiddleSkillNum;						  // 강공격 (중간강도)
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int R_HardSkillNum;							  // 강공격 (강한강도)
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int ThrowSkillNum;                            // 무기 투척
+
+	/// 맵 키를 반환한다.
+	EWeaponState GetKey(){ return WeaponState; };
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
