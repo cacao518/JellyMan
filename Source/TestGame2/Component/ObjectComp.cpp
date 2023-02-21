@@ -15,6 +15,7 @@
 #include "../System/MonsterAIController.h"
 #include "../System/MyGameInstance.h"
 #include "../System/MyAnimInstance.h"
+#include "../Util/UtilMaterial.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
@@ -280,9 +281,13 @@ void UObjectComp::_Init()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UObjectComp::_ProcessLandscapeHit( AActor* InOtherActor )
 {
-	// 물에 빠졌을 때
-	auto waterBody = Cast<UWaterBodyComponent>( InOtherActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
-	if( !waterBody )
+	// 랜드스케이프로 된 물에만 빠질 수 있따. ( 깊은 물 )
+	auto landScape = Cast<ULandscapeComponent>( InOtherActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
+	if ( !landScape )
+		return;
+
+	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( UtilMaterial::GetMatrialInterface( InOtherActor ) );
+	if ( matState != EMaterialState::WATER )
 		return;
 
 	/// 가벼운 재질은 물에 빠지지 않는다.
