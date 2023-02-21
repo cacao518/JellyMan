@@ -7,7 +7,7 @@
 #include "../Manager/CameraManager.h"
 #include "../Manager/LockOnManager.h"
 #include "../Manager/UIManager.h"
-#include "../Character/CharacterPC.h"
+#include "../Actor/CharacterPC.h"
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

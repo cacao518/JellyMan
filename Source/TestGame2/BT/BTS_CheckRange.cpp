@@ -3,7 +3,7 @@
 
 #include "BTS_CheckRange.h"
 #include "GameFramework/Character.h"
-#include "../Character/CharacterNPC.h"
+#include "../Actor/CharacterNPC.h"
 #include "../System/MonsterAIController.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Component/CharacterComp.h"

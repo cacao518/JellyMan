@@ -7,7 +7,7 @@
 #include "../Manager/LockOnManager.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
-#include "../Character/CharacterPC.h"
+#include "../Actor/CharacterPC.h"
 #include "../System/MyAnimInstance.h"
 #include "../System/MyGameInstance.h"
 #include "../ETC/SDB.h"

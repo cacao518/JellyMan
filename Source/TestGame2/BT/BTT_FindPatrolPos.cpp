@@ -3,7 +3,7 @@
 
 #include "BTT_FindPatrolPos.h"
 #include "../System/MonsterAIController.h"
-#include "../Character/CharacterNPC.h"
+#include "../Actor/CharacterNPC.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationSystem.h"
 

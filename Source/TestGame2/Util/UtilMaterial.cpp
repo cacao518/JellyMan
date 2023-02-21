@@ -1,6 +1,10 @@
 
 #include "UtilMaterial.h"
 #include "Engine/World.h"
+#include "WaterBodyComponent.h"
+#include "LandscapeComponent.h"
+#include "LandscapeProxy.h"
+#include "GameFramework/Character.h"
 #include "../System/MyGameInstance.h"
 #include "../Manager/DataInfoManager.h"
 

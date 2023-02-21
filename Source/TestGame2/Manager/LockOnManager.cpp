@@ -3,7 +3,7 @@
 #include "Engine/World.h"
 #include "../Component/ObjectComp.h"
 #include "../Component/CharacterComp.h"
-#include "../Character/CharacterPC.h"
+#include "../Actor/CharacterPC.h"
 #include "../System/MyAnimInstance.h"
 #include "../System/MyGameInstance.h"
 #include "../System/TestGame2GameMode.h"

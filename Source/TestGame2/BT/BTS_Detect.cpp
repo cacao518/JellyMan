@@ -4,7 +4,7 @@
 #include "BTS_Detect.h"
 #include "GameFramework/Character.h"
 #include "../System/MonsterAIController.h"
-#include "../Character/CharacterNPC.h"
+#include "../Actor/CharacterNPC.h"
 #include "../Component/CharacterComp.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"

@@ -1,9 +1,9 @@
 
 #include "ObjectManager.h"
 #include "Engine/World.h"
-#include "../Character/CharacterPC.h"
-#include "../Character/CharacterNPC.h"
-#include "../Character/StaticObject.h"
+#include "../Actor/CharacterPC.h"
+#include "../Actor/CharacterNPC.h"
+#include "../Actor/StaticObject.h"
 #include "../System/MyGameInstance.h"
 #include "../Component/ObjectComp.h"
 #include "Engine/BlueprintGeneratedClass.h"
