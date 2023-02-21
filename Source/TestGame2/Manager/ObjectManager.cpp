@@ -82,7 +82,7 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 AActor* ObjectManager::SpawnStaticObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator )
 {
-	FString path = FString( TEXT( "/Game/GroundObject/" ) ) + InName;
+	FString path = FString( TEXT( "/Game/Blueprints/StaticObject/" ) ) + InName;
 	UClass* staticObject = ConstructorHelpersInternal::FindOrLoadClass( path, AStaticObject::StaticClass() );
 	if( !staticObject )
 		return nullptr;

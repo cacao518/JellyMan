@@ -14,7 +14,7 @@ ATestGame2GameMode::ATestGame2GameMode()
 	PlayerControllerClass = AMyPlayerController::StaticClass();
 
 	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Player/BP_Player"));
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Blueprints/Player/BP_Player"));
 	if (PlayerPawnBPClass.Class != NULL)
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 }

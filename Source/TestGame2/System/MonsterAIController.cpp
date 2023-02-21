@@ -15,7 +15,7 @@ const FName AMonsterAIController::IsCommonActionKey( TEXT( "IsCommonAction" ) );
 
 AMonsterAIController::AMonsterAIController( FObjectInitializer const& object_initializer )
 {
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject( TEXT( "BehaviorTree'/Game/Monster/BT_Monster.BT_Monster'" ) );
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject( TEXT( "BehaviorTree'/Game/Blueprints/Monster/BT_Monster.BT_Monster'" ) );
 	if( BTObject.Succeeded() )
 	{
 		BTAsset = BTObject.Object;
