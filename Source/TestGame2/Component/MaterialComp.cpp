@@ -51,15 +51,13 @@ void UMaterialComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UMaterialComp::SetMatState( UMaterialInterface* InMatInterface, bool InIsInit )
 {
-	if( !InitMaterial )
-		return;
-
-	// 변화할 물질이 없으면 초기 물질 상태로 돌아간다.
-	if( !InMatInterface )
+	if( InIsInit )
 		InMatInterface = InitMaterial;
 
-	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( InMatInterface );
+	if ( !InMatInterface )
+		return;
 
+	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( InMatInterface );
 	if( matState == EMaterialState::DEFAULT || matState == MatState )
 		return;
 

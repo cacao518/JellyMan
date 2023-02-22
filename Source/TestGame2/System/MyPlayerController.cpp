@@ -338,7 +338,7 @@ void AMyPlayerController::ProcessR()
 	{
 		if ( _SkillPlay( skillInfo->SkillNum ) )
 		{
-			MatComp->SetMatState();
+			MatComp->SetMatState( nullptr, true );
 		}
 	}
 }
