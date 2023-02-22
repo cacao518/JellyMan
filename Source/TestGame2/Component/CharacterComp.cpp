@@ -325,7 +325,7 @@ void UCharacterComp::_ProcessHit( AActor* InOtherActor )
 	if( !othetObjectComp )
 		return;
 
-	if( ( TeamType == ETeamType::MAX || othetObjectComp->GetTeamType() == ETeamType::MAX ) || othetObjectComp->GetTeamType() == TeamType )
+	if ( othetObjectComp->GetTeamType() == TeamType && !othetObjectComp->GetIsTyrant() )
 		return;
 
 	othetObjectComp->OnAttackSuccess();
