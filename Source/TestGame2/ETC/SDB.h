@@ -370,7 +370,7 @@ namespace Const
 
 	constexpr float LOCKON_RANGE              = 800.f;      // 락온 범위
 	constexpr float LOCKON_CAMERA_ROTAION_LAG_SPEED = 5.f;  // 락온 카메라 회전 딜레이 속도
-	constexpr float LOCKON_CAMERA_FIX_PITCH   = 16.f;      // 락온 카메라 pitch 고정 값
+	constexpr float LOCKON_CAMERA_FIX_PITCH   = -15.f;      // 락온 카메라 pitch 고정 값
 
 
 	constexpr float MAX_MASS                  = 2.f;       // 최대 질량

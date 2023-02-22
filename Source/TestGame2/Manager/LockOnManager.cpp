@@ -204,7 +204,7 @@ void LockOnManager::_ProcessLockOn()
 	}
 
 	FRotator rotator = UKismetMathLibrary::FindLookAtRotation( myPlayer->GetActorLocation(), LockOnTarget->GetActorLocation() );
-	rotator.Pitch -= Const::LOCKON_CAMERA_FIX_PITCH;
+	rotator.Pitch = Const::LOCKON_CAMERA_FIX_PITCH;
 
 	myPlayer->GetController()->SetControlRotation( rotator );
 	
