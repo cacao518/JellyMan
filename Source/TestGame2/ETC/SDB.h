@@ -180,6 +180,9 @@ public:
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float Weight;   	// 무게
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	bool IsTyrant;      // 폭군 여부 (팀 상관 없이 타격)
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

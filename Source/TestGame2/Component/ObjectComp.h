@@ -29,7 +29,6 @@ protected:
 	bool               IsDie;                   // 사망 여부
 	bool               IsFallWater;             // 물에 빠졌는지 여부
 	bool               IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
-	bool               IsTyrant;                // 폭군 여부(팀 상관없이 타격 가능)
 
 public:	
 	// 생성자 함수
@@ -120,9 +119,6 @@ public:
 
 	// 사망 여부를 반환한다.
 	bool GetIsDie(){ return IsDie; };
-
-	// 폭군 여부를 반환한다.
-	bool GetIsTyrant(){ return IsTyrant; };
 
 	// 고 중량 인지 여부를 반환한다.
 	bool IsHeavyWeight();
