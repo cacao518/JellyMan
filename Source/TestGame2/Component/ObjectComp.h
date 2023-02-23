@@ -145,6 +145,6 @@ private:
 	// 초기화 한다.
 	void _Init();
 
-	// 랜드스케이프 피격 처리를 한다.
-	void _ProcessLandscapeHit( AActor* InOtherActor );
+	// 물 히트 처리를 한다.
+	void _ProcessWaterHit( AActor* InOtherActor );
 };

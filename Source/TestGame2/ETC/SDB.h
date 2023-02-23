@@ -53,6 +53,7 @@ enum class EMaterialState : uint8
 	ROCK             UMETA( DisplayName = "Rock" ),
 	GRAVEL           UMETA( DisplayName = "Gravel" ),
 	WATER            UMETA( DisplayName = "Water" ),
+	DEEPWATER        UMETA( DisplayName = "DeepWater" ),
 	MARBLE           UMETA( DisplayName = "Marble" ),
 
 	MAX,

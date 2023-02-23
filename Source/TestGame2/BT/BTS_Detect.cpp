@@ -6,6 +6,8 @@
 #include "../System/MonsterAIController.h"
 #include "../Actor/CharacterNPC.h"
 #include "../Component/CharacterComp.h"
+#include "../Component/MaterialComp.h"
+#include "../Util/UtilMaterial.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 #include <map>
@@ -72,6 +74,21 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 
 		if( detectedCharComp->GetTeamType() == characterComp->GetTeamType() )
 			continue;
+
+		// 물 상태가 아닐 경우 탐색한 적 발밑에 깊은물이 있으면 가지 않는다.
+		bool bWater = false;
+
+		auto matComp = Cast<UMaterialComp>( controllingChar->FindComponentByClass<UMaterialComp>() );
+		bWater = matComp && ( matComp->GetMatState() == EMaterialState::WATER || matComp->GetMatState() == EMaterialState::DEEPWATER );
+		if ( !bWater )
+		{
+			EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( UtilMaterial::GetSteppedMatrialInterface( detectedChar ) );
+			if ( matState == EMaterialState::DEEPWATER )
+			{
+				OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, nullptr );
+				return;
+			}
+		}
 
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, detectedChar );
 		return;

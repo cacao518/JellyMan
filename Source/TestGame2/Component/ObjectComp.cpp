@@ -173,7 +173,7 @@ void UObjectComp::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 		return;
 	}
 
-	_ProcessLandscapeHit( OtherActor );
+	_ProcessWaterHit( OtherActor );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -280,17 +280,13 @@ void UObjectComp::_Init()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 랜드스케이프 피격 처리를 한다.
+//// @brief 물 히트 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UObjectComp::_ProcessLandscapeHit( AActor* InOtherActor )
+void UObjectComp::_ProcessWaterHit( AActor* InOtherActor )
 {
-	// 랜드스케이프로 된 물에만 빠질 수 있따. ( 깊은 물 )
-	auto landScape = Cast<ULandscapeComponent>( InOtherActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
-	if ( !landScape )
-		return;
-
+	// 깊은 물에만 빠진다.
 	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( UtilMaterial::GetMatrialInterface( InOtherActor ) );
-	if ( matState != EMaterialState::WATER )
+	if ( matState != EMaterialState::DEEPWATER )
 		return;
 
 	/// 가벼운 재질은 물에 빠지지 않는다.
@@ -301,7 +297,8 @@ void UObjectComp::_ProcessLandscapeHit( AActor* InOtherActor )
 	auto charMatProperty = OwningActor ? Cast<UMaterialComp>( OwningActor->FindComponentByClass<UMaterialComp>() ) : nullptr;
 	if( charMatProperty )
 	{
-		if( charMatProperty->GetMatState() == EMaterialState::WATER )
+		if( charMatProperty->GetMatState() == EMaterialState::WATER ||
+			charMatProperty->GetMatState() == EMaterialState::DEEPWATER )
 			return;
 	}
 
