@@ -20,6 +20,7 @@
 #include "WaterBodyComponent.h"
 #include "LandscapeComponent.h"
 #include "LandscapeProxy.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -95,6 +96,9 @@ void UCharacterComp::ResetInfo( bool InForceReset )
 void UCharacterComp::MontagePlay( UAnimMontage* InMontage, float InScale )
 {
 	if( !OwningCharacter )
+		return;
+
+	if ( !OwningCharacter->GetMesh() )
 		return;
 
 	UAnimInstance* animInstance = OwningCharacter->GetMesh()->GetAnimInstance();
@@ -313,6 +317,12 @@ void UCharacterComp::_ProcessDie()
 	if( AnimState == EAnimState::DIE && DeathTime >= Const::DEAD_ACTOR_DESTROY_TIME )
 	{
 		GetObjectManager().DestroyActor( OwningCharacter );
+
+		if ( GetObjectType() == EObjectType::PC )
+		{
+			FString levelName = L"/Game/Maps/Stage1/Stage1";
+			UGameplayStatics::OpenLevel( this, *levelName );
+		}
 	}
 }
 

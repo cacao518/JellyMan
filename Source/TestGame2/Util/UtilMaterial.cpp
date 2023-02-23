@@ -3,7 +3,6 @@
 #include "Engine/World.h"
 #include "WaterBodyComponent.h"
 #include "LandscapeComponent.h"
-#include "LandscapeProxy.h"
 #include "GameFramework/Character.h"
 #include "../System/MyGameInstance.h"
 #include "../Manager/DataInfoManager.h"
@@ -85,20 +84,20 @@ namespace UtilMaterial
 					matInterface = waterMatInfo->MaterialAsset[ 0 ];
 			}
 
-			// 랜드스케이프
-			auto landScape = Cast<ULandscapeComponent>( InActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
-			if ( landScape )
-			{
-				auto proxy = landScape->GetLandscapeProxy();
-				if ( !proxy )
-				{
-					if ( GEngine )
-						GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, "proxy is null" );
-					return nullptr;
-				}
+			//// 랜드스케이프
+			//auto landScape = Cast<ULandscapeComponent>( InActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
+			//if ( landScape )
+			//{
+			//	auto proxy = landScape->GetLandscapeProxy();
+			//	if ( !proxy )
+			//	{
+			//		if ( GEngine )
+			//			GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, "proxy is null" );
+			//		return nullptr;
+			//	}
 
-				matInterface = proxy->GetLandscapeMaterial( 0 );
-			}
+			//	matInterface = proxy->GetLandscapeMaterial( 0 );
+			//}
 		}
 
 		return matInterface;

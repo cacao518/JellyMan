@@ -120,8 +120,8 @@ UMyGameInstance* UMyGameInstance::GetInstance()
 	return nullptr;
 
 #else
-	if( GEngine )
-		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, "game" );
+	//if( GEngine )
+	//	GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, "game" );
 
 	UGameEngine* GameEngine = Cast< UGameEngine >( GEngine );
 	if( !GameEngine )
