@@ -249,9 +249,9 @@ void UObjectComp::_ProcessHit( AActor* InOtherActor )
 
 	_ProcessCameraShake( InOtherActor );
 
-	FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
+	/*FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
 	if ( GEngine )
-		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
+		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

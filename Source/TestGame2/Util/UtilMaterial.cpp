@@ -2,7 +2,7 @@
 #include "UtilMaterial.h"
 #include "Engine/World.h"
 #include "WaterBodyComponent.h"
-#include "LandscapeComponent.h"
+#include "Landscape.h"
 #include "GameFramework/Character.h"
 #include "../System/MyGameInstance.h"
 #include "../Manager/DataInfoManager.h"
@@ -87,12 +87,17 @@ namespace UtilMaterial
 				}
 			}
 
-			//// 랜드스케이프
-			//auto landScape = Cast<ULandscapeComponent>( InActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
-			//if ( landScape )
-			//{
-			//	matInterface = landScape->GetLandscapeMaterial( 0 );
-			//}
+			// 랜드 스케이프
+			auto landScape = Cast<ALandscape>( InActor );
+			if ( landScape )
+			{
+				const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::DEEPWATER );
+				if ( waterMatInfo )
+				{
+					FString path = waterMatInfo->MaterialAssetPaths[ 0 ];
+					matInterface = LoadObject<UMaterialInterface>( NULL, *path, NULL, LOAD_None, NULL );
+				}
+			}
 		}
 
 		return matInterface;

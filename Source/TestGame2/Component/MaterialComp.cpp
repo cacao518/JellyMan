@@ -82,9 +82,9 @@ void UMaterialComp::SetMatState( UMaterialInterface* InMatInterface, bool InIsIn
 	{
 		_PlayChangeEffect();
 
-		FString str = OwningCharacter->GetName() + TEXT( ": Material Change -> " ) + InMatInterface->GetName();
+	/*	FString str = OwningCharacter->GetName() + TEXT( ": Material Change -> " ) + InMatInterface->GetName();
 		if ( GEngine )
-			GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );
+			GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, str );*/
 	}
 }
 
