@@ -138,7 +138,7 @@ void LockOnManager::LockOnStart( ELockOnMode InMode )
 	if ( !selectLockOnTarget )
 		return;
 
-	if ( auto widgetComp = Cast<UWidgetComponent>( selectLockOnTarget->GetDefaultSubobjectByName( TEXT( "LockOnMark" ) ) ) )
+	if ( auto widgetComp = Cast<UWidgetComponent>( selectLockOnTarget->GetDefaultSubobjectByName( TEXT( "LockOnMarkComp" ) ) ) )
 	{
 		if ( auto userWidget = Cast<UUserWidget>( widgetComp->GetUserWidgetObject() ) )
 		{
@@ -157,7 +157,7 @@ void LockOnManager::LockOnStart( ELockOnMode InMode )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void LockOnManager::LockOnRelease()
 {
-	if( auto widgetComp = Cast<UWidgetComponent>( LockOnTarget->GetDefaultSubobjectByName( TEXT( "LockOnMark" ) ) ) )
+	if( auto widgetComp = Cast<UWidgetComponent>( LockOnTarget->GetDefaultSubobjectByName( TEXT( "LockOnMarkComp" ) ) ) )
 	{
 		if( auto userWidget = Cast<UUserWidget>( widgetComp->GetUserWidgetObject() ) )
 			userWidget->SetVisibility( ESlateVisibility::Collapsed );

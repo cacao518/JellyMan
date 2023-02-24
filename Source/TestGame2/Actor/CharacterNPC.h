@@ -24,7 +24,10 @@ public:
 	class USceneComponent* SpawnPosComp;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Default, meta = ( AllowPrivateAccess = "true" ) )
-	class UWidgetComponent* LockOnMark;
+	class UWidgetComponent* LockOnMarkComp;
+
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Default, meta = ( AllowPrivateAccess = "true" ) )
+	class UWidgetComponent* HpBarComp;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = ( AllowPrivateAccess = "true" ) )
 	class UBoxComponent* HitColl;

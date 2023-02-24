@@ -42,6 +42,8 @@ private:
 	float              MontagePlayTime;         // 몽타주 재생시간 누적
 	float              DeathTime;               // 사망 시간 누적
 
+	float              HpBarShowTime;           // 체력바 떠있을 수 있는 시간
+
 public:
 	// 생성자 함수
 	UCharacterComp();
@@ -136,6 +138,9 @@ private:
 
 	// 스킬 쿨타임을 등록한다.
 	void _RegisterCoolTime( const FSkillInfo& InSkillInfo );
+
+	// 체력바를 업데이트 한다.
+	void _UpdateHpBar();
 
 	// 스킬 쿨타임을 돌린다.
 	void _CoolingSkills( float InDeltaTime );

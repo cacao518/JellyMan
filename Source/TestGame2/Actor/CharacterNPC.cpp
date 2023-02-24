@@ -7,6 +7,7 @@
 #include "../Component/MaterialComp.h"
 #include "../System/MonsterAIController.h"
 #include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
 #include "Components/WidgetComponent.h"
 
@@ -36,11 +37,20 @@ ACharacterNPC::ACharacterNPC()
 
 	// LockOnMark Component
 	static ConstructorHelpers::FClassFinder<UUserWidget> lockOnWidget( TEXT( "/Game/Sprite/LockOnWidget" ) );
-	LockOnMark = CreateDefaultSubobject<UWidgetComponent>( TEXT( "LockOnMark" ) );
-	LockOnMark->SetupAttachment( RootComponent );
-	LockOnMark->SetWidgetClass( lockOnWidget.Class );
-	LockOnMark->SetWidgetSpace( EWidgetSpace::Screen );
-	LockOnMark->SetDrawSize( FVector2D( 30.f, 30.f ) );
+	LockOnMarkComp = CreateDefaultSubobject<UWidgetComponent>( TEXT( "LockOnMarkComp" ) );
+	LockOnMarkComp->SetupAttachment( RootComponent );
+	LockOnMarkComp->SetWidgetClass( lockOnWidget.Class );
+	LockOnMarkComp->SetWidgetSpace( EWidgetSpace::Screen );
+	LockOnMarkComp->SetDrawSize( FVector2D( 30.f, 30.f ) );
+
+	// HpBar Component
+	static ConstructorHelpers::FClassFinder<UUserWidget> hpBarWidget( TEXT( "/Game/Sprite/HpBarWidget" ) );
+	HpBarComp = CreateDefaultSubobject<UWidgetComponent>( TEXT( "HpBarComp" ) );
+	HpBarComp->SetupAttachment( RootComponent );
+	HpBarComp->SetWidgetClass( hpBarWidget.Class );
+	HpBarComp->SetWidgetSpace( EWidgetSpace::Screen );
+	HpBarComp->SetDrawSize( FVector2D( 80.f, 3.8f ) );
+	HpBarComp->SetRelativeLocation( FVector( 0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() ) );
 
 	// Box Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );

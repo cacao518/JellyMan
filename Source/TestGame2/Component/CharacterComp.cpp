@@ -17,9 +17,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/ProgressBar.h"
+#include "Components/WidgetComponent.h"
 #include "WaterBodyComponent.h"
 #include "LandscapeComponent.h"
 #include "LandscapeProxy.h"
+#include "Blueprint/WidgetTree.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -323,6 +326,7 @@ void UCharacterComp::_ProcessDie()
 		}
 
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( TEXT( "NoCollision" ) );
+		_UpdateHpBar();
 	}
 
 	if( AnimState == EAnimState::DIE && DeathTime >= Const::DEAD_ACTOR_DESTROY_TIME )
@@ -381,6 +385,8 @@ void UCharacterComp::_ProcessHit( AActor* InOtherActor )
 	}
 
 	_ProcessCameraShake( InOtherActor );
+
+	_UpdateHpBar();
 
 	//FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
 	//if ( GEngine )
@@ -472,6 +478,41 @@ void UCharacterComp::_RegisterCoolTime( const FSkillInfo& InSkillInfo )
 		*coolTime = InSkillInfo.CoolTime;
 	else
 		CoolingSkills.Add( InSkillInfo.Num, InSkillInfo.CoolTime );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 체력바를 업데이트 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UCharacterComp::_UpdateHpBar()
+{
+	auto widgetComp = Cast<UWidgetComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "HpBarComp" ) ) );
+	if ( !widgetComp )
+		return;
+
+	auto userWidget = Cast<UUserWidget>( widgetComp->GetUserWidgetObject() );
+	if ( !userWidget )
+		return;
+
+	auto progressBar = userWidget->WidgetTree->FindWidget<UProgressBar>( ( TEXT( "HpProgressBar" ) ) );
+	if ( !progressBar )
+		return;
+
+	float hpPercent = Stat.Hp / Stat.Hpm;
+
+	if ( progressBar )
+		progressBar->SetPercent( hpPercent );
+
+	HpBarShowTime = 3.f;
+
+	if ( Stat.Hp <= 0 || HpBarShowTime <= 0 )
+	{
+		HpBarShowTime = 0;
+		userWidget->SetVisibility( ESlateVisibility::Collapsed );
+	}
+	else
+	{
+		userWidget->SetVisibility( ESlateVisibility::SelfHitTestInvisible );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -586,4 +627,7 @@ void UCharacterComp::_ProcessAccTime( float InDeltaTime )
 	{
 		DeathTime += InDeltaTime;
 	}
+
+	if ( HpBarShowTime > 0 )
+		HpBarShowTime -= InDeltaTime;
 }
