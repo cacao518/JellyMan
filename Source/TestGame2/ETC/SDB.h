@@ -213,13 +213,13 @@ public:
 	FName CollisonName;                              // 물질 변경 시 콜리전이름
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TArray < UMaterialInterface* > MaterialAsset;    // 머터리얼 애셋 ( 해당 하는 머터리얼은 State가 될 수 있다 )
+	TArray < FString > MaterialAssetPaths;         // 머터리얼 애셋경로 ( 해당 하는 머터리얼은 State가 될 수 있다 )
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	UNiagaraSystem* FootStepParticle;                // 재질 밟을 때 스폰할 파티클
+	FString FootStepParticleName;                // 재질 밟을 때 스폰할 파티클 이름
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	UNiagaraSystem* ChangeParticle;                  // 해당 재질로 변경되었을 때 스폰할 파티클
+	FString ChangeParticleName;                  // 해당 재질로 변경되었을 때 스폰할 파티클 이름
 
 	/// 맵 키를 반환한다.
 	EMaterialState GetKey(){ return State; };
@@ -245,7 +245,7 @@ public:
 	FName ComponentName;        // 스테틱 메쉬 컴포넌트 이름
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	UClass* ThorwingBP;         // 무기 투척시 소환할 BP
+	FString ThorwingBPPath;        // 무기 투척시 소환할 BP 경로
 
 	/// 맵 키를 반환한다.
 	EWeaponState GetKey(){ return State; };
@@ -284,7 +284,7 @@ public:
 	bool LockOnLookAt;                                 // 락온 상태에서 스킬 시전 시 바라볼 것인지 여부 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	UAnimMontage* Anim;                                // 몽타주
+	FString AnimPath;                                  // 몽타주 경로
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float ActivateRangeMin;                            // 스킬 발동 범위 최소 (몬스터 전용)

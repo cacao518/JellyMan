@@ -89,6 +89,17 @@ void UCharacterComp::ResetInfo( bool InForceReset )
 		MontagePlayTime = 0;
 	}
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 몽타주를 플레이한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UCharacterComp::MontagePlay( const FString& InMontagePath, float InScale )
+{
+	UAnimMontage* anim = LoadObject<UAnimMontage>( NULL, *InMontagePath, NULL, LOAD_None, NULL );
+	if ( !anim )
+		return;
+
+	MontagePlay( anim, InScale );
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 몽타주를 플레이한다.
@@ -148,9 +159,9 @@ bool UCharacterComp::SkillPlay( int InSkillNum )
 	}
 
 	if ( skillInfo->PlaySpeedType == ESkillPlaySpeedType::DEFAULT )
-		MontagePlay( skillInfo->Anim );
+		MontagePlay( skillInfo->AnimPath );
 	else
-		MontagePlay( skillInfo->Anim, skillInfo->PlaySpeedType == ESkillPlaySpeedType::ATTACK_SPEED ? Stat.AttackSpeed : Stat.MoveSpeed );
+		MontagePlay( skillInfo->AnimPath, skillInfo->PlaySpeedType == ESkillPlaySpeedType::ATTACK_SPEED ? Stat.AttackSpeed : Stat.MoveSpeed );
 
 	_RegisterCoolTime( *skillInfo );
 

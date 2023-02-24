@@ -181,7 +181,7 @@ void UMaterialComp::_PlayChangeEffect()
 	if( !matInfo )
 		return;
 
-	GetObjectManager().SpawnParticle( matInfo->ChangeParticle, OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
+	GetObjectManager().SpawnParticle( matInfo->ChangeParticleName, OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -81,22 +81,17 @@ namespace UtilMaterial
 			{
 				const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::WATER );
 				if ( waterMatInfo )
-					matInterface = waterMatInfo->MaterialAsset[ 0 ];
+				{
+					FString path = waterMatInfo->MaterialAssetPaths[ 0 ];
+					matInterface = LoadObject<UMaterialInterface>( NULL, *path, NULL, LOAD_None, NULL );
+				}
 			}
 
 			//// 랜드스케이프
 			//auto landScape = Cast<ULandscapeComponent>( InActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
 			//if ( landScape )
 			//{
-			//	auto proxy = landScape->GetLandscapeProxy();
-			//	if ( !proxy )
-			//	{
-			//		if ( GEngine )
-			//			GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Blue, "proxy is null" );
-			//		return nullptr;
-			//	}
-
-			//	matInterface = proxy->GetLandscapeMaterial( 0 );
+			//	matInterface = landScape->GetLandscapeMaterial( 0 );
 			//}
 		}
 
@@ -108,9 +103,12 @@ namespace UtilMaterial
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	EMaterialState ConvertMatAssetToMatState( UMaterialInterface* InMaterial )
 	{
+		if ( !InMaterial )
+			return EMaterialState::DEFAULT;
+
 		for ( const auto& [state, matInfo] : GetDataInfoManager().GetMaterialInfos() )
 		{
-			if ( matInfo.MaterialAsset.Find( InMaterial ) != INDEX_NONE )
+			if ( matInfo.MaterialAssetPaths.Find( InMaterial->GetPathName() ) != INDEX_NONE )
 				return state;
 		}
 

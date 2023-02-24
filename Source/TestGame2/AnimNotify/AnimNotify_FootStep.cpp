@@ -36,5 +36,5 @@ void UAnimNotify_FootStep::Notify( USkeletalMeshComponent* MeshComp, UAnimSequen
 	if( !matInfo )
 		return;
 
-	GetObjectManager().SpawnParticle( matInfo->FootStepParticle, owner, worldSpawnPos, owner->GetActorRotation() );
+	GetObjectManager().SpawnParticle( matInfo->FootStepParticleName, owner, worldSpawnPos, owner->GetActorRotation() );
 }

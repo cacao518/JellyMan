@@ -59,6 +59,9 @@ public:
 	void ResetInfo( bool InForceReset = false );
 
 	// 몽타주를 플레이한다.
+	void MontagePlay( const FString& InMontagePath, float InScale = 1.f );
+
+	// 몽타주를 플레이한다.
 	void MontagePlay( UAnimMontage* InMontage, float InScale = 1.f );
 
 	// 스킬을 플레이한다.

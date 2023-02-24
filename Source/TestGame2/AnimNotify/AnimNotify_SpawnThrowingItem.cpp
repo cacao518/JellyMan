@@ -4,11 +4,13 @@
 #include "AnimNotify_SpawnThrowingItem.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/Character.h"
+#include "../Actor/Projectile.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../Manager/LockOnManager.h"
 #include "../Component/ObjectComp.h"
 #include "../Component/WeaponComp.h"
+#include "UObject/ConstructorHelpers.h"
 
 FString UAnimNotify_SpawnThrowingItem::GetNotifyName_Implementation() const
 {
@@ -29,7 +31,9 @@ void UAnimNotify_SpawnThrowingItem::SetProperty( AActor* InOwner )
 	if ( !weaponInfo )
 		return;
 
-	ResultActor = weaponInfo->ThorwingBP;
+	FString path = weaponInfo->ThorwingBPPath;
+	UClass* thorwingBP = ConstructorHelpersInternal::FindOrLoadClass( path, AProjectile::StaticClass() );
+	ResultActor = thorwingBP;
 
 	/* Set Pos */
 	UObjectComp* objComp = Cast<UObjectComp>( InOwner->FindComponentByClass<UObjectComp>() );
