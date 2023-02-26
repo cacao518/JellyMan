@@ -42,8 +42,6 @@ private:
 	float              MontagePlayTime;         // 몽타주 재생시간 누적
 	float              DeathTime;               // 사망 시간 누적
 
-	float              HpBarShowTime;           // 체력바 떠있을 수 있는 시간
-
 public:
 	// 생성자 함수
 	UCharacterComp();

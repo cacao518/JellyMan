@@ -3,6 +3,7 @@
 #include "CharacterComp.h"
 #include "MaterialComp.h"
 #include "WeaponComp.h"
+#include "FloatingBarComp.h"
 #include "../ETC/SDB.h"
 #include "../Actor/CharacterPC.h"
 #include "../Actor/CharacterNPC.h"
@@ -17,7 +18,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/ProgressBar.h"
 #include "Components/WidgetComponent.h"
 #include "WaterBodyComponent.h"
 #include "LandscapeComponent.h"
@@ -485,34 +485,11 @@ void UCharacterComp::_RegisterCoolTime( const FSkillInfo& InSkillInfo )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UCharacterComp::_UpdateHpBar()
 {
-	auto widgetComp = Cast<UWidgetComponent>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "HpBarComp" ) ) );
-	if ( !widgetComp )
+	auto floatingBarComp = Cast<UFloatingBarComp>( OwningCharacter->GetDefaultSubobjectByName( TEXT( "FloatingBarComp" ) ) );
+	if ( !floatingBarComp )
 		return;
 
-	auto userWidget = Cast<UUserWidget>( widgetComp->GetUserWidgetObject() );
-	if ( !userWidget )
-		return;
-
-	auto progressBar = userWidget->WidgetTree->FindWidget<UProgressBar>( ( TEXT( "HpProgressBar" ) ) );
-	if ( !progressBar )
-		return;
-
-	float hpPercent = Stat.Hp / Stat.Hpm;
-
-	if ( progressBar )
-		progressBar->SetPercent( hpPercent );
-
-	HpBarShowTime = 3.f;
-
-	if ( Stat.Hp <= 0 || HpBarShowTime <= 0 )
-	{
-		HpBarShowTime = 0;
-		userWidget->SetVisibility( ESlateVisibility::Collapsed );
-	}
-	else
-	{
-		userWidget->SetVisibility( ESlateVisibility::SelfHitTestInvisible );
-	}
+	floatingBarComp->UpdateHpBar( Stat.Hp / Stat.Hpm );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -627,7 +604,4 @@ void UCharacterComp::_ProcessAccTime( float InDeltaTime )
 	{
 		DeathTime += InDeltaTime;
 	}
-
-	if ( HpBarShowTime > 0 )
-		HpBarShowTime -= InDeltaTime;
 }

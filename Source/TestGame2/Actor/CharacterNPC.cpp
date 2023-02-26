@@ -5,6 +5,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Component/CharacterComp.h"
 #include "../Component/MaterialComp.h"
+#include "../Component/FloatingBarComp.h"
 #include "../System/MonsterAIController.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -36,7 +37,7 @@ ACharacterNPC::ACharacterNPC()
 	SpawnPosComp->SetupAttachment( RootComponent );
 
 	// LockOnMark Component
-	static ConstructorHelpers::FClassFinder<UUserWidget> lockOnWidget( TEXT( "/Game/Sprite/LockOnWidget" ) );
+	static ConstructorHelpers::FClassFinder<UUserWidget> lockOnWidget( TEXT( "/Game/UI/UserWidget/LockOnWidget" ) );
 	LockOnMarkComp = CreateDefaultSubobject<UWidgetComponent>( TEXT( "LockOnMarkComp" ) );
 	LockOnMarkComp->SetupAttachment( RootComponent );
 	LockOnMarkComp->SetWidgetClass( lockOnWidget.Class );
@@ -44,13 +45,12 @@ ACharacterNPC::ACharacterNPC()
 	LockOnMarkComp->SetDrawSize( FVector2D( 30.f, 30.f ) );
 
 	// HpBar Component
-	static ConstructorHelpers::FClassFinder<UUserWidget> hpBarWidget( TEXT( "/Game/Sprite/HpBarWidget" ) );
-	HpBarComp = CreateDefaultSubobject<UWidgetComponent>( TEXT( "HpBarComp" ) );
-	HpBarComp->SetupAttachment( RootComponent );
-	HpBarComp->SetWidgetClass( hpBarWidget.Class );
-	HpBarComp->SetWidgetSpace( EWidgetSpace::Screen );
-	HpBarComp->SetDrawSize( FVector2D( 80.f, 3.8f ) );
-	HpBarComp->SetRelativeLocation( FVector( 0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() ) );
+	static ConstructorHelpers::FClassFinder<UUserWidget> floatingBarWidget( TEXT( "/Game/UI/UserWidget/FloatingBarWidget" ) );
+	FloatingBarComp = CreateDefaultSubobject<UFloatingBarComp>( TEXT( "FloatingBarComp" ) );
+	FloatingBarComp->SetupAttachment( RootComponent );
+	FloatingBarComp->SetWidgetClass( floatingBarWidget.Class );
+	FloatingBarComp->SetWidgetSpace( EWidgetSpace::Screen );
+	FloatingBarComp->SetRelativeLocation( FVector( 0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() ) );
 
 	// Box Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
