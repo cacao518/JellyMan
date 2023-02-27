@@ -37,7 +37,7 @@ ACharacterNPC::ACharacterNPC()
 	SpawnPosComp->SetupAttachment( RootComponent );
 
 	// LockOnMark Component
-	static ConstructorHelpers::FClassFinder<UUserWidget> lockOnWidget( TEXT( "/Game/UI/UserWidget/LockOnWidget" ) );
+	static ConstructorHelpers::FClassFinder<UUserWidget> lockOnWidget( TEXT( "/Game/UI/WBP_LockOn" ) );
 	LockOnMarkComp = CreateDefaultSubobject<UWidgetComponent>( TEXT( "LockOnMarkComp" ) );
 	LockOnMarkComp->SetupAttachment( RootComponent );
 	LockOnMarkComp->SetWidgetClass( lockOnWidget.Class );
@@ -45,7 +45,7 @@ ACharacterNPC::ACharacterNPC()
 	LockOnMarkComp->SetDrawSize( FVector2D( 30.f, 30.f ) );
 
 	// HpBar Component
-	static ConstructorHelpers::FClassFinder<UUserWidget> floatingBarWidget( TEXT( "/Game/UI/UserWidget/FloatingBarWidget" ) );
+	static ConstructorHelpers::FClassFinder<UUserWidget> floatingBarWidget( TEXT( "/Game/UI/WBP_FloatingBar" ) );
 	FloatingBarComp = CreateDefaultSubobject<UFloatingBarComp>( TEXT( "FloatingBarComp" ) );
 	FloatingBarComp->SetupAttachment( RootComponent );
 	FloatingBarComp->SetWidgetClass( floatingBarWidget.Class );
