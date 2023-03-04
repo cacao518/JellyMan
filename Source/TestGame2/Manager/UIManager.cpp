@@ -11,6 +11,7 @@
 #include "../Manager/LockOnManager.h"
 #include "../Manager/DataInfoManager.h"
 #include "../ETC/CameraShakeEffect.h"
+#include "../UI/UIBase.h"
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -45,11 +46,12 @@ UUserWidget* UIManager::ShowUI( const FString& InPath )
 	if( !loadedClass )
 		return nullptr;
 
-	UUserWidget* userWidget = CreateWidget<UUserWidget>( &GetMyGameInstance(), loadedClass );
+	UUIBase* userWidget = CreateWidget<UUIBase>( &GetMyGameInstance(), loadedClass );
 	if( !userWidget )
 		return nullptr;
 
 	userWidget->AddToViewport( 9999 ); // Z-order, this just makes it render on the very top.
+	userWidget->OnCreated();
 
 	return userWidget;
 }

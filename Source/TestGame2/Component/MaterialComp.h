@@ -62,6 +62,9 @@ public:
 	// 현재 젤리 에너지를 반환한다.
 	float GetJellyEnergy() { return JellyEnergy; };
 
+	// 현재 젤리 에너지 맥스를 반환한다.
+	float GetJellyEnergyMax() { return JellyEnergyMax; };
+
 	// 중간 강도 인지 여부를 반환한다.
 	bool IsMiddleIntensity();
 

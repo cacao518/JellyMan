@@ -2,6 +2,12 @@
 
 
 #include "GameUI.h"
+#include "../Component/ObjectComp.h"
+#include "../Component/MaterialComp.h"
+#include "../Component/CharacterComp.h"
+#include "../Actor/CharacterPC.h"
+#include "../System/MyAnimInstance.h"
+#include "../System/MyGameInstance.h"
 #include "Components/ProgressBar.h"
 
 
@@ -11,9 +17,17 @@
 void UGameUI::NativeConstruct()
 {
 	Super::NativeConstruct();
+}
 
-	ProgressBarHP = Cast<UProgressBar>( GetWidgetFromName( TEXT( "ProgressBarHP" ) ) );
-	ProgressBarJelly = Cast<UProgressBar>( GetWidgetFromName( TEXT( "ProgressBarJelly" ) ) );
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief NativeTick
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameUI::NativeTick( const FGeometry& MyGeometry, float InDeltaTime )
+{
+	Super::NativeTick( MyGeometry, InDeltaTime );
+
+	_UpdateHpBar();
+	_UpdateJellyBar();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,4 +36,46 @@ void UGameUI::NativeConstruct()
 void UGameUI::BeginDestroy()
 {
 	Super::BeginDestroy();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief UI 생성 완료됨을 알린다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameUI::OnCreated()
+{
+	ProgressBarHP = Cast<UProgressBar>( GetWidgetFromName( TEXT( "ProgressBarHP" ) ) );
+	ProgressBarJelly = Cast<UProgressBar>( GetWidgetFromName( TEXT( "ProgressBarJelly" ) ) );
+
+	ACharacterPC* myPlayer = GetMyGameInstance().GetMyPlayer();
+	if( !myPlayer )
+		return;
+
+	MyPlayerMatComp = Cast<UMaterialComp>( myPlayer->FindComponentByClass<UMaterialComp>() );
+	MyPlayerCharComp = Cast<UCharacterComp>( myPlayer->FindComponentByClass<UCharacterComp>() );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief Hp바를 업데이트한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameUI::_UpdateHpBar()
+{
+	if( !MyPlayerCharComp )
+		return;
+
+	float percent = MyPlayerCharComp->Stat.Hp / MyPlayerCharComp->Stat.Hpm;
+	if( ProgressBarHP )
+		ProgressBarHP->SetPercent( percent );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 젤리바를 업데이트한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGameUI::_UpdateJellyBar()
+{
+	if( !MyPlayerMatComp )
+		return;
+
+	float percent = MyPlayerMatComp->GetJellyEnergy() / MyPlayerMatComp->GetJellyEnergyMax();
+	if( ProgressBarJelly )
+		ProgressBarJelly->SetPercent( percent );
 }

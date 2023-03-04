@@ -18,13 +18,13 @@ ATestGame2GameMode::ATestGame2GameMode()
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Blueprints/Player/BP_Player"));
 	if (PlayerPawnBPClass.Class != NULL)
 		DefaultPawnClass = PlayerPawnBPClass.Class;
-
-	GetUIManager().ShowUI( "WBP_GameUI" );
 }
 
 void ATestGame2GameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetUIManager().ShowUI( "WBP_GameUI" );
 }
 
 void ATestGame2GameMode::BeginDestroy()
