@@ -9,6 +9,9 @@
 #include <list>
 
 
+class UUIBase;
+
+
 class UIManager final : public SingletonBase< UIManager>
 {
 
@@ -20,7 +23,7 @@ public:
 	void Tick( float InDeltaTime );
 
 	// UI를 생성하고 띄운다.
-	UUserWidget* ShowUI( const FString& InPath );
+	UUIBase* ShowUI( const FString& InPath );
 
 };
 inline UIManager& GetUIManager() { return UIManager::GetInstance(); };

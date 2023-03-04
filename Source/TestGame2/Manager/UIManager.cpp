@@ -39,7 +39,7 @@ void UIManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief UI를 생성하고 띄운다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-UUserWidget* UIManager::ShowUI( const FString& InPath )
+UUIBase* UIManager::ShowUI( const FString& InPath )
 {
 	FString path = FString( TEXT( "/Game/UI/" ) ) + InPath;
 	UClass* loadedClass = ConstructorHelpersInternal::FindOrLoadClass( path, UUserWidget::StaticClass() );
