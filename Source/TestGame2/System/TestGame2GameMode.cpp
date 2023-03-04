@@ -3,6 +3,7 @@
 #include "TestGame2GameMode.h"
 #include "MyPlayerController.h"
 #include "MyGameInstance.h"
+#include "../Manager/UIManager.h"
 #include "../Actor/CharacterPC.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
@@ -17,6 +18,8 @@ ATestGame2GameMode::ATestGame2GameMode()
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Blueprints/Player/BP_Player"));
 	if (PlayerPawnBPClass.Class != NULL)
 		DefaultPawnClass = PlayerPawnBPClass.Class;
+
+	GetUIManager().ShowUI( "WBP_GameUI" );
 }
 
 void ATestGame2GameMode::BeginPlay()

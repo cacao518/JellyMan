@@ -19,5 +19,8 @@ public:
 	// 틱 함수
 	void Tick( float InDeltaTime );
 
+	// UI를 생성하고 띄운다.
+	UUserWidget* ShowUI( const FString& InPath );
+
 };
 inline UIManager& GetUIManager() { return UIManager::GetInstance(); };
