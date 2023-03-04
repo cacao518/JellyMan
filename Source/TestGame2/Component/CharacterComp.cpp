@@ -325,6 +325,11 @@ void UCharacterComp::_ProcessDie()
 		break;
 		}
 
+		if( UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
+		{
+			auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
+			animInstance->Montage_Stop( 0.f, curMontage );
+		}
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( TEXT( "NoCollision" ) );
 		_UpdateHpBar();
 	}
