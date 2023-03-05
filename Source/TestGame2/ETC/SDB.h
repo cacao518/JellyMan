@@ -84,6 +84,8 @@ enum class EInputKeyType : uint8
 	F                     UMETA( DisplayName = "F" ),
 	R                     UMETA( DisplayName = "R" ),
 	Num1                  UMETA( DisplayName = "Num1" ),
+	Num2                  UMETA( DisplayName = "Num2" ),
+	Num3                  UMETA( DisplayName = "Num3" ),
 
 	MAX,
 };
@@ -212,7 +214,7 @@ public:
 	float Mass;                                      // 질량(공격속도,이동속도,점프력 비율)
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Intensity;                                 // 강도(공격력,방어력,강인함 비율, 공격모션)
+	float Intensity;                                 // 강도(공격력,방어력,강인함 비율 )
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float MatEnergyMax;                              // 최대 물질 에너지
@@ -335,31 +337,19 @@ struct FPlayerWeaponSkillInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	EWeaponState WeaponState;                     // 무기 종류
+	int WeaponNum;                           // 무기 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int L_BasicSkillNum;                          // 약공격 (기본)  
+	int L_SkillNum;                          // 약공격 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int L_MiddleSkillNum;                         // 약공격 (중간강도)
+	int R_SkillNum;                          // 강공격 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int L_HardSkillNum;                           // 약공격 (강한강도)
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int R_BasicSkillNum;                          // 강공격 (기본)  
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int R_MiddleSkillNum;						  // 강공격 (중간강도)
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int R_HardSkillNum;							  // 강공격 (강한강도)
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int ThrowSkillNum;                            // 무기 투척
+	int ThrowSkillNum;                       // 무기 투척
 
 	/// 맵 키를 반환한다.
-	EWeaponState GetKey(){ return WeaponState; };
+	int GetKey(){ return WeaponNum; };
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -379,6 +369,7 @@ namespace Const
 	constexpr float MONTAGE_INITIAL_TIME      = 0.05f;     // 몽타주 발동 후 초기시간 ( 방향전환가능 및 LookAt 시간)
 	constexpr float DEAD_ACTOR_DESTROY_TIME   = 3.f;       // 사망 후 해당 초 이후 액터 삭제
 	constexpr float HOLD_TIME_INCREASE_VALUE  = 0.1f;      // 역경직 시간 증가 값
+	constexpr float MP_RECOVERY_VALUE         = 20.f;      // MP 회복 상수 
 
 	constexpr float DEFAULT_TARGET_ARM_LENGTH = 280.f;     // 기본 카메라 암 길이
 	constexpr float FLY_TARGET_ARM_LENGTH     = 400.f;     // 날기 카메라 암 길이

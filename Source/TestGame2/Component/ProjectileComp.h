@@ -17,7 +17,9 @@ public:
 	FCollisionInfo     AttackCollInfo;          // 공격 콜리전 정보
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	float LifeTime;    
+	float LifeTime;                             // 지속 시간
+
+	FVector Direction;                          // 투사체 방향
 
 private:
 	float LifeTimeAcc;

@@ -65,10 +65,12 @@ public:
 	void ProcessF();
 	void ProcessR();
 	void Process1();
+	void Process2();
+	void Process3();
 
 private:
 	// 스킬을 재생한다.
-	bool _SkillPlay( int InBasicSkillNum, int InMiddleSkillNum = 0, int InHardSkillNum = 0 );
+	bool _SkillPlay( int InSkillNum );
 
 	// 발동 대기중 스킬 초기화
 	void _ResetReadySkill();

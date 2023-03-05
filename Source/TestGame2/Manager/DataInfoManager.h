@@ -8,7 +8,7 @@
 
 
 using PlayerDefaultSkillInfoMap = TMap< EInputKeyType,  FPlayerDefaultSkillInfo >;
-using PlayerWeaponSkillInfoMap  = TMap< EWeaponState,   FPlayerWeaponSkillInfo >;
+using PlayerWeaponSkillInfoMap  = TMap< int,            FPlayerWeaponSkillInfo >;
 using MaterialInfoMap           = TMap< EMaterialState, FMaterialInfo >;
 using WeaponInfoMap             = TMap< int,            FWeaponInfo >;
 using SkillInfoMap              = TMap< int,            FSkillInfo >;

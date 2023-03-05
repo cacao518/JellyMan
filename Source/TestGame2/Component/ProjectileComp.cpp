@@ -50,6 +50,9 @@ void UProjectileComp::OnAttackSuccess()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UProjectileComp::_Init()
 {
+	const FRotator rotation = OwningActor->GetActorRotation();
+	Direction = FRotationMatrix( rotation ).GetUnitAxis( EAxis::X );
+
 	SetAttackCollInfo( AttackCollInfo );
 	SetIsEnabledAttackColl( true );
 }
@@ -59,11 +62,8 @@ void UProjectileComp::_Init()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UProjectileComp::_ProcessMove()
 {
-	const FRotator rotation = OwningActor->GetActorRotation();
-	FVector direction = FRotationMatrix( rotation ).GetUnitAxis( EAxis::X );
-
 	float moveSpeed = GetWorld()->GetDeltaSeconds() * Stat.MoveSpeed * Const::ANIM_LERP_MULITPLIER;
-	OwningActor->SetActorLocation( OwningActor->GetActorLocation() + ( direction * moveSpeed ), true );
+	OwningActor->SetActorLocation( OwningActor->GetActorLocation() + ( Direction * moveSpeed ), true );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

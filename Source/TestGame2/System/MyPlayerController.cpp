@@ -59,6 +59,9 @@ void AMyPlayerController::BeginPlay()
 	InputComponent->BindAction( "WheelUp",    IE_Pressed, this, &AMyPlayerController::ProcessWheelUp );
 	InputComponent->BindAction( "WheelDown",  IE_Pressed, this, &AMyPlayerController::ProcessWheelDown );
 	InputComponent->BindAction( "1",          IE_Pressed, this, &AMyPlayerController::Process1 );
+	InputComponent->BindAction( "2",          IE_Pressed, this, &AMyPlayerController::Process2 );
+	InputComponent->BindAction( "3",          IE_Pressed, this, &AMyPlayerController::Process3 );
+
 
 	InputTypeAndFuncMap[ EInputKeyType::LEFT_MOUSE ]  = bind( &AMyPlayerController::ProcessLeftMouse, this );
 	InputTypeAndFuncMap[ EInputKeyType::RIGHT_MOUSE ] = bind( &AMyPlayerController::ProcessRightMouse, this );
@@ -180,11 +183,11 @@ void AMyPlayerController::ProcessLeftMouse()
 	if( !WeaponComp )
 		return;
 
-	const auto& skillInfo = GetDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetWeaponState() );
+	const auto& skillInfo = GetDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponNum() );
 	if ( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->L_BasicSkillNum, skillInfo->L_MiddleSkillNum, skillInfo->L_HardSkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
+	_SkillPlay( skillInfo->L_SkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,11 +198,11 @@ void AMyPlayerController::ProcessRightMouse()
 	if( !WeaponComp )
 		return;
 
-	const auto& skillInfo = GetDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetWeaponState() );
+	const auto& skillInfo = GetDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponNum() );
 	if ( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->R_BasicSkillNum, skillInfo->R_MiddleSkillNum, skillInfo->R_HardSkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
+	_SkillPlay( skillInfo->R_SkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -306,7 +309,7 @@ void AMyPlayerController::ProcessTab()
 	if ( WeaponComp->GetWeaponState() == EWeaponState::DEFAULT )
 		return;
 
-	const auto& skillInfo = GetDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetWeaponState() );
+	const auto& skillInfo = GetDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponNum() );
 	if ( !skillInfo )
 		return;
 
@@ -362,22 +365,50 @@ void AMyPlayerController::Process1()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 2번키 실행 ( 무기 생성 )
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AMyPlayerController::Process2()
+{
+	if( !WeaponComp )
+		return;
+
+	if( !( WeaponComp->CanWeaponComp( EWeaponState::AXE ) ) )
+		return;
+
+	const auto& skillInfo = GetDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::Num2 );
+	if( !skillInfo )
+		return;
+
+	_SkillPlay( skillInfo->SkillNum );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 3번키 실행 ( 무기 생성 )
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AMyPlayerController::Process3()
+{
+	if( !WeaponComp )
+		return;
+
+	if( !( WeaponComp->CanWeaponComp( EWeaponState::SPEAR ) ) )
+		return;
+
+	const auto& skillInfo = GetDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::Num3 );
+	if( !skillInfo )
+		return;
+
+	_SkillPlay( skillInfo->SkillNum );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 스킬을 재생한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-bool AMyPlayerController::_SkillPlay( int InBasicSkillNum, int InMiddleSkillNum, int InHardSkillNum )
+bool AMyPlayerController::_SkillPlay( int InSkillNum )
 {
 	if( !CharacterComp )
 		return false;
 
-	if( MatComp && InMiddleSkillNum != 0 && InHardSkillNum != 0 )
-	{
-		if( MatComp->IsHardIntensity() )
-			return CharacterComp->SkillPlay( InHardSkillNum );
-		else if( MatComp->IsMiddleIntensity() )
-			return CharacterComp->SkillPlay( InMiddleSkillNum );
-	}
-
-	return CharacterComp->SkillPlay( InBasicSkillNum );
+	return CharacterComp->SkillPlay( InSkillNum );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

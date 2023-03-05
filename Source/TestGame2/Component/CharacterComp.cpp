@@ -609,7 +609,7 @@ void UCharacterComp::_ProcessHold( float InDeltaTime )
 void UCharacterComp::_ProcessMp( float InDeltaTime )
 {
 	if( AnimState == EAnimState::IDLE_RUN )
-		Stat.Mp = FMath::Clamp( Stat.Mp + InDeltaTime * 15.f, 0, Stat.Mpm );
+		Stat.Mp = FMath::Clamp( Stat.Mp + ( InDeltaTime * Const::MP_RECOVERY_VALUE ), 0, Stat.Mpm );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
