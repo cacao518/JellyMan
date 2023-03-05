@@ -50,7 +50,7 @@ UUIBase* UIManager::ShowUI( const FString& InPath )
 	if( !userWidget )
 		return nullptr;
 
-	userWidget->AddToViewport( 9999 ); // Z-order, this just makes it render on the very top.
+	userWidget->AddToViewport( 9999 );
 	userWidget->OnCreated();
 
 	return userWidget;
