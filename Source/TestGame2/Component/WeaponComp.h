@@ -8,15 +8,15 @@
 #include "WeaponComp.generated.h"
 
 
+using WeaponMeshMap     = TMap< int, UStaticMeshComponent* >;
+using WeaponCooltimeMap = TMap<EWeaponState, float>; // (key:무기종류, value:남은쿨타임)
+using WeaponNumMap      = TMap<EWeaponState, int>;   // (Key:무기종류, value:무기식별자)
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TESTGAME2_API UWeaponComp final : public UActorComponent
 {
 	GENERATED_BODY()
-
-public:
-	using WeaponMeshMap = TMap< int, UStaticMeshComponent* >;
-	using CooltimeMap   = TMap<EWeaponState, float>; // (key:무기종류, value:남은쿨타임)
-	using WeaponNumMap  = TMap<EWeaponState, int>;   // (Key:무기종류, value:무기식별자)
 
 public:
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
@@ -27,7 +27,7 @@ private:
 
 	WeaponNumMap                    RegisteredWeaponNums;        // 등록된 무기 식별자
 	WeaponMeshMap                   WeaponMeshes;                // 무기 스태틱 메시 애셋들
-	CooltimeMap                     CoolingWeapons;              // 쿨타임 돌고 있는 무기 정보		
+	WeaponCooltimeMap               CoolingWeapons;              // 쿨타임 돌고 있는 무기 정보		
 
 	int                             CurWeaponNum;                // 현재 무기 식별자
 	class UStaticMeshComponent*     CurWeaponMesh;               // 현재 무기 스태틱매쉬
@@ -75,6 +75,9 @@ public:
 
 	// 현재 무기 스태틱매쉬를 반환한다.
 	UStaticMeshComponent* GetCurWeaponMesh() { return CurWeaponMesh; };
+
+	// 해당 무기 쿨타임 퍼센트를 반환한다.
+	float GetWeaponCoolTimePercent( EWeaponState InWeaponState );
 
 private:
 	// 무기 메쉬 주소를 저장해놓는다.

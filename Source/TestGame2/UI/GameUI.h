@@ -10,7 +10,7 @@
 
 class UProgressBar;
 class UCharacterComp;
-class UMaterialComp;
+class UWeaponComp;
 
 
 UCLASS()
@@ -22,7 +22,12 @@ private:
 	UProgressBar* ProgressBarHP;         // HP 프로그레스바
 	UProgressBar* ProgressBarMP;         // MP 프로그레스바
 
-	UCharacterComp* MyPlayerCharComp;     // 내캐릭터 CharacterComp
+	UProgressBar* ProgressBarWeapon1;    // 무기1 쿨타임 프로그레스바
+	UProgressBar* ProgressBarWeapon2;    // 무기2 쿨타임 프로그레스바
+	UProgressBar* ProgressBarWeapon3;    // 무기3 쿨타임 프로그레스바
+
+	UCharacterComp* MyPlayerCharComp;    // 내캐릭터 CharacterComp
+	UWeaponComp* MyPlayerWeaponComp;     // 내캐릭터 CharacterComp
 
 public:
 	// NativeConstruct
