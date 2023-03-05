@@ -8,13 +8,15 @@
 #include "WeaponComp.generated.h"
 
 
-using WeaponMeshMap = TMap< EWeaponState, UStaticMeshComponent* >;
-
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TESTGAME2_API UWeaponComp final : public UActorComponent
 {
 	GENERATED_BODY()
+
+public:
+	using WeaponMeshMap = TMap< int, UStaticMeshComponent* >;
+	using CooltimeMap   = TMap<EWeaponState, float>; // (key:무기종류, value:남은쿨타임)
+	using WeaponNumMap  = TMap<EWeaponState, int>;   // (Key:무기종류, value:무기식별자)
 
 public:
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
@@ -22,9 +24,13 @@ public:
 
 private:
 	ACharacter*                     OwningCharacter;             // 부모 캐릭터 클래스
-	WeaponMeshMap                   WeaponMeshes;                // 무기 스태틱 메시 애셋들
-	class UStaticMeshComponent*     CurWeaponMesh;               // 현재 무기 스태틱매쉬
 
+	WeaponNumMap                    RegisteredWeaponNums;        // 등록된 무기 식별자
+	WeaponMeshMap                   WeaponMeshes;                // 무기 스태틱 메시 애셋들
+	CooltimeMap                     CoolingWeapons;              // 쿨타임 돌고 있는 무기 정보		
+
+	int                             CurWeaponNum;                // 현재 무기 식별자
+	class UStaticMeshComponent*     CurWeaponMesh;               // 현재 무기 스태틱매쉬
 	class UMaterialInstanceDynamic* DissovleMaterialInstance;    // 디졸브 머티리얼 인스턴스
 	UMaterialInterface*             DissolveMaterial;            // 디졸브 머티리얼 주소
 	float                           DissolveAmount;              // 디졸브 변환 값
@@ -64,6 +70,9 @@ public:
 	// 현재 무기 상태를 반환한다.
 	EWeaponState GetWeaponState() { return WeaponState; };
 
+	// 현재 무기 식별자를 반환한다.
+	int GetCurWeaponNum() { return CurWeaponNum; };
+
 	// 현재 무기 스태틱매쉬를 반환한다.
 	UStaticMeshComponent* GetCurWeaponMesh() { return CurWeaponMesh; };
 
@@ -74,4 +83,9 @@ private:
 	// 디졸브 애니메이션을 종료 처리한다.
 	void _DissovleAnimEnd();
 
+	// 무기 생성 쿨타임을 등록한다.
+	void _RegisterCoolTime( const FWeaponInfo& InWeaponInfo );
+
+	// 무기 생성 쿨타임을 돌린다.
+	void _CoolingWeapons( float InDeltaTime );
 };

@@ -152,6 +152,9 @@ private:
 	// 역경직 로직을 수행한다.
 	void _ProcessHold( float InDeltaTime );
 
+	// Mp 로직을 수행한다.
+	void _ProcessMp( float InDeltaTime );
+
 	// 누적시간 관련 로직 처리를 한다.
 	void _ProcessAccTime( float InDeltaTime );
 };

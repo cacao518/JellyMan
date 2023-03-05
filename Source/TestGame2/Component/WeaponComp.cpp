@@ -30,6 +30,10 @@ void UWeaponComp::BeginPlay()
 
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 
+	RegisteredWeaponNums.Add( EWeaponState::SWORD, 1 );
+	RegisteredWeaponNums.Add( EWeaponState::AXE,   2 );
+	RegisteredWeaponNums.Add( EWeaponState::SPEAR, 3 );
+
 	_InitWeaponMesh();
 	EquipWeapon( WeaponState, false );
 }
@@ -40,6 +44,8 @@ void UWeaponComp::BeginPlay()
 void UWeaponComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	_CoolingWeapons( DeltaTime );
 
 	if( DissolveAmount <= 0.1f )
 	{ 
@@ -73,14 +79,19 @@ bool UWeaponComp::CanWeaponComp( EWeaponState InWeaponState )
 	if( matProperty->GetMatState() != EMaterialState::JELLY )
 		return false;
 
-	const auto& curWeaponInfo = GetDataInfoManager().GetWeaponInfos().Find( InWeaponState );
+	int weaponNum = RegisteredWeaponNums.FindRef( InWeaponState );
+	const auto& curWeaponInfo = GetDataInfoManager().GetWeaponInfos().Find( weaponNum );
 	if( !curWeaponInfo )
 		return false;
 
-	if( matProperty->GetJellyEnergy() >= curWeaponInfo->RequireJellyAmount )
-		return true;
-	else
-		return false;
+	float* cooltime = CoolingWeapons.Find( InWeaponState );
+	if( cooltime )
+	{
+		if( *cooltime > 0 )
+			return false;
+	}
+
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,25 +113,17 @@ void UWeaponComp::EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim )
 	if( InWeaponState == EWeaponState::DEFAULT )
 		return;
 
-	if( WeaponMeshes.IsEmpty() )
+	if( WeaponMeshes.IsEmpty() || RegisteredWeaponNums.IsEmpty() )
 		return;
 
-	const auto& curWeaponInfo = GetDataInfoManager().GetWeaponInfos().Find( InWeaponState );
+	int weaponNum = RegisteredWeaponNums.FindRef( InWeaponState );
+	const auto& curWeaponInfo = GetDataInfoManager().GetWeaponInfos().Find( weaponNum );
 	if( !curWeaponInfo )
 		return;
 
-	// MaterialComp 가 있고 젤리 상태라면 WeaponInfo의 필요젤리양 만큼 젤리에너지가 소모된다.
-	auto matProperty = OwningCharacter ? Cast<UMaterialComp>( OwningCharacter->FindComponentByClass<UMaterialComp>() ) : nullptr;
-	if( matProperty && matProperty->GetMatState() == EMaterialState::JELLY )
-	{
-		if( matProperty->GetJellyEnergy() >= curWeaponInfo->RequireJellyAmount )
-			matProperty->SetJellyEnergy( matProperty->GetJellyEnergy() - curWeaponInfo->RequireJellyAmount );
-		else
-			return;
-	}
-
-	WeaponState = InWeaponState;
-	CurWeaponMesh = WeaponMeshes.FindRef( WeaponState );
+	WeaponState = curWeaponInfo->State;
+	CurWeaponNum = weaponNum;
+	CurWeaponMesh = WeaponMeshes.FindRef( weaponNum );
 	WeaponDurability = curWeaponInfo->DurabilityMax;
 	WeaponDurabilityMax = curWeaponInfo->DurabilityMax;
 
@@ -149,6 +152,13 @@ void UWeaponComp::EquipWeapon( EWeaponState InWeaponState, bool InChangeAnim )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UWeaponComp::UnEquipWeapon()
 {
+	const auto& curWeaponInfo = GetDataInfoManager().GetWeaponInfos().Find( CurWeaponNum );
+	if( !curWeaponInfo )
+		return;
+
+	_RegisterCoolTime( *curWeaponInfo );
+
+	CurWeaponNum = 0;
 	CurWeaponMesh = nullptr;
 	WeaponState = EWeaponState::DEFAULT;
 	WeaponDurability = 0;
@@ -162,10 +172,11 @@ void UWeaponComp::UnEquipWeapon()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UWeaponComp::_InitWeaponMesh()
 {
-	for( const auto& [state, weaponInfo] : GetDataInfoManager().GetWeaponInfos() )
+	for( const auto& [num, weaponInfo] : GetDataInfoManager().GetWeaponInfos() )
 	{
 		auto staticMesh = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( weaponInfo.ComponentName ) );
-		WeaponMeshes.Add( state, staticMesh );
+		if( staticMesh )
+			WeaponMeshes.Add( num, staticMesh );
 	}
 }
 
@@ -185,4 +196,35 @@ void UWeaponComp::_DissovleAnimEnd()
 
 	// 무기 머티리얼을 현재 캐릭터 머티리얼과 동일한 머티리얼로 바꿔준다.
 	CurWeaponMesh->SetMaterial( 0, curMesh->GetMaterial( 0 ) );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 무기 생성 쿨타임을 등록한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UWeaponComp::_RegisterCoolTime( const FWeaponInfo& InWeaponInfo )
+{
+	if( InWeaponInfo.CoolTime <= 0 )
+		return;
+
+	if( float* coolTime = CoolingWeapons.Find( InWeaponInfo.State ) )
+		*coolTime = InWeaponInfo.CoolTime;
+	else
+		CoolingWeapons.Add( InWeaponInfo.State, InWeaponInfo.CoolTime );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 무기 생성 쿨타임을 돌린다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UWeaponComp::_CoolingWeapons( float InDeltaTime )
+{
+	for( auto& [_, remainCoolTime] : CoolingWeapons )
+	{
+		if( remainCoolTime > 0 )
+			remainCoolTime -= InDeltaTime;
+		else
+			continue;
+
+		if( remainCoolTime < 0 )
+			remainCoolTime = 0;
+	}
 }

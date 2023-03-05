@@ -20,9 +20,8 @@ class TESTGAME2_API UGameUI : public UUIBase
 	
 private:
 	UProgressBar* ProgressBarHP;         // HP 프로그레스바
-	UProgressBar* ProgressBarJelly;      // Jelly 프로그레스바
+	UProgressBar* ProgressBarMP;         // MP 프로그레스바
 
-	UMaterialComp* MyPlayerMatComp;      // 내캐릭터 MaterialComp
 	UCharacterComp* MyPlayerCharComp;     // 내캐릭터 CharacterComp
 
 public:
@@ -40,9 +39,6 @@ protected:
 	virtual void OnCreated() override;
 
 private:
-	// Hp바를 업데이트한다.
-	void _UpdateHpBar();
-
-	// 젤리바를 업데이트한다.
-	void _UpdateJellyBar();
+	// 프로그레스바를 업데이트한다.
+	void _UpdateProgressBar();
 };

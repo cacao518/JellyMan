@@ -42,7 +42,6 @@ void UMaterialComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	_ProcessGauge( DeltaTime );
 	_ProcessGrass( DeltaTime );
 }
 
@@ -124,18 +123,6 @@ bool UMaterialComp::IsHardIntensity()
 void UMaterialComp::_Init()
 {
 	MatState = EMaterialState::DEFAULT;
-
-	JellyEnergy = 0.f;
-	JellyEnergyMax = 0.f;
-	MatEnergy = 0.f;
-	MatEnergyMax = 0.f;
-
-	const auto& jellyMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::JELLY );
-	if( jellyMatInfo )
-	{
-		JellyEnergy    = jellyMatInfo->MatEnergyMax;
-		JellyEnergyMax = jellyMatInfo->MatEnergyMax;
-	}
 	
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 
@@ -166,9 +153,6 @@ void UMaterialComp::_InitStatus()
 		objectComp->SetStrength    ( matInfo->Intensity              * objectComp->GetInitStat().Strength  );
 		objectComp->SetWeight      ( matInfo->Mass                   * objectComp->GetInitStat().Weight );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( matInfo->CollisonName );
-
-		MatEnergy    = matInfo->MatEnergyMax;
-		MatEnergyMax = matInfo->MatEnergyMax;
 	}
 }
 
@@ -182,15 +166,6 @@ void UMaterialComp::_PlayChangeEffect()
 		return;
 
 	GetObjectManager().SpawnParticle( matInfo->ChangeParticleName, OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 게이지 관련 로직을 실행한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UMaterialComp::_ProcessGauge( float InDeltaTime )
-{
-	if( MatState == EMaterialState::JELLY )
-		JellyEnergy < JellyEnergyMax ? JellyEnergy += InDeltaTime * 2.f : JellyEnergy = JellyEnergyMax;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

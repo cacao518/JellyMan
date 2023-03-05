@@ -67,6 +67,7 @@ void UCharacterComp::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 	_ProcessHold( DeltaTime );
 	_ProcessMove();
 	_ProcessAccTime( DeltaTime );
+	_ProcessMp( DeltaTime );
 	_CoolingSkills( DeltaTime );
 	_FallingWater( DeltaTime );
 	_ProcessLand();
@@ -137,6 +138,10 @@ bool UCharacterComp::SkillPlay( int InSkillNum )
 	if ( skillInfo->DerivedSkillNum != 0 && IsEnableDerivedKey )
 		return SkillPlay( skillInfo->DerivedSkillNum );
 
+	// Mp 확인
+	if( skillInfo->CostMP > Stat.Mp )
+		return false;
+
 	// 쿨타임 확인
 	if ( IsCoolingSkill( skillInfo->Num ) )
 		return false;
@@ -169,6 +174,8 @@ bool UCharacterComp::SkillPlay( int InSkillNum )
 	_RegisterCoolTime( *skillInfo );
 
 	CurSkillInfo = skillInfo;
+
+	Stat.Mp = FMath::Clamp( Stat.Mp - skillInfo->CostMP, 0, Stat.Mpm );
 
 	return true;
 }
@@ -594,6 +601,15 @@ void UCharacterComp::_ProcessHold( float InDeltaTime )
 	}
 
 	animInstance->Montage_Pause( curMontage );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief Mp 로직을 수행한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UCharacterComp::_ProcessMp( float InDeltaTime )
+{
+	if( AnimState == EAnimState::IDLE_RUN )
+		Stat.Mp = FMath::Clamp( Stat.Mp + InDeltaTime * 15.f, 0, Stat.Mpm );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

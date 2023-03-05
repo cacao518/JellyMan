@@ -27,7 +27,7 @@ void UAnimNotify_SpawnThrowingItem::SetProperty( AActor* InOwner )
 	if ( !weaponComp )
 		return;
 
-	const auto& weaponInfo = GetDataInfoManager().GetWeaponInfos().Find( weaponComp->GetWeaponState() );
+	const auto& weaponInfo = GetDataInfoManager().GetWeaponInfos().Find( weaponComp->GetCurWeaponNum() );
 	if ( !weaponInfo )
 		return;
 

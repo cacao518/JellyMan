@@ -26,8 +26,7 @@ void UGameUI::NativeTick( const FGeometry& MyGeometry, float InDeltaTime )
 {
 	Super::NativeTick( MyGeometry, InDeltaTime );
 
-	_UpdateHpBar();
-	_UpdateJellyBar();
+	_UpdateProgressBar();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,38 +43,26 @@ void UGameUI::BeginDestroy()
 void UGameUI::OnCreated()
 {
 	ProgressBarHP = Cast<UProgressBar>( GetWidgetFromName( TEXT( "ProgressBarHP" ) ) );
-	ProgressBarJelly = Cast<UProgressBar>( GetWidgetFromName( TEXT( "ProgressBarJelly" ) ) );
+	ProgressBarMP = Cast<UProgressBar>( GetWidgetFromName( TEXT( "ProgressBarMP" ) ) );
 
 	ACharacterPC* myPlayer = GetMyGameInstance().GetMyPlayer();
 	if( !myPlayer )
 		return;
 
-	MyPlayerMatComp = Cast<UMaterialComp>( myPlayer->FindComponentByClass<UMaterialComp>() );
 	MyPlayerCharComp = Cast<UCharacterComp>( myPlayer->FindComponentByClass<UCharacterComp>() );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief Hp바를 업데이트한다.
+//// @brief 프로그레스바를 업데이트한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameUI::_UpdateHpBar()
+void UGameUI::_UpdateProgressBar()
 {
 	if( !MyPlayerCharComp )
 		return;
 
-	float percent = MyPlayerCharComp->Stat.Hp / MyPlayerCharComp->Stat.Hpm;
 	if( ProgressBarHP )
-		ProgressBarHP->SetPercent( percent );
-}
+		ProgressBarHP->SetPercent( MyPlayerCharComp->Stat.Hp / MyPlayerCharComp->Stat.Hpm );
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 젤리바를 업데이트한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGameUI::_UpdateJellyBar()
-{
-	if( !MyPlayerMatComp )
-		return;
-
-	float percent = MyPlayerMatComp->GetJellyEnergy() / MyPlayerMatComp->GetJellyEnergyMax();
-	if( ProgressBarJelly )
-		ProgressBarJelly->SetPercent( percent );
+	if( ProgressBarMP )
+		ProgressBarMP->SetPercent( MyPlayerCharComp->Stat.Mp / MyPlayerCharComp->Stat.Mpm );
 }

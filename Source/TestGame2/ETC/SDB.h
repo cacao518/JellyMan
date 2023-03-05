@@ -65,6 +65,8 @@ enum class EWeaponState : uint8
 {
 	DEFAULT          UMETA( DisplayName = "Default" ),
 	SWORD            UMETA( DisplayName = "Sword" ),
+	AXE              UMETA( DisplayName = "Axe" ),
+	SPEAR            UMETA( DisplayName = "Spear" ),
 
 	MAX,
 };
@@ -162,6 +164,12 @@ public:
 	float Hpm; 	// 체력
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float Mp; 	// 스태미너
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float Mpm; 	// 스태미너
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float MoveSpeed;	// 이동속도
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
@@ -233,13 +241,16 @@ struct FWeaponInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int Num;                    // 식별자
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	EWeaponState State;         // 무기 종류
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	int   DurabilityMax;        // 무기 내구도 최대
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float RequireJellyAmount;   // 무기를 생성하는데 필요한 젤리 양
+	float CoolTime;            // 무기 생성 쿨타임
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FName ComponentName;        // 스테틱 메쉬 컴포넌트 이름
@@ -248,7 +259,7 @@ public:
 	FString ThorwingBPPath;        // 무기 투척시 소환할 BP 경로
 
 	/// 맵 키를 반환한다.
-	EWeaponState GetKey(){ return State; };
+	int GetKey(){ return Num; };
 };
 
 
@@ -264,6 +275,9 @@ public:
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float CoolTime;                                    // 쿨타임
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float CostMP;                                      // 소모 값 MP
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	ESkillPlaySpeedType PlaySpeedType;                 // 스킬 재생속도 타입
