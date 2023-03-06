@@ -31,8 +31,7 @@ UObjectComp::UObjectComp()
 OwningActor           ( nullptr ),
 TeamType              ( ETeamType::MAX ),
 IsDie                 ( false   ),
-IsFallWater           ( false   ),
-IsEnabledAttackColl   ( false   )
+IsFallWater           ( false   )
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
@@ -109,15 +108,25 @@ void UObjectComp::SetJumpPower( float InJumpPower )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 공격 콜리전 활성화 여부를 셋팅한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UObjectComp::SetIsEnabledAttackColl( bool InIsEnabledAttackColl )
+void UObjectComp::SetIsEnabledAttackColl( bool InIsEnabled )
 {
-	IsEnabledAttackColl = InIsEnabledAttackColl;
-
 	auto attackColl = OwningActor ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
 	if( attackColl )
 	{ 
-		attackColl->SetCollisionEnabled( IsEnabledAttackColl ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
-		attackColl->SetVisibility( IsEnabledAttackColl );
+		attackColl->SetCollisionEnabled( InIsEnabled ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
+		attackColl->SetVisibility( InIsEnabled );
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 히트 콜리전 활성화 여부를 셋팅한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UObjectComp::SetIsEnabledHitColl( bool InIsEnabled )
+{
+	auto hitColl = OwningActor ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
+	if( hitColl )
+	{
+		hitColl->SetCollisionEnabled( InIsEnabled ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
 	}
 }
 

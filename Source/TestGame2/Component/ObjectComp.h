@@ -28,7 +28,6 @@ protected:
 
 	bool               IsDie;                   // 사망 여부
 	bool               IsFallWater;             // 물에 빠졌는지 여부
-	bool               IsEnabledAttackColl;     // 공격 콜리전 활성화 여부
 
 public:	
 	// 생성자 함수
@@ -87,7 +86,10 @@ public:
 	void SetWeight( float InWeight ){ Stat.Weight = InWeight; };
 
 	// 공격 콜리전 활성화 여부를 셋팅한다.
-	void SetIsEnabledAttackColl( bool InIsEnabledAttackColl );
+	void SetIsEnabledAttackColl( bool InIsEnabled );
+
+	// 히트 콜리전 활성화 여부를 셋팅한다.
+	void SetIsEnabledHitColl( bool InIsEnabled );
 
 	///////////////////////////////////////////////////////////////////////
 	// Getter
@@ -113,9 +115,6 @@ public:
 	
 	// 현재 HP를 반환한다. 
 	float GetHp() { return Stat.Hp; };
-
-	// 공격 콜리전 활성화 여부를 반환한다.
-	bool GetIsEnabledAttackColl() { return IsEnabledAttackColl; };
 
 	// 사망 여부를 반환한다.
 	bool GetIsDie(){ return IsDie; };
