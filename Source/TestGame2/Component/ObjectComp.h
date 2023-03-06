@@ -34,7 +34,7 @@ public:
 	UObjectComp();
 
 	// 소멸자 함수
-	~UObjectComp();
+	virtual ~UObjectComp();
 
 	// Begin 함수
 	virtual void BeginPlay() override;

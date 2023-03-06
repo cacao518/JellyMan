@@ -47,7 +47,7 @@ public:
 	UCharacterComp();
 
 	// 소멸자 함수
-	~UCharacterComp();
+	virtual ~UCharacterComp();
 
 	// Begin 함수
 	virtual void BeginPlay() override;

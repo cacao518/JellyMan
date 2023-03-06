@@ -39,7 +39,11 @@ private:
 	int                             WeaponDurabilityMax;         // 무기 내구도 최대
 
 public:	
+	// 생성자
 	UWeaponComp();
+
+	// 소멸자
+	virtual ~UWeaponComp();
 
 	// Begin 함수
 	virtual void BeginPlay() override;

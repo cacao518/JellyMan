@@ -27,7 +27,11 @@ private:
 	ACharacter*         OwningCharacter;          // 부모 캐릭터 클래스
 
 public:	
+	// 생성자
 	UMaterialComp();
+
+	// 소멸자
+	virtual ~UMaterialComp();
 
 	// Begin 함수
 	virtual void BeginPlay() override;

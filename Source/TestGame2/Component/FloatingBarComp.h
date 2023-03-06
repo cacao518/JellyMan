@@ -27,7 +27,7 @@ public:
 	UFloatingBarComp();
 
 	// 소멸자 함수
-	~UFloatingBarComp();
+	virtual ~UFloatingBarComp();
 
 	// Begin 함수
 	virtual void BeginPlay() override;

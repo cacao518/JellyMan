@@ -29,7 +29,7 @@ public:
 	UProjectileComp();
 
 	// 소멸자 함수
-	~UProjectileComp();
+	virtual ~UProjectileComp();
 
 	// Begin 함수
 	virtual void BeginPlay() override;
