@@ -172,10 +172,10 @@ public:
 	float Mpm; 	// 스태미너
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float MoveSpeed;	// 이동속도
+	float MoveSpeed;	// 이동속도 ( 0 ~ 2 )
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float AttackSpeed;	// 공격속도
+	float AttackSpeed;	// 공격속도 ( 0 ~ 2 )
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float AttackPower;	// 공격력
@@ -184,13 +184,13 @@ public:
 	float DefensePower;	// 방어력
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float JumpPower;	// 점프력
+	float JumpPower;	// 점프력 ( 0 ~ 2 )
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Strength;   	// 강인함 MAX:100( 경직시간, 넉백거리 관련 ) 
+	float Strength;     // 강인함 ( 0 ~ 100 ) ( 경직시간, 넉백거리 관련 ) 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Weight;   	// 무게
+	float Weight;   	// 무게 ( 0 ~ 2 )
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	bool IsTyrant;      // 폭군 여부 (팀 상관 없이 타격)
@@ -211,10 +211,10 @@ public:
 	EMaterialState State;                            // 물질 상태
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Mass;                                      // 질량(공격속도,이동속도,점프력 비율)
+	float Mass;                                      // 질량 ( 0 ~ 2 ) (공격속도,이동속도,점프력 비율)
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Intensity;                                 // 강도(공격력,방어력,강인함 비율 )
+	float Intensity;                                 // 강도 ( 0 ~ 2 ) (공격력,방어력,강인함 비율 )
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float MatEnergyMax;                              // 최대 물질 에너지
