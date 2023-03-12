@@ -156,7 +156,7 @@ void UMaterialComp::_InitStatus()
 		objectComp->SetAttackPower ( matInfo->Intensity              * objectComp->GetInitStat().AttackPower );
 		objectComp->SetDefensePower( matInfo->Intensity              * objectComp->GetInitStat().DefensePower );
 		objectComp->SetStrength    ( matInfo->Intensity              * objectComp->GetInitStat().Strength  );
-		objectComp->SetWeight      ( matInfo->Mass                   * objectComp->GetInitStat().Weight );
+		objectComp->SetWeight      ( matInfo->Mass                                                         );
 		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( matInfo->CollisonName );
 	}
 }
