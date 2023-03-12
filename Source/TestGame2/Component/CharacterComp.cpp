@@ -362,6 +362,9 @@ void UCharacterComp::_ProcessHit( AActor* InOtherActor )
 	if( !othetObjectComp )
 		return;
 
+	auto othetMatComp = InOtherActor ? Cast<UMaterialComp>( InOtherActor->FindComponentByClass<UMaterialComp>() ) : nullptr;
+	auto myMatComp    = OwningActor  ? Cast<UMaterialComp>( OwningActor->FindComponentByClass<UMaterialComp>() ) : nullptr;
+
 	if ( othetObjectComp->GetTeamType() == ETeamType::MAX || TeamType == ETeamType::MAX )
 		return;
 
@@ -378,8 +381,11 @@ void UCharacterComp::_ProcessHit( AActor* InOtherActor )
 	float decrease = Stat.Hp - totalDamage;
 	Stat.Hp = decrease > 0 ? decrease : 0;
 
+	float myIntensity    = myMatComp    ? myMatComp->GetIntensity()    : 1.f;
+	float otherIntensity = othetMatComp ? othetMatComp->GetIntensity() : 1.f;
+
 	// °æÁ÷
-	if( Stat.Hpm * ( 0.1f + ( Stat.Strength * 0.01f ) ) < totalDamage )
+	if( otherIntensity >= myIntensity )
 	{
 		MontagePlay( HitAnim, 1.0f + ( Stat.Strength * 0.01f ) );
 		LookAt( Cast<ACharacter>( InOtherActor ) );

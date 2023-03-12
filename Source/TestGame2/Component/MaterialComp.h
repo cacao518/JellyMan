@@ -53,6 +53,9 @@ public:
 	// 현재 물질 상태를 반환한다.
 	EMaterialState GetMatState() { return MatState; };
 
+	// 강도를 반환한다.
+	float GetIntensity();
+
 	// 중간 강도 인지 여부를 반환한다.
 	bool IsMiddleIntensity();
 
