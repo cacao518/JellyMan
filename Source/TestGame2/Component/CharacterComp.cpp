@@ -387,7 +387,9 @@ void UCharacterComp::_ProcessHit( AActor* InOtherActor )
 	// °æÁ÷
 	if( otherIntensity >= myIntensity )
 	{
-		MontagePlay( HitAnim, 1.0f + ( Stat.Strength * 0.01f ) );
+		float addTimeToDamage = totalDamage / Stat.Hpm;
+		float subTimeToMyStrength = Stat.Strength * 0.01f;
+		MontagePlay( HitAnim, 1.0f - addTimeToDamage + subTimeToMyStrength );
 		LookAt( Cast<ACharacter>( InOtherActor ) );
 
 		// ³Ë¹é
