@@ -20,6 +20,9 @@
 #include "../Util/UtilMaterial.h"
 
 UMaterialComp::UMaterialComp()
+	:
+InitMaterial    ( nullptr ),
+OwningCharacter ( nullptr )
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	OwningCharacter = nullptr;	

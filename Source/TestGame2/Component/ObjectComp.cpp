@@ -28,6 +28,7 @@
 
 UObjectComp::UObjectComp()
 :
+Id                    ( 0       ),
 OwningActor           ( nullptr ),
 TeamType              ( ETeamType::MAX ),
 IsDie                 ( false   ),
