@@ -88,16 +88,22 @@ namespace UtilMaterial
 			}
 
 			// 랜드 스케이프
-			auto landScape = Cast<ALandscape>( InActor );
-			if ( landScape )
+			auto landScape = Cast<ULandscapeComponent>( InActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
+			if( landScape )
 			{
-				const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::DEEPWATER );
-				if ( waterMatInfo )
-				{
-					FString path = waterMatInfo->MaterialAssetPaths[ 0 ];
-					matInterface = LoadObject<UMaterialInterface>( NULL, *path, NULL, LOAD_None, NULL );
-				}
+				matInterface = landScape->GetMaterial( 0 );
 			}
+
+			//auto landScape = Cast<ALandscape>( InActor );
+			//if ( landScape )
+			//{
+			//	/*const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::DEEPWATER );
+			//	if ( waterMatInfo )
+			//	{
+			//		FString path = waterMatInfo->MaterialAssetPaths[ 0 ];
+			//		matInterface = LoadObject<UMaterialInterface>( NULL, *path, NULL, LOAD_None, NULL );
+			//	}*/
+			//}
 		}
 
 		return matInterface;
