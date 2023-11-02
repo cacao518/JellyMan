@@ -35,9 +35,10 @@ void ObjectManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 액터 생성
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType, AActorSpawner* InSpawner )
+ActorPtr ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType, TWeakObjectPtr<AActorSpawner> InSpawner )
 {
-	if( AActor* actor = Objects.FindRef( ObjectId ) )
+	const auto& actor = Objects.FindRef( ObjectId );
+	if( actor.IsValid() )
 	{
 		actor->SetActorLocationAndRotation( InLocation, InRotator );
 		return actor;
@@ -67,7 +68,7 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 
 		newActor->FinishSpawning( spawnTransform );
 
-		if( InSpawner )
+		if( InSpawner.IsValid() )
 			SpawnerMap.Add( ObjectId, InSpawner );
 
 		Objects.Add( ObjectId, newActor );
@@ -80,7 +81,7 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 정적 오브젝트 생성
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-AActor* ObjectManager::SpawnStaticObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator )
+ActorPtr ObjectManager::SpawnStaticObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator )
 {
 	FString path = FString( TEXT( "/Game/Blueprints/StaticObject/" ) ) + InName;
 	UClass* staticObject = ConstructorHelpersInternal::FindOrLoadClass( path, AStaticObject::StaticClass() );
@@ -125,7 +126,8 @@ void ObjectManager::DestroyActor( AActor* InActor )
 		InActor->Destroy();
 		Objects.Remove( objectComp->GetId() );
 
-		if( AActorSpawner* spawner = SpawnerMap.FindRef( objectComp->GetId() ) )
+		const auto& spawner = SpawnerMap.FindRef( objectComp->GetId() );
+		if( spawner.IsValid() )
 		{
 			spawner->SubSpawnCountInWorld();
 			spawner->ResetSpawnIntervalCount();
@@ -165,16 +167,16 @@ void ObjectManager::RegisterSpawner( AActorSpawner* InSpawner )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void ObjectManager::SpawnActorInSpawner( float InDeltaTime )
 {
-	for( AActorSpawner* spawner : SpawnerList )
+	for( const auto& spawner : SpawnerList )
 	{
-		if( !spawner )
+		if( !spawner.IsValid() )
 			continue;
 
 		spawner->AddSpawnIntervalCount( InDeltaTime );
 
 		if( spawner->CanSpawn() )
 		{
-			SpawnActor( spawner->GetActor(), spawner->GetActorLocation(), spawner->GetActorRotation(), ETeamType::MAX, spawner );
+			SpawnActor( spawner->GetActorClass(), spawner->GetActorLocation(), spawner->GetActorRotation(), ETeamType::MAX, spawner );
 
 			spawner->AddSpawnCountTotal();
 			spawner->AddSpawnCountInWorld();

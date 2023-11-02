@@ -14,9 +14,12 @@ class AActorSpawner;
 class UNiagaraSystem;
 
 
-using ActorMap         = TMap< int, AActor* >;
-using SpawnerMap       = TMap< int, AActorSpawner* >;
-using ActorSpawnerList = TArray< AActorSpawner* >;
+using ActorPtr         = TWeakObjectPtr< AActor >;
+using ActorSpawnerPtr  = TWeakObjectPtr< AActorSpawner >;
+
+using ActorMap         = TMap< int, ActorPtr >;
+using SpawnerMap       = TMap< int, ActorSpawnerPtr >;
+using ActorSpawnerList = TArray< ActorSpawnerPtr >;
 
 
 class ObjectManager final : public SingletonBase< ObjectManager>
@@ -45,10 +48,10 @@ public:
 	///////////////////////////////////////////////////////////////
 	
 	// 액터 생성
-	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType = ETeamType::MAX, AActorSpawner* InSpawner = nullptr );
+	ActorPtr SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType = ETeamType::MAX, ActorSpawnerPtr InSpawner = nullptr );
 
 	// 정적 오브젝트 생성
-	AActor* SpawnStaticObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator );
+	ActorPtr SpawnStaticObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator );
 
 	// 파티클 생성
 	void SpawnParticle( const FString& InEffectName, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator );
