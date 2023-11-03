@@ -48,10 +48,10 @@ public:
 	///////////////////////////////////////////////////////////////
 	
 	// 액터 생성
-	ActorPtr SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType = ETeamType::MAX, ActorSpawnerPtr InSpawner = nullptr );
+	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType = ETeamType::MAX, AActorSpawner* InSpawner = nullptr );
 
 	// 정적 오브젝트 생성
-	ActorPtr SpawnStaticObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator );
+	AActor* SpawnStaticObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator );
 
 	// 파티클 생성
 	void SpawnParticle( const FString& InEffectName, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator );
