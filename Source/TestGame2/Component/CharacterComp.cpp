@@ -540,7 +540,7 @@ void UCharacterComp::_FallingWater( float InDeltaTime )
 	auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
 	bool isNotHitAnim = curMontage && HitAnim && curMontage->GetName() != HitAnim->GetName();
 	if( !curMontage || isNotHitAnim )
-		MontagePlay( HitAnim, 0.01f );
+		MontagePlay( HitAnim, Const::WATER_FALL_ANIM_TIME );
 
 	if( FallWaterTime <= 3.f )
 	{

@@ -364,6 +364,7 @@ namespace Const
 	constexpr float DEFAULT_JUMP_POWER        = 750.f;     // 기본 점프력
 	constexpr float DEFAULT_ROTATION_RATE     = 1000.f;    // 기본 캐릭터 방향 전환 비율
 	constexpr float FLY_ROTATION_RATE         = 100.f;     // 날기 캐릭터 방향 전환 비율
+	constexpr float WATER_FALL_ANIM_TIME      = 0.01f;     // 물에 빠지는 애니메이션 속도
 	constexpr float READY_SKILL_ROTATION_RATE = 100000.f;  // 발동 대기 스킬 보유 캐릭터 방향 전환 비율
 	constexpr float READY_SKILL_DURATION      = 0.4f;      // 발동 대기중인 스킬 저장 지속시간
 	constexpr float MONTAGE_INITIAL_TIME      = 0.05f;     // 몽타주 발동 후 초기시간 ( 방향전환가능 및 LookAt 시간)
