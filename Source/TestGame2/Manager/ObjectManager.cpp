@@ -66,14 +66,15 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 			objectComp->SetTeamType( InTeamType );
 		}
 
-		newActor->FinishSpawning( spawnTransform );
-
 		if( InSpawner )
 			SpawnerMap.Add( ObjectId, ActorSpawnerPtr( InSpawner ) );
 
 		Objects.Add( ObjectId, newActor );
 
 		ObjectId++;
+
+		newActor->FinishSpawning( spawnTransform );
+
 		return newActor;
 	}
 }
@@ -149,6 +150,26 @@ void ObjectManager::Clear()
 	Objects.Empty();
 	SpawnerList.Empty();
 	SpawnerMap.Empty();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 에디터에서 소환된 액터를 등록한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void ObjectManager::RegisterActorInEditor( AActor* InActor )
+{
+	auto objectComp = InActor ? Cast<UObjectComp>( InActor->FindComponentByClass<UObjectComp>() ) : nullptr;
+	if( !objectComp )
+		return;
+
+	if( Objects.Find( objectComp->GetId() ) )
+		return;
+
+	objectComp->SetId( ObjectId );
+	objectComp->SetTeamType( ETeamType::MAX );
+
+	Objects.Add( ObjectId, InActor );
+
+	ObjectId++;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

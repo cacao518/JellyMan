@@ -287,6 +287,8 @@ void UObjectComp::_Init()
 		else 
 			SetTeamType( ETeamType::NEUTRAL );
 	}
+
+	GetObjectManager().RegisterActorInEditor( OwningActor );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
