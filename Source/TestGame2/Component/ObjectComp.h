@@ -26,6 +26,7 @@ protected:
 	FCollisionInfo     AttackCollInfo;          // 공격 콜리전 정보
 	FStatusInfo        InitStat;                // 초기기본 능력치
 
+	bool               IsSpawnedInEditor;       // 에디터로 스폰되었는지 여부
 	bool               IsDie;                   // 사망 여부
 	bool               IsFallWater;             // 물에 빠졌는지 여부
 
@@ -84,6 +85,9 @@ public:
 
 	// 무게를 설정한다.
 	void SetWeight( float InWeight ){ Stat.Weight = InWeight; };
+
+	// 에디터로 스폰되었는지 여부를 셋팅한다.
+	void SetIsSpawnedInEditor( bool InIsSpawnedInEditor ){ IsSpawnedInEditor = InIsSpawnedInEditor; };
 
 	// 공격 콜리전 활성화 여부를 셋팅한다.
 	void SetIsEnabledAttackColl( bool InIsEnabled );

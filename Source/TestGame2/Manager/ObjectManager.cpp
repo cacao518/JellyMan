@@ -64,6 +64,7 @@ AActor* ObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, c
 		{
 			objectComp->SetId( ObjectId );
 			objectComp->SetTeamType( InTeamType );
+			objectComp->SetIsSpawnedInEditor( false );
 		}
 
 		if( InSpawner )

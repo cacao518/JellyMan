@@ -31,6 +31,7 @@ UObjectComp::UObjectComp()
 Id                    ( 0       ),
 OwningActor           ( nullptr ),
 TeamType              ( ETeamType::MAX ),
+IsSpawnedInEditor     ( true    ),
 IsDie                 ( false   ),
 IsFallWater           ( false   )
 {
@@ -48,6 +49,11 @@ UObjectComp::~UObjectComp()
 void UObjectComp::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if( IsSpawnedInEditor )
+	{
+		GetObjectManager().RegisterActorInEditor( OwningActor );
+	}
 
 	_Init();
 }
@@ -279,7 +285,7 @@ void UObjectComp::_Init()
 
 	SetMoveSpeed( Stat.MoveSpeed );
 	SetJumpPower( Stat.JumpPower );
-
+	
 	if( GetTeamType() == ETeamType::MAX )
 	{
 		if( GetObjectType() == EObjectType::PC )
@@ -287,8 +293,6 @@ void UObjectComp::_Init()
 		else 
 			SetTeamType( ETeamType::NEUTRAL );
 	}
-
-	GetObjectManager().RegisterActorInEditor( OwningActor );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
